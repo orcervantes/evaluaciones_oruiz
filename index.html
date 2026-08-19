@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Evaluación Continua — Facultad de Ingeniería UNAM</title>
+  
+  <!-- Hojas de estilo KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  
+  <!-- Carga diferida de motores matemáticos -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://unpkg.com/mathlive@0.98.6/dist/mathlive.min.js"></script>
+
+  <style>
+    :root {
+      --ink: #111111;
+      --paper: #ffffff;
+      --muted: #e5e5e5;
+      --muted-dark: #666666;
+      --focus: #0056b3;
+      --success: #1b5e20;
+      --success-bg: #e8f5e9;
+      --error: #b71c1c;
+      --error-bg: #ffebee;
+      --card-bg: #fafafa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--paper);
+      color: var(--ink);
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      touch-action: manipulation;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      margin-top: 10px;
+      padding-bottom: 80px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: var(--muted-dark);
+      margin-top: 4px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--muted);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      background-color: var(--muted);
+      height: 6px;
+      border-radius: 3px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: var(--ink);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .timer-badge {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-badge.warning {
+      background: var(--error);
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .question-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .math-block {
+      text-align: center;
+      margin: 16px 0;
+      padding: 14px;
+      background: var(--paper);
+      border: 1px solid var(--muted);
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    math-field {
+      font-size: 1.25rem;
+      padding: 12px 8px;
+      border: none;
+      border-bottom: 2px solid var(--ink);
+      background: var(--paper);
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      border-radius: 4px 4px 0 0;
+      margin-top: 10px;
+    }
+
+    math-field:focus-within {
+      border-bottom-color: var(--focus);
+      box-shadow: 0 2px 0 0 var(--focus);
+    }
+
+    math-field[disabled] {
+      background-color: #f0f0f0;
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    .input-text {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+
+    .input-text:focus {
+      outline: 2px solid var(--focus);
+    }
+
+    .btn {
+      background: var(--ink);
+      color: var(--paper);
+      border: 1px solid var(--ink);
+      padding: 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: 100%;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s ease, color 0.2s ease;
+      margin-top: 16px;
+    }
+
+    .btn:hover, .btn:focus {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .btn-action {
+      background: var(--focus);
+      border-color: var(--focus);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .alert {
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+    }
+
+    .alert-error {
+      background-color: var(--error-bg);
+      color: var(--error);
+      border: 1px solid #ffcdd2;
+    }
+
+    .alert-success {
+      background-color: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #c8e6c9;
+    }
+
+    .feedback-box {
+      display: none;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      border-left: 5px solid transparent;
+    }
+
+    .feedback-box.correct {
+      display: block;
+      background-color: var(--success-bg);
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .feedback-box.incorrect {
+      display: block;
+      background-color: var(--error-bg);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .feedback-title {
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    .feedback-expected {
+      margin-top: 8px;
+      color: var(--ink);
+      font-size: 0.85rem;
+    }
+
+    .feedback-math-render {
+      margin-top: 6px;
+      padding: 8px;
+      background: var(--paper);
+      border-radius: 4px;
+      border: 1px solid var(--muted);
+      text-align: center;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    .summary-table th, .summary-table td {
+      border: 1px solid var(--muted);
+      padding: 10px;
+    }
+
+    .summary-table th {
+      background-color: var(--muted);
+      font-weight: 700;
+    }
+
+    .status-badge {
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.75rem;
+    }
+
+    .status-correct {
+      background-color: #c8e6c9;
+      color: var(--success);
+    }
+
+    .status-incorrect {
+      background-color: #ffcdd2;
+      color: var(--error);
+    }
+  </style>
+</head>
+<body>
+
+<main class="container" role="main">
+  <header>
+    <h1>Evaluación Continua</h1>
+    <p>Facultad de Ingeniería — UNAM</p>
+  </header>
+
+  <!-- PANTALLA 1: REGISTRO -->
+  <section id="pantalla-registro" class="screen active" aria-labelledby="reg-title">
+    <div class="card">
+      <h2 id="reg-title" class="question-title">Identificación del Estudiante</h2>
+      <p class="question-text">Ingresa tu número de cuenta oficial. La plataforma permite un único intento por evaluación.</p>
+      
+      <div id="error-registro" class="alert alert-error" style="display: none;" role="alert"></div>
+
+      <label for="num-cuenta" style="font-size: 0.85rem; font-weight: bold;">NÚMERO DE CUENTA:</label>
+      <input type="text" id="num-cuenta" class="input-text" placeholder="Ej. 318000000" maxlength="11" pattern="[0-9]*" inputmode="numeric" required>
+
+      <button type="button" class="btn" id="btn-iniciar" onclick="iniciarEvaluacion()">Comenzar Evaluación</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: EVALUACIÓN SECUENCIAL CON FEEDBACK -->
+  <section id="pantalla-evaluacion" class="screen" aria-labelledby="pregunta-titulo">
+    <div class="progress-bar-container" aria-hidden="true">
+      <div id="barra-progreso" class="progress-bar"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-meta">
+        <span id="indicador-progreso">Pregunta 1 de 6</span>
+        <span id="cronometro" class="timer-badge" aria-live="polite">02:00</span>
+      </div>
+
+      <h2 id="pregunta-titulo" class="question-title"></h2>
+      <p id="pregunta-descripcion" class="question-text"></p>
+
+      <div id="contenedor-render-math" class="math-block">
+        <span id="math-render-target"></span>
+      </div>
+
+      <label for="math-input" style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Tu Respuesta Simbólica / Matemática:</label>
+      <math-field id="math-input" placeholder="Introduce el resultado aquí..."></math-field>
+
+      <!-- Retroalimentación inmediata -->
+      <div id="feedback-inmediato" class="feedback-box">
+        <div id="feedback-status" class="feedback-title"></div>
+        <div class="feedback-expected">
+          <strong>Formato / Respuesta esperada:</strong>
+          <div id="feedback-math-render" class="feedback-math-render"></div>
+        </div>
+      </div>
+
+      <!-- Botón dinámico de interacción -->
+      <button type="button" class="btn" id="btn-interaccion" onclick="procesarInteraccion()">Evaluar Respuesta</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 3: CONCLUSIÓN Y REGISTRO CENTRAL -->
+  <section id="pantalla-final" class="screen" aria-labelledby="fin-title">
+    <div class="card">
+      <h2 id="fin-title" class="question-title" style="text-align: center;">Evaluación Finalizada</h2>
+      <div id="estado-envio" class="alert alert-success" style="margin-top: 16px;">
+        Registrando respuestas en la base central de datos...
+      </div>
+
+      <div id="resumen-calificacion" style="margin-top: 16px;"></div>
+
+      <p class="question-text" id="mensaje-final" style="margin-top: 16px; text-align: center;">
+        Tu participación ha quedado asentada formalmente. Puedes cerrar esta ventana.
+      </p>
+    </div>
+  </section>
+</main>
+
+<script>
+  /**
+   * =========================================================================
+   * BANCO MODULAR DE REACTIVOS (BANCO_REACTIVOS)
+   * 
+   * INSTRUCCIONES PARA MODIFICAR, AGREGAR O QUITAR REACTIVOS:
+   * 1. Cada reactivo es un objeto JSON delimitado por llaves { ... }.
+   * 2. Para ELIMINAR un reactivo: borra el bloque completo correspondiente.
+   * 3. Para AGREGAR un reactivo: copia un bloque, asígnale un "id" único,
+   *    define su título, descripción, fórmula en "latexProblema", tiempo en
+   *    "tiempoSegundos" (120 s), su "respuestaCanonica" y el listado de
+   *    "solucionesValidas".
+   * 4. El sistema ajusta automáticamente el progreso, contador y evaluación.
+   * =========================================================================
+   */
+  const BANCO_REACTIVOS = [
+    // -----------------------------------------------------------------------
+    // INICIO BLOQUE: REACTIVO 01[cite: 3]
+    // -----------------------------------------------------------------------
+    {
+      id: "R01_DESPEJE_EXP1",
+      titulo: "01. Despeje Exponencial Simple",
+      descripcion: "Despeja la variable x del siguiente modelo matemático:",
+      latexProblema: "y = A^{2x}",
+      tiempoSegundos: 120,
+      respuestaCanonica: "x = \\frac{\\ln(y)}{2\\ln(A)}",
+      solucionesValidas: [
+        "\\frac{\\ln(y)}{2\\ln(A)}",
+        "\\frac{\\ln y}{2\\ln A}",
+        "\\ln(y)/(2\\ln(A))",
+        "\\frac{\\log_{A}(y)}{2}",
+        "\\frac{1}{2}\\log_{A}(y)",
+        "\\frac{\\log_A(y)}{2}",
+        "\\frac{1}{2}\\log_A(y)",
+        "\\frac{\\ln(y)}{\\ln(A^{2})}",
+        "\\frac{\\ln(y)}{\\ln(A^2)}",
+        "\\frac{\\ln(y)}{2*\\ln(A)}",
+        "\\frac{1}{2}\\frac{\\ln(y)}{\\ln(A)}"
+      ]
+    },
+    // -----------------------------------------------------------------------
+    // FIN BLOQUE: REACTIVO 01
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // INICIO BLOQUE: REACTIVO 02[cite: 3]
+    // -----------------------------------------------------------------------
+    {
+      id: "R02_DESPEJE_EXP2",
+      titulo: "02. Despeje Exponencial Doble",
+      descripcion: "Despeja la variable x del siguiente modelo matemático:",
+      latexProblema: "y = A^{2^x}",
+      tiempoSegundos: 120,
+      respuestaCanonica: "x = \\frac{\\ln\\left(\\frac{\\ln(y)}{\\ln(A)}\\right)}{\\ln(2)}",
+      solucionesValidas: [
+        "\\frac{\\ln(\\frac{\\ln(y)}{\\ln(A)})}{\\ln(2)}",
+        "\\frac{\\ln(\\ln(y)/\\ln(A))}{\\ln(2)}",
+        "\\frac{\\ln(\\ln(y))-\\ln(\\ln(A))}{\\ln(2)}",
+        "\\frac{\\ln(\\ln y)-\\ln(\\ln A)}{\\ln 2}",
+        "\\log_{2}(\\frac{\\ln(y)}{\\ln(A)})",
+        "\\log_{2}(\\frac{\\ln y}{\\ln A})",
+        "\\log_2(\\frac{\\ln(y)}{\\ln(A)})",
+        "\\frac{\\log_2(\\frac{\\ln(y)}{\\ln(A)})}{1}"
+      ]
+    },
+    // -----------------------------------------------------------------------
+    // FIN BLOQUE: REACTIVO 02
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // INICIO BLOQUE: REACTIVO 03[cite: 3]
+    // -----------------------------------------------------------------------
+    {
+      id: "R03_ARRHENIUS_AJUSTE",
+      titulo: "03. Despeje de Constante en Ecuaciones Simultáneas",
+      descripcion: "A partir del sistema simultáneo, despeja la constante C en términos de A, E, D, x_1 y x_2:",
+      latexProblema: "A = B \\exp\\left(-\\frac{C}{Dx_1}\\right), \\quad E = B \\exp\\left(-\\frac{C}{Dx_2}\\right)",
+      tiempoSegundos: 120,
+      respuestaCanonica: "C = \\frac{D x_1 x_2 \\ln(A/E)}{x_1 - x_2}",
+      solucionesValidas: [
+        "\\frac{Dx_{1}x_{2}\\ln(\\frac{A}{E})}{x_{1}-x_{2}}",
+        "\\frac{D\\cdot x_{1}x_{2}\\ln(\\frac{A}{E})}{x_{1}-x_{2}}",
+        "\\frac{Dx_{1}x_{2}\\ln(A/E)}{x_{1}-x_{2}}",
+        "\\frac{Dx_{1}x_{2}(\\ln(A)-\\ln(E))}{x_{1}-x_{2}}",
+        "\\frac{Dx_{1}x_{2}(\\ln A-\\ln E)}{x_{1}-x_{2}}",
+        "\\frac{D(\\ln(A)-\\ln(E))}{\\frac{1}{x_{2}}-\\frac{1}{x_{1}}}",
+        "\\frac{D\\ln(A/E)}{\\frac{1}{x_{2}}-\\frac{1}{x_{1}}}",
+        "\\frac{Dx_{1}x_{2}\\ln(E/A)}{x_{2}-x_{1}}",
+        "\\frac{Dx_1x_2\\ln(A/E)}{x_1-x_2}"
+      ]
+    },
+    // -----------------------------------------------------------------------
+    // FIN BLOQUE: REACTIVO 03
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // INICIO BLOQUE: REACTIVO 04[cite: 3]
+    // -----------------------------------------------------------------------
+    {
+      id: "R04_PROYECCION_VECTORES",
+      titulo: "04. Análisis Vectorial en Laminado Plano",
+      descripcion: "Siendo P el vector radial y F el vector tangencial bajo ángulo \\theta, expresa la fuerza neta proyectada en dirección horizontal X:",
+      latexProblema: "F_x = F\\cos(\\theta) - P\\sin(\\theta)",
+      tiempoSegundos: 120,
+      respuestaCanonica: "F_x = F\\cos(\\theta) - P\\sin(\\theta)",
+      solucionesValidas: [
+        "F\\cos(\\theta)-P\\sin(\\theta)",
+        "F\\cos\\theta-P\\sin\\theta",
+        "-P\\sin(\\theta)+F\\cos(\\theta)",
+        "-P\\sin\\theta+F\\cos\\theta",
+        "F\\cdot\\cos(\\theta)-P\\cdot\\sin(\\theta)",
+        "F\\cos(\\theta)-P\\mathrm{sen}(\\theta)",
+        "F\\cos\\theta-P\\mathrm{sen}\\theta"
+      ]
+    },
+    // -----------------------------------------------------------------------
+    // FIN BLOQUE: REACTIVO 04
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // INICIO BLOQUE: REACTIVO 05[cite: 3]
+    // -----------------------------------------------------------------------
+    {
+      id: "R05_EDO_LOGISTICA",
+      titulo: "05. Ecuación Diferencial de Crecimiento",
+      descripcion: "Escribe la solución general simplificada y = y(t) de la ecuación logística:",
+      latexProblema: "\\frac{dy}{dt} = ry\\left(\\frac{1-y}{k}\\right)",
+      tiempoSegundos: 120,
+      respuestaCanonica: "y(t) = \\frac{k}{1 + C e^{-rt}}",
+      solucionesValidas: [
+        "\\frac{k}{1+Ce^{-rt}}",
+        "\\frac{k}{1+C\\cdot e^{-rt}}",
+        "\\frac{k}{1+C\\exp(-rt)}",
+        "\\frac{kC_{0}e^{rt}}{1+C_{0}e^{rt}}",
+        "\\frac{kCe^{rt}}{1+Ce^{rt}}",
+        "\\frac{k}{1+ce^{-rt}}",
+        "k/(1+Ce^{-rt})"
+      ]
+    },
+    // -----------------------------------------------------------------------
+    // FIN BLOQUE: REACTIVO 05
+    // -----------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------
+    // INICIO BLOQUE: REACTIVO 06[cite: 3]
+    // -----------------------------------------------------------------------
+    {
+      id: "R06_PRESION_CIRCULAR",
+      titulo: "06. Valor Promedio de Presión en Superficie Circular",
+      descripcion: "Determina el valor promedio adimensional \\bar{p}/\\sigma_y sobre el disco:",
+      latexProblema: "\\frac{p}{\\sigma_y} = \\exp\\left[\\frac{2\\mu}{h}\\left(\\frac{D}{2}-r\\right)\\right]",
+      tiempoSegundos: 120,
+      respuestaCanonica: "\\frac{\\bar{p}}{\\sigma_y} = \\frac{2}{\\left(\\frac{\\mu D}{h}\\right)^2}\\left[\\exp\\left(\\frac{\\mu D}{h}\\right) - \\frac{\\mu D}{h} - 1\\right]",
+      solucionesValidas: [
+        "\\frac{2}{(\\frac{\\mu D}{h})^{2}}(e^{\\frac{\\mu D}{h}}-\\frac{\\mu D}{h}-1)",
+        "\\frac{2}{(\\frac{\\mu D}{h})^{2}}(\\exp(\\frac{\\mu D}{h})-\\frac{\\mu D}{h}-1)",
+        "\\frac{2\\sigma_{y}}{(\\frac{\\mu D}{h})^{2}}(e^{\\frac{\\mu D}{h}}-\\frac{\\mu D}{h}-1)",
+        "\\frac{2\\sigma_{y}}{(\\frac{\\mu D}{h})^{2}}(\\exp(\\frac{\\mu D}{h})-\\frac{\\mu D}{h}-1)",
+        "\\frac{2}{(\\mu D/h)^{2}}(e^{\\mu D/h}-\\mu D/h-1)",
+        "\\frac{2}{(\\frac{\\mu D}{h})^2}(e^{\\frac{\\mu D}{h}}-\\frac{\\mu D}{h}-1)",
+        "\\frac{2}{(\\frac{\\mu D}{h})^2}(\\exp(\\frac{\\mu D}{h})-\\frac{\\mu D}{h}-1)"
+      ]
+    }
+    // -----------------------------------------------------------------------
+    // FIN BLOQUE: REACTIVO 06
+    // -----------------------------------------------------------------------
+  ];
+
+  // Endpoint de Google Apps Script integrado
+  const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbyH8bSnqfz72ZT-lFbV0X_bovIYKg8a9mOXj4OUyRKlalkWOhr-jOD-mJZGILmmuiOC/exec";
+
+  // Variables de control de estado
+  let indiceActual = 0;
+  let tiempoRestante = 0;
+  let temporizadorInterval = null;
+  let numeroCuentaEstudiante = "";
+  let estadoTarjeta = "RESPONDER"; // 'RESPONDER' o 'AVANZAR'
+  const respuestasRecopiladas = [];
+
+  document.addEventListener("DOMContentLoaded", () => {
+    customElements.whenDefined('math-field').then(() => {
+      document.querySelectorAll('math-field').forEach(mf => {
+        mf.mathVirtualKeyboardPolicy = "auto";
+      });
+    });
+  });
+
+  /**
+   * =========================================================================
+   * FUNCIÓN DE NORMALIZACIÓN EXHAUSTIVA
+   * Aplica universalmente a todos los reactivos matemáticos
+   * =========================================================================
+   */
+  function normalizarExpresion(str) {
+    if (!str) return "";
+    let s = str.trim();
+
+    // 1. Eliminar comandos de visualización y delimitadores elásticos antes de cualquier otra regla
+    s = s.replace(/\\(displaystyle|left|right|mleft|mright|text|mathrm|mathbf)/g, '');
+
+    // 2. Remover cualquier miembro izquierdo de manera universal (todo lo que preceda al signo igual '=')
+    s = s.replace(/^.*=\s*/g, '');
+
+    // 3. Homologar corchetes y llaves de agrupación a paréntesis circulares
+    s = s.replace(/\[/g, '(').replace(/\]/g, ')');
+
+    // 4. Eliminar espacios en blanco
+    s = s.replace(/\s+/g, '');
+
+    // 5. Normalizar multiplicación explícita y operadores
+    s = s.replace(/\\(cdot|times)/g, '');
+    s = s.replace(/\*/g, '');
+
+    // 6. Estandarizar llaves en subíndices y superíndices de 1 caracter: _{1} -> _1, ^{2} -> ^2
+    s = s.replace(/_\{([a-zA-Z0-9])\}/g, '_$1');
+    s = s.replace(/\^\{([a-zA-Z0-9])\}/g, '^$1');
+
+    // 7. Normalizar logaritmos, exponenciales y funciones trigonométricas
+    s = s.replace(/\\ln\{([^}]+)\}/g, '\\ln($1)');
+    s = s.replace(/\\ln([a-zA-Z0-9])/g, '\\ln($1)');
+    s = s.replace(/\\exp\{([^}]+)\}/g, '\\exp($1)');
+    s = s.replace(/\\mathrm\{sen\}/g, '\\sin');
+    s = s.replace(/\\sen/g, '\\sin');
+
+    return s;
+  }
+
+  function cambiarPantalla(idPantalla) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(idPantalla).classList.add('active');
+  }
+
+  function iniciarEvaluacion() {
+    const inputCuenta = document.getElementById('num-cuenta');
+    const errorDiv = document.getElementById('error-registro');
+    numeroCuentaEstudiante = inputCuenta.value.trim();
+
+    if (!numeroCuentaEstudiante || numeroCuentaEstudiante.length < 7 || isNaN(numeroCuentaEstudiante)) {
+      errorDiv.textContent = "Ingresa un número de cuenta válido (mínimo 7 dígitos numéricos).";
+      errorDiv.style.display = "block";
+      return;
+    }
+
+    if (localStorage.getItem("eval_completada_" + numeroCuentaEstudiante)) {
+      errorDiv.textContent = "Este número de cuenta ya ha completado la evaluación en este dispositivo.";
+      errorDiv.style.display = "block";
+      return;
+    }
+
+    errorDiv.style.display = "none";
+    cambiarPantalla('pantalla-evaluacion');
+    cargarReactivo(0);
+  }
+
+  function cargarReactivo(indice) {
+    if (indice >= BANCO_REACTIVOS.length) {
+      finalizarEvaluacion();
+      return;
+    }
+
+    indiceActual = indice;
+    estadoTarjeta = "RESPONDER";
+    const reactivo = BANCO_REACTIVOS[indice];
+
+    // Actualizar metadata de la tarjeta
+    document.getElementById('indicador-progreso').textContent = `Pregunta ${indice + 1} de ${BANCO_REACTIVOS.length}`;
+    document.getElementById('barra-progreso').style.width = `${((indice + 1) / BANCO_REACTIVOS.length) * 100}%`;
+    document.getElementById('pregunta-titulo').textContent = reactivo.titulo;
+    document.getElementById('pregunta-descripcion').textContent = reactivo.descripcion;
+
+    // Renderizar la fórmula del problema con KaTeX
+    const targetMath = document.getElementById('math-render-target');
+    if (typeof katex !== 'undefined') {
+      katex.render(reactivo.latexProblema, targetMath, { throwOnError: false, displayMode: true });
+    } else {
+      targetMath.textContent = reactivo.latexProblema;
+    }
+
+    // Restablecer campo de entrada
+    const mathInput = document.getElementById('math-input');
+    mathInput.value = "";
+    mathInput.removeAttribute('disabled');
+    mathInput.focus();
+
+    // Ocultar caja de retroalimentación
+    const feedbackBox = document.getElementById('feedback-inmediato');
+    feedbackBox.className = "feedback-box";
+    feedbackBox.style.display = "none";
+
+    // Configurar botón
+    const btn = document.getElementById('btn-interaccion');
+    btn.textContent = "Evaluar Respuesta";
+    btn.className = "btn";
+
+    iniciarTemporizador(reactivo.tiempoSegundos);
+  }
+
+  function iniciarTemporizador(segundos) {
+    clearInterval(temporizadorInterval);
+    tiempoRestante = segundos;
+    actualizarVistaCronometro();
+
+    temporizadorInterval = setInterval(() => {
+      tiempoRestante--;
+      actualizarVistaCronometro();
+
+      if (tiempoRestante <= 0) {
+        clearInterval(temporizadorInterval);
+        if (estadoTarjeta === "RESPONDER") {
+          evaluarRespuestaActual(true); // Forzar evaluación al expirar los 120 s
+        }
+      }
+    }, 1000);
+  }
+
+  function actualizarVistaCronometro() {
+    const cronoEl = document.getElementById('cronometro');
+    const mins = Math.floor(tiempoRestante / 60);
+    const segs = tiempoRestante % 60;
+    cronoEl.textContent = `${mins.toString().padStart(2, '0')}:${segs.toString().padStart(2, '0')}`;
+
+    if (tiempoRestante <= 15) {
+      cronoEl.classList.add('warning');
+    } else {
+      cronoEl.classList.remove('warning');
+    }
+  }
+
+  function procesarInteraccion() {
+    if (estadoTarjeta === "RESPONDER") {
+      evaluarRespuestaActual(false);
+    } else if (estadoTarjeta === "AVANZAR") {
+      cargarReactivo(indiceActual + 1);
+    }
+  }
+
+  function evaluarRespuestaActual(porTiempoAgotado) {
+    clearInterval(temporizadorInterval);
+    const mathInput = document.getElementById('math-input');
+    mathInput.setAttribute('disabled', 'true');
+
+    const valorOriginal = mathInput.value.trim();
+    const reactivo = BANCO_REACTIVOS[indiceActual];
+
+    // Evaluación aplicando la normalización universal
+    const entradaNormalizada = normalizarExpresion(valorOriginal);
+    const esCorrecta = !porTiempoAgotado && reactivo.solucionesValidas.some(sol => {
+      return normalizarExpresion(sol) === entradaNormalizada;
+    });
+
+    // Registrar resultado en el acumulador
+    respuestasRecopiladas.push({
+      id: reactivo.id,
+      titulo: reactivo.titulo,
+      respuesta: valorOriginal || (porTiempoAgotado ? "TIEMPO_AGOTADO" : "SIN_RESPUESTA"),
+      esCorrecta: esCorrecta
+    });
+
+    // Desplegar retroalimentación inmediata
+    const feedbackBox = document.getElementById('feedback-inmediato');
+    const statusText = document.getElementById('feedback-status');
+    const mathRenderExpected = document.getElementById('feedback-math-render');
+
+    if (esCorrecta) {
+      feedbackBox.className = "feedback-box correct";
+      statusText.textContent = "✓ Respuesta Correcta";
+    } else {
+      feedbackBox.className = "feedback-box incorrect";
+      statusText.textContent = porTiempoAgotado ? "✗ Tiempo Agotado — Respuesta Incorrecta" : "✗ Respuesta Incorrecta";
+    }
+
+    if (typeof katex !== 'undefined') {
+      katex.render(reactivo.respuestaCanonica, mathRenderExpected, { throwOnError: false, displayMode: true });
+    } else {
+      mathRenderExpected.textContent = reactivo.respuestaCanonica;
+    }
+
+    feedbackBox.style.display = "block";
+
+    // Modificar estado del botón para avanzar
+    estadoTarjeta = "AVANZAR";
+    const btn = document.getElementById('btn-interaccion');
+    btn.className = "btn btn-action";
+    if (indiceActual === BANCO_REACTIVOS.length - 1) {
+      btn.textContent = "Finalizar y Ver Resumen →";
+    } else {
+      btn.textContent = "Continuar al siguiente reactivo →";
+    }
+    btn.focus();
+  }
+
+  function finalizarEvaluacion() {
+    clearInterval(temporizadorInterval);
+    localStorage.setItem("eval_completada_" + numeroCuentaEstudiante, "true");
+    cambiarPantalla('pantalla-final');
+
+    const total = respuestasRecopiladas.length;
+    const aciertos = respuestasRecopiladas.filter(r => r.esCorrecta).length;
+    const calificacion = Math.round((aciertos / total) * 100);
+
+    let htmlTabla = `
+      <p style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; text-align: center;">
+        Aciertos: ${aciertos} de ${total} (${calificacion}%)
+      </p>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Reactivo</th>
+            <th style="text-align: center;">Dictamen</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    respuestasRecopiladas.forEach(r => {
+      htmlTabla += `
+        <tr>
+          <td>${r.titulo}</td>
+          <td style="text-align: center;">
+            <span class="status-badge ${r.esCorrecta ? 'status-correct' : 'status-incorrect'}">
+              ${r.esCorrecta ? 'CORRECTO' : 'INCORRECTO'}
+            </span>
+          </td>
+        </tr>
+      `;
+    });
+
+    htmlTabla += `</tbody></table>`;
+    document.getElementById('resumen-calificacion').innerHTML = htmlTabla;
+
+    const payload = {
+      numeroCuenta: numeroCuentaEstudiante,
+      timestamp: new Date().toISOString(),
+      calificacion: calificacion,
+      aciertos: aciertos,
+      total: total,
+      respuestas: respuestasRecopiladas
+    };
+
+    fetch(URL_APPS_SCRIPT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(() => {
+      document.getElementById('estado-envio').textContent = "Respuestas registradas exitosamente en la base central de datos.";
+      document.getElementById('estado-envio').className = "alert alert-success";
+    })
+    .catch(err => {
+      console.error("Error al registrar:", err);
+      document.getElementById('estado-envio').textContent = "Registro guardado localmente. Presente su comprobante al profesor.";
+      document.getElementById('estado-envio').className = "alert alert-error";
+    });
+  }
+</script>
+
+</body>
+</html>
