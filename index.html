@@ -515,23 +515,27 @@
     // -----------------------------------------------------------------------
 
     // -----------------------------------------------------------------------
-    // INICIO BLOQUE: REACTIVO 05[cite: 3]
+    // BLOQUE: REACTIVO 05 - Solución Exacta de EDO
     // -----------------------------------------------------------------------
     {
       id: "R05_EDO_LOGISTICA",
       titulo: "05. Ecuación Diferencial de Crecimiento",
-      descripcion: "Escribe la solución general simplificada y = y(t) de la ecuación logística:",
+      descripcion: "Escribe la solución general simplificada y = y(t) de la ecuación diferencial:",
       latexProblema: "\\frac{dy}{dt} = ry\\left(\\frac{1-y}{k}\\right)",
-      tiempoSegundos: 120,
-      respuestaCanonica: "y(t) = \\frac{k}{1 + C e^{-rt}}",
+      tiempoSegundos: 240,
+      respuestaCanonica: "y(t) = \\frac{1}{1 + C e^{-\\frac{r}{k}t}}",
       solucionesValidas: [
-        "\\frac{k}{1+Ce^{-rt}}",
-        "\\frac{k}{1+C\\cdot e^{-rt}}",
-        "\\frac{k}{1+C\\exp(-rt)}",
-        "\\frac{kC_{0}e^{rt}}{1+C_{0}e^{rt}}",
-        "\\frac{kCe^{rt}}{1+Ce^{rt}}",
-        "\\frac{k}{1+ce^{-rt}}",
-        "k/(1+Ce^{-rt})"
+        "\\frac{1}{1+Ce^{-\\frac{r}{k}t}}",
+        "\\frac{1}{1+C\\cdot e^{-\\frac{r}{k}t}}",
+        "\\frac{1}{1+C\\exp(-\\frac{r}{k}t)}",
+        "\\frac{1}{1+Ce^{-(r/k)t}}",
+        "\\frac{1}{1+C\\exp(-(r/k)t)}",
+        "\\frac{1}{1+ce^{-\\frac{r}{k}t}}",
+        "\\frac{1}{1+ce^{-(r/k)t}}",
+        "\\frac{C_{0}e^{\\frac{r}{k}t}}{1+C_{0}e^{\\frac{r}{k}t}}",
+        "\\frac{Ce^{\\frac{r}{k}t}}{1+Ce^{\\frac{r}{k}t}}",
+        "1/(1+Ce^{-\\frac{r}{k}t})",
+        "1/(1+Ce^{-(r/k)t})"
       ]
     },
     // -----------------------------------------------------------------------
