@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Evaluación Continua — Facultad de Ingeniería UNAM</title>
+  <title>Tutorial Guiado de Notación Simbólica — FI UNAM</title>
   
-  <!-- Hojas de estilo KaTeX -->
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+  <!-- KaTeX CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   
   <!-- Carga diferida de motores matemáticos -->
@@ -14,70 +17,52 @@
 
   <style>
     :root {
+      --fi-blue: #002B7A;
+      --fi-gold: #D59F0F;
       --ink: #111111;
       --paper: #ffffff;
       --muted: #e5e5e5;
       --muted-dark: #666666;
-      --focus: #0056b3;
-      --success: #1b5e20;
       --success-bg: #e8f5e9;
-      --error: #b71c1c;
       --error-bg: #ffebee;
       --card-bg: #fafafa;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--paper);
       color: var(--ink);
-      padding: 16px;
+      padding: 12px;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
 
-    .container {
+    .container-app {
       width: 100%;
-      max-width: 640px;
-      margin-top: 10px;
+      max-width: 680px;
+      margin-top: 8px;
       padding-bottom: 80px;
     }
 
     header {
-      border-bottom: 2px solid var(--ink);
+      border-bottom: 3px solid var(--fi-blue);
       padding-bottom: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    header h1 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      line-height: 1.3;
-    }
-
-    header p {
-      font-size: 0.85rem;
-      color: var(--muted-dark);
-      margin-top: 4px;
-    }
-
-    .card {
+    .eval-card {
       background: var(--card-bg);
       border: 1px solid var(--muted);
-      border-radius: 6px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      border-radius: 8px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
     }
 
     .progress-bar-container {
@@ -89,9 +74,9 @@
       overflow: hidden;
     }
 
-    .progress-bar {
+    .progress-bar-fill {
       height: 100%;
-      background-color: var(--ink);
+      background-color: var(--fi-blue);
       width: 0%;
       transition: width 0.3s ease;
     }
@@ -100,95 +85,114 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       font-size: 0.85rem;
       font-weight: 700;
       text-transform: uppercase;
     }
 
-    .timer-badge {
-      background: var(--ink);
-      color: var(--paper);
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .timer-badge.warning {
-      background: var(--error);
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    .question-title {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .question-text {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-
-    .math-block {
+    .target-math-box {
       text-align: center;
-      margin: 16px 0;
+      margin: 14px 0;
       padding: 14px;
       background: var(--paper);
-      border: 1px solid var(--muted);
-      border-radius: 4px;
+      border: 1px dashed #b0bec5;
+      border-radius: 6px;
       overflow-x: auto;
+    }
+
+    /* Barra de herramientas / accesos directos */
+    .math-toolbar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px 2px;
+      margin-bottom: 8px;
+      scrollbar-width: thin;
+    }
+
+    .math-toolbar::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .math-toolbar::-webkit-scrollbar-thumb {
+      background: #ced4da;
+      border-radius: 4px;
+    }
+
+    .tool-btn {
+      flex: 0 0 auto;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid #ced4da;
+      background: #ffffff;
+      color: var(--fi-blue);
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tool-btn:hover, .tool-btn:active {
+      background: #e9ecef;
+      border-color: var(--fi-blue);
+    }
+
+    .tool-btn.highlight {
+      background: #eef3fc;
+      border-color: var(--fi-blue);
+      font-weight: bold;
     }
 
     math-field {
       font-size: 1.25rem;
-      padding: 12px 8px;
+      padding: 10px 8px;
       border: none;
-      border-bottom: 2px solid var(--ink);
+      border-bottom: 2px solid var(--fi-blue);
       background: var(--paper);
       width: 100%;
       box-sizing: border-box;
       outline: none;
       border-radius: 4px 4px 0 0;
-      margin-top: 10px;
     }
 
     math-field:focus-within {
-      border-bottom-color: var(--focus);
-      box-shadow: 0 2px 0 0 var(--focus);
+      border-bottom-color: var(--fi-gold);
+      box-shadow: 0 2px 0 0 var(--fi-gold);
     }
 
     math-field[disabled] {
       background-color: #f0f0f0;
-      opacity: 0.8;
+      opacity: 0.85;
       cursor: not-allowed;
+    }
+
+    .kb-toggle-btn {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid #ced4da;
+      background: #ffffff;
+      color: #495057;
+      cursor: pointer;
     }
 
     .input-text {
       width: 100%;
       padding: 12px;
       font-size: 1rem;
-      border: 1px solid var(--ink);
+      border: 1px solid var(--fi-blue);
       border-radius: 4px;
       margin-top: 8px;
       margin-bottom: 16px;
     }
 
-    .input-text:focus {
-      outline: 2px solid var(--focus);
-    }
-
-    .btn {
-      background: var(--ink);
+    .btn-custom {
+      background: var(--fi-blue);
       color: var(--paper);
-      border: 1px solid var(--ink);
-      padding: 14px;
+      border: 1px solid var(--fi-blue);
+      padding: 13px;
       font-size: 0.9rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -196,90 +200,58 @@
       width: 100%;
       cursor: pointer;
       border-radius: 4px;
-      transition: background 0.2s ease, color 0.2s ease;
-      margin-top: 16px;
+      transition: background 0.2s ease;
     }
 
-    .btn:hover, .btn:focus {
-      background: var(--paper);
-      color: var(--ink);
-    }
+    .btn-custom:hover { background: #001f5c; color: var(--paper); }
+    .btn-action { background: var(--ink); border-color: var(--ink); }
+    .btn-action:hover { background: #333333; }
+    .btn-retry { background: #6c757d; border-color: #6c757d; }
+    .btn-retry:hover { background: #5a6268; }
 
-    .btn-action {
-      background: var(--focus);
-      border-color: var(--focus);
-    }
-
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .alert {
-      padding: 12px;
-      border-radius: 4px;
-      margin-bottom: 16px;
-      font-size: 0.85rem;
-    }
-
-    .alert-error {
-      background-color: var(--error-bg);
-      color: var(--error);
-      border: 1px solid #ffcdd2;
-    }
-
-    .alert-success {
-      background-color: var(--success-bg);
-      color: var(--success);
-      border: 1px solid #c8e6c9;
-    }
+    .screen-view { display: none; }
+    .screen-view.active { display: block; }
 
     .feedback-box {
       display: none;
-      margin-top: 16px;
-      padding: 14px;
+      margin-top: 14px;
+      padding: 12px;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       border-left: 5px solid transparent;
     }
 
     .feedback-box.correct {
       display: block;
       background-color: var(--success-bg);
-      border-color: var(--success);
-      color: var(--success);
+      border-color: #198754;
+      color: #198754;
     }
 
     .feedback-box.incorrect {
       display: block;
       background-color: var(--error-bg);
-      border-color: var(--error);
-      color: var(--error);
+      border-color: #dc3545;
+      color: #dc3545;
     }
 
-    .feedback-title {
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      font-size: 0.95rem;
-    }
-
-    .feedback-expected {
-      margin-top: 8px;
-      color: var(--ink);
-      font-size: 0.85rem;
-    }
-
-    .feedback-math-render {
-      margin-top: 6px;
-      padding: 8px;
-      background: var(--paper);
+    .tip-box {
+      font-size: 0.82rem;
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-left: 3px solid var(--fi-gold);
+      padding: 8px 12px;
       border-radius: 4px;
-      border: 1px solid var(--muted);
-      text-align: center;
+      margin-top: 10px;
+    }
+
+    .code-tag {
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      background-color: #e9ecef;
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #b71c1c;
     }
 
     .summary-table {
@@ -287,296 +259,368 @@
       border-collapse: collapse;
       margin-top: 16px;
       font-size: 0.85rem;
-      text-align: left;
     }
 
     .summary-table th, .summary-table td {
       border: 1px solid var(--muted);
-      padding: 10px;
+      padding: 9px;
     }
 
-    .summary-table th {
-      background-color: var(--muted);
-      font-weight: 700;
-    }
-
-    .status-badge {
-      font-weight: bold;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 3px;
-      font-size: 0.75rem;
-    }
-
-    .status-correct {
-      background-color: #c8e6c9;
-      color: var(--success);
-    }
-
-    .status-incorrect {
-      background-color: #ffcdd2;
-      color: var(--error);
-    }
+    .summary-table th { background-color: #f1f3f5; font-weight: 700; }
   </style>
 </head>
 <body>
 
-<main class="container" role="main">
-  <header>
-    <h1>Evaluación Continua</h1>
-    <p>Facultad de Ingeniería — UNAM</p>
+<main class="container-app" role="main">
+  
+  <header class="d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="h5 fw-bold text-uppercase mb-0" style="color: var(--fi-blue);">Taller de Notación Simbólica</h1>
+      <p class="small text-muted mb-0">Facultad de Ingeniería — UNAM</p>
+    </div>
+    <span class="badge text-uppercase p-2" style="background-color: var(--fi-gold); color: #000;">20 Reactivos Guiados</span>
   </header>
 
-  <!-- PANTALLA 1: REGISTRO -->
-  <section id="pantalla-registro" class="screen active" aria-labelledby="reg-title">
-    <div class="card">
-      <h2 id="reg-title" class="question-title">Identificación del Estudiante</h2>
-      <p class="question-text">Ingresa tu número de cuenta oficial. La plataforma permite un único intento por evaluación.</p>
+  <!-- PANTALLA 1: REGISTRO SIN BLOQUEO -->
+  <section id="pantalla-registro" class="screen-view active">
+    <div class="eval-card">
+      <h2 class="h6 fw-bold text-uppercase mb-2">Entrenamiento Práctico en Escritura Matemática</h2>
+      <p class="small text-muted mb-3">
+        Ingresa tu número de cuenta oficial para registrar tus avances. Este tutorial consta de <strong>20 ejercicios interactivos guiados</strong> sin límite de tiempo, con botones de acceso rápido y retroalimentación inmediata. Puedes repetir el taller cuantas veces desees para afinar tu velocidad.
+      </p>
       
-      <div id="error-registro" class="alert alert-error" style="display: none;" role="alert"></div>
+      <div id="error-registro" class="alert alert-danger py-2 small" style="display: none;" role="alert"></div>
 
-      <label for="num-cuenta" style="font-size: 0.85rem; font-weight: bold;">NÚMERO DE CUENTA:</label>
-      <input type="text" id="num-cuenta" class="input-text" placeholder="Ej. 318000000" maxlength="11" pattern="[0-9]*" inputmode="numeric" required>
+      <label for="num-cuenta" class="form-label small fw-bold text-uppercase">Número de Cuenta:</label>
+      <input type="text" id="num-cuenta" class="input-text text-center fw-bold" placeholder="Ej. 318000000" maxlength="11" pattern="[0-9]*" inputmode="numeric" required>
 
-      <button type="button" class="btn" id="btn-iniciar" onclick="iniciarEvaluacion()">Comenzar Evaluación</button>
+      <button type="button" class="btn-custom" onclick="iniciarTutorial()">
+        Comenzar Entrenamiento Guiado
+      </button>
     </div>
   </section>
 
-  <!-- PANTALLA 2: EVALUACIÓN SECUENCIAL CON FEEDBACK -->
-  <section id="pantalla-evaluacion" class="screen" aria-labelledby="pregunta-titulo">
-    <div class="progress-bar-container" aria-hidden="true">
-      <div id="barra-progreso" class="progress-bar"></div>
+  <!-- PANTALLA 2: REACTIVOS GUIADOS DEL TUTORIAL -->
+  <section id="pantalla-tutorial" class="screen-view">
+    <div class="progress-bar-container">
+      <div id="barra-progreso" class="progress-bar-fill"></div>
     </div>
 
-    <div class="card">
+    <div class="eval-card">
       <div class="card-meta">
-        <span id="indicador-progreso">Pregunta 1 de 6</span>
-        <span id="cronometro" class="timer-badge" aria-live="polite">02:00</span>
+        <span id="indicador-reactivo" class="badge text-bg-primary">Reactivo 1 de 20</span>
+        <span id="badge-intento-alumno" class="badge bg-secondary">Intento #1</span>
       </div>
 
-      <h2 id="pregunta-titulo" class="question-title"></h2>
-      <p id="pregunta-descripcion" class="question-text"></p>
+      <h2 id="tut-titulo" class="h6 fw-bold mb-1"></h2>
+      <p id="tut-descripcion" class="small text-muted mb-2"></p>
 
-      <div id="contenedor-render-math" class="math-block">
-        <span id="math-render-target"></span>
+      <div class="target-math-box">
+        <span class="d-block small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.72rem;">Ecuación a recrear:</span>
+        <div id="tut-render-target"></div>
       </div>
 
-      <label for="math-input" style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Tu Respuesta Simbólica / Matemática:</label>
-      <math-field id="math-input" placeholder="Introduce el resultado aquí..."></math-field>
+      <div class="d-flex justify-content-between align-items-center mt-3 mb-1">
+        <label for="math-input" class="small fw-bold text-uppercase">Tu Escritura Matemática (minúsculas):</label>
+        <button type="button" class="kb-toggle-btn" onclick="alternarTecladoVirtual()">
+          ⌨️ Teclado Virtual
+        </button>
+      </div>
 
-      <!-- Retroalimentación inmediata -->
-      <div id="feedback-inmediato" class="feedback-box">
-        <div id="feedback-status" class="feedback-title"></div>
-        <div class="feedback-expected">
-          <strong>Formato / Respuesta esperada:</strong>
-          <div id="feedback-math-render" class="feedback-math-render"></div>
+      <!-- Barra de accesos directos priorizada por frecuencia -->
+      <div class="math-toolbar" id="toolbar-accesos" aria-label="Atajos matemáticos">
+        <button type="button" class="tool-btn highlight" title="Subíndice y Superíndice simultáneo" onclick="insertarEnCampo('_{#?}^{#?}')">x_a^b</button>
+        <button type="button" class="tool-btn highlight" title="Raíz n-ésima" onclick="insertarEnCampo('\\sqrt[#?]{#?}')">\sqrt[n]{x}</button>
+        <button type="button" class="tool-btn" title="Fracción" onclick="insertarEnCampo('\\frac{#?}{#?}')">\frac{a}{b}</button>
+        <button type="button" class="tool-btn" title="Potencia" onclick="insertarEnCampo('^{#?}')">x^a</button>
+        <button type="button" class="tool-btn" title="Subíndice" onclick="insertarEnCampo('_{#?}')">x_a</button>
+        <button type="button" class="tool-btn" title="Raíz cuadrada" onclick="insertarEnCampo('\\sqrt{#?}')">\sqrt{x}</button>
+        <button type="button" class="tool-btn" title="Logaritmo natural" onclick="insertarEnCampo('\\ln(#?)')">\ln(x)</button>
+        <button type="button" class="tool-btn" title="Logaritmo base n" onclick="insertarEnCampo('\\log_{#?}(#?)')">\log_n(x)</button>
+        <button type="button" class="tool-btn" title="Exponencial" onclick="insertarEnCampo('e^{#?}')">e^x</button>
+        <button type="button" class="tool-btn" title="Letra Theta" onclick="insertarEnCampo('\\theta ')">\theta</button>
+        <button type="button" class="tool-btn" title="Letra Mu" onclick="insertarEnCampo('\\mu ')">\mu</button>
+        <button type="button" class="tool-btn" title="Letra Sigma" onclick="insertarEnCampo('\\sigma ')">\sigma</button>
+        <button type="button" class="tool-btn" title="Letra Omega" onclick="insertarEnCampo('\\omega ')">\omega</button>
+        <button type="button" class="tool-btn" title="Letra Pi" onclick="insertarEnCampo('\\pi ')">\pi</button>
+        <button type="button" class="tool-btn" title="Seno" onclick="insertarEnCampo('\\sin(#?)')">\sin(\theta)</button>
+        <button type="button" class="tool-btn" title="Coseno" onclick="insertarEnCampo('\\cos(#?)')">\cos(\theta)</button>
+      </div>
+
+      <math-field id="math-input" placeholder="Escribe aquí..."></math-field>
+
+      <div class="tip-box" id="tut-tip-box"></div>
+
+      <!-- Feedback Inmediato -->
+      <div id="feedback-box" class="feedback-box">
+        <div id="feedback-status" class="fw-bold text-uppercase small mb-1"></div>
+        <div class="small text-muted">Solución canónica esperada:</div>
+        <div id="feedback-math-render" class="bg-white p-2 border rounded mt-1 text-center"></div>
+      </div>
+
+      <div class="row g-2 mt-3" id="contenedor-botones-accion">
+        <div class="col-12" id="col-btn-principal">
+          <button type="button" class="btn-custom" id="btn-verificar" onclick="verificarRespuesta()">
+            Verificar Escritura
+          </button>
+        </div>
+        <div class="col-6" id="col-btn-reintentar" style="display: none;">
+          <button type="button" class="btn-custom btn-retry" onclick="reintentarEjercicioActual()">
+            ↺ Reintentar
+          </button>
+        </div>
+        <div class="col-6" id="col-btn-siguiente" style="display: none;">
+          <button type="button" class="btn-custom btn-action" id="btn-siguiente" onclick="avanzarSiguiente()">
+            Siguiente →
+          </button>
         </div>
       </div>
-
-      <!-- Botón dinámico de interacción -->
-      <button type="button" class="btn" id="btn-interaccion" onclick="procesarInteraccion()">Evaluar Respuesta</button>
     </div>
   </section>
 
-  <!-- PANTALLA 3: CONCLUSIÓN Y REGISTRO CENTRAL -->
-  <section id="pantalla-final" class="screen" aria-labelledby="fin-title">
-    <div class="card">
-      <h2 id="fin-title" class="question-title" style="text-align: center;">Evaluación Finalizada</h2>
-      <div id="estado-envio" class="alert alert-success" style="margin-top: 16px;">
-        Registrando respuestas en la base central de datos...
+  <!-- PANTALLA 3: REPORTE FINAL DE DESEMPEÑO -->
+  <section id="pantalla-final" class="screen-view">
+    <div class="eval-card text-center">
+      <h2 class="h5 fw-bold text-uppercase mb-1">Tutorial Completado</h2>
+      <p class="small text-muted mb-3" id="summary-meta-info"></p>
+      
+      <div id="estado-envio" class="alert alert-info py-2 small mb-3">
+        Registrando intento en la hoja 'Tutorial_Sintaxis_Matematica'...
       </div>
 
-      <div id="resumen-calificacion" style="margin-top: 16px;"></div>
+      <div id="resumen-calificacion" class="text-start mb-3"></div>
 
-      <p class="question-text" id="mensaje-final" style="margin-top: 16px; text-align: center;">
-        Tu participación ha quedado asentada formalmente. Puedes cerrar esta ventana.
-      </p>
+      <button type="button" class="btn-custom py-2 fw-bold text-uppercase" onclick="reiniciarTutorialCompleto()">
+        Realizar un Nuevo Intento del Tutorial
+      </button>
     </div>
   </section>
+
 </main>
 
 <script>
   /**
-   * =========================================================================
-   * BANCO MODULAR DE REACTIVOS (BANCO_REACTIVOS)
-   * 
-   * INSTRUCCIONES PARA MODIFICAR, AGREGAR O QUITAR REACTIVOS:
-   * 1. Cada reactivo es un objeto JSON delimitado por llaves { ... }.
-   * 2. Para ELIMINAR un reactivo: borra el bloque completo correspondiente.
-   * 3. Para AGREGAR un reactivo: copia un bloque, asígnale un "id" único,
-   *    define su título, descripción, fórmula en "latexProblema", tiempo en
-   *    "tiempoSegundos" (120 s), su "respuestaCanonica" y el listado de
-   *    "solucionesValidas".
-   * 4. El sistema ajusta automáticamente el progreso, contador y evaluación.
-   * =========================================================================
+   * CONFIGURACIÓN DE LA ACTIVIDAD
    */
-  const BANCO_REACTIVOS = [
-    // -----------------------------------------------------------------------
-    // INICIO BLOQUE: REACTIVO 01[cite: 3]
-    // -----------------------------------------------------------------------
+  const CONFIG_TUTORIAL = {
+    actividad: "Tutorial_Guiado_20_Reactivos",
+    nombreHojaCalculo: "Tutorial_Sintaxis_Matematica",
+    urlAppsScript: "https://script.google.com/macros/s/AKfycbxdb4bLB7EgA4CSzxZkTE8ORi0cvLTqJS9DvPA2fVHrtz6Y-zcJHFL7WDRRLxIJ2cNJ/exec"
+  };
+
+  /**
+   * BANCO DE 20 REACTIVOS GUIADOS (MINÚSCULAS ESTRICTAS)
+   */
+  const BANCO_TUTORIAL = [
     {
-      id: "R01_DESPEJE_EXP1",
-      titulo: "01. Despeje Exponencial Simple",
-      descripcion: "Despeja la variable x del siguiente modelo matemático:",
-      latexProblema: "y = A^{2x}",
-      tiempoSegundos: 120,
-      respuestaCanonica: "x = \\frac{\\ln(y)}{2\\ln(A)}",
+      id: "tut_01_lineal",
+      titulo: "01. Constantes y Variables Simples",
+      descripcion: "escribe la ecuación lineal básica:",
+      latexProblema: "y = mx + b",
+      guia: "En laptop/PC escribe directamente: 'y = m x + b'. En móvil usa el teclado de MathLive o escribe 'y=mx+b'.",
+      respuestaCanonica: "y = mx + b",
+      solucionesValidas: ["y=mx+b", "y=m*x+b", "y=m\\cdot x+b", "mx+b"]
+    },
+    {
+      id: "tut_02_subindices",
+      titulo: "02. Subíndices Simples",
+      descripcion: "escribe la suma de dos variables con subíndice numérico:",
+      latexProblema: "x_1 + x_2",
+      guia: "Usa el guion bajo '_' para subíndices: 'x_1 + x_2' o el botón 'x_a'. No te preocupes por las llaves {}.",
+      respuestaCanonica: "x_1 + x_2",
+      solucionesValidas: ["x_1+x_2", "x_{1}+x_{2}"]
+    },
+    {
+      id: "tut_03_potencias",
+      titulo: "03. Superíndices y Potencias",
+      descripcion: "escribe la suma de cuadrados (teorema de pitágoras):",
+      latexProblema: "a^2 + b^2",
+      guia: "Usa el acento circunflejo '^' o el botón 'x^a': 'a^2 + b^2'. El normalizador acepta con o sin llaves {}.",
+      respuestaCanonica: "a^2 + b^2",
+      solucionesValidas: ["a^2+b^2", "a^{2}+b^{2}"]
+    },
+    {
+      id: "tut_04_fracciones",
+      titulo: "04. Fracciones Estándar",
+      descripcion: "escribe la división fraccionaria de dos variables:",
+      latexProblema: "\\frac{a}{b}",
+      guia: "Escribe la diagonal '/' o '\\frac{a}{b}' o presiona el botón '\\frac{a}{b}'. Ambas formas son aceptadas.",
+      respuestaCanonica: "\\frac{a}{b}",
+      solucionesValidas: ["\\frac{a}{b}", "a/b"]
+    },
+    {
+      id: "tut_05_simultaneos",
+      titulo: "05. Subíndice y Superíndice Simultáneos",
+      descripcion: "escribe variables con subíndice elevadas a una potencia:",
+      latexProblema: "x_1^2 + x_2^2",
+      guia: "Usa el botón destacado 'x_a^b' de la barra, o escribe en tu teclado 'x_1^2 + x_2^2' (primero '_' y luego '^').",
+      respuestaCanonica: "x_1^2 + x_2^2",
+      solucionesValidas: ["x_1^2+x_2^2", "x_{1}^{2}+x_{2}^{2}", "x^2_1+x^2_2", "x^{2}_{1}+x^{2}_{2}"]
+    },
+    {
+      id: "tut_06_raiz_cuadrada",
+      titulo: "06. Raíz Cuadrada Simple",
+      descripcion: "escribe la raíz cuadrada de una suma:",
+      latexProblema: "\\sqrt{x + y}",
+      guia: "Escribe '\\sqrt' o presiona el botón '\\sqrt{x}'.",
+      respuestaCanonica: "\\sqrt{x + y}",
+      solucionesValidas: ["\\sqrt{x+y}", "\\sqrt{x + y}"]
+    },
+    {
+      id: "tut_07_raiz_nesima",
+      titulo: "07. Raíz n-ésima Compleja",
+      descripcion: "escribe la raíz cúbica de la variable x:",
+      latexProblema: "\\sqrt[3]{x}",
+      guia: "Usa el botón '\\sqrt[n]{x}' de la barra de atajos o escribe en teclado '\\sqrt[3]{x}'.",
+      respuestaCanonica: "\\sqrt[3]{x}",
+      solucionesValidas: ["\\sqrt[3]{x}", "\\sqrt[3]{x}", "\\nthroot[3]{x}"]
+    },
+    {
+      id: "tut_08_log_natural",
+      titulo: "08. Logaritmo Natural",
+      descripcion: "escribe el logaritmo natural de la variable y:",
+      latexProblema: "\\ln(y)",
+      guia: "Escribe '\\ln(y)' o presiona el botón '\\ln(x)'.",
+      respuestaCanonica: "\\ln(y)",
+      solucionesValidas: ["\\ln(y)", "\\ln y", "\\ln{y}"]
+    },
+    {
+      id: "tut_09_log_base",
+      titulo: "09. Logaritmo en Base Arbitraria",
+      descripcion: "escribe el logaritmo en base 2 de la variable x:",
+      latexProblema: "\\log_2(x)",
+      guia: "Usa el botón '\\log_n(x)' o escribe '\\log_2(x)' usando subíndice para la base.",
+      respuestaCanonica: "\\log_2(x)",
+      solucionesValidas: ["\\log_2(x)", "\\log_{2}(x)", "\\log_2x"]
+    },
+    {
+      id: "tut_10_trigonometria_simple",
+      titulo: "10. Funciones Trigonométricas y Letra Theta",
+      descripcion: "escribe la suma trigonométrica con el ángulo theta:",
+      latexProblema: "\\sin(\\theta) + \\cos(\\theta)",
+      guia: "Usa los botones '\\sin', '\\cos' y '\\theta' o escribe '\\sin(\\theta) + \\cos(\\theta)'.",
+      respuestaCanonica: "\\sin(\\theta) + \\cos(\\theta)",
       solucionesValidas: [
-        "\\frac{\\ln(y)}{2\\ln(A)}",
-        "\\frac{\\ln y}{2\\ln A}",
-        "\\ln(y)/(2\\ln(A))",
-        "\\frac{\\log_{A}(y)}{2}",
-        "\\frac{1}{2}\\log_{A}(y)",
-        "\\frac{\\log_A(y)}{2}",
-        "\\frac{1}{2}\\log_A(y)",
-        "\\frac{\\ln(y)}{\\ln(A^{2})}",
-        "\\frac{\\ln(y)}{\\ln(A^2)}",
-        "\\frac{\\ln(y)}{2*\\ln(A)}",
-        "\\frac{1}{2}\\frac{\\ln(y)}{\\ln(A)}"
+        "\\sin(\\theta)+\\cos(\\theta)",
+        "\\sin\\theta+\\cos\\theta",
+        "\\mathrm{sen}(\\theta)+\\cos(\\theta)",
+        "\\mathrm{sen}\\theta+\\cos\\theta"
       ]
     },
-    // -----------------------------------------------------------------------
-    // FIN BLOQUE: REACTIVO 01
-    // -----------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------
-    // INICIO BLOQUE: REACTIVO 02[cite: 3]
-    // -----------------------------------------------------------------------
     {
-      id: "R02_DESPEJE_EXP2",
-      titulo: "02. Despeje Exponencial Doble",
-      descripcion: "Despeja la variable x del siguiente modelo matemático:",
-      latexProblema: "y = A^{2^x}",
-      tiempoSegundos: 120,
-      respuestaCanonica: "x = \\frac{\\ln\\left(\\frac{\\ln(y)}{\\ln(A)}\\right)}{\\ln(2)}",
+      id: "tut_11_trigo_potencias",
+      titulo: "11. Identidad Trigonométrica Cuadrática",
+      descripcion: "escribe la identidad pitagórica:",
+      latexProblema: "\\sin^2(\\theta) + \\cos^2(\\theta)",
+      guia: "Escribe '\\sin^2(\\theta)' combinando función y potencia o usando los atajos.",
+      respuestaCanonica: "\\sin^2(\\theta) + \\cos^2(\\theta)",
       solucionesValidas: [
-        "\\frac{\\ln(\\frac{\\ln(y)}{\\ln(A)})}{\\ln(2)}",
-        "\\frac{\\ln(\\ln(y)/\\ln(A))}{\\ln(2)}",
-        "\\frac{\\ln(\\ln(y))-\\ln(\\ln(A))}{\\ln(2)}",
-        "\\frac{\\ln(\\ln y)-\\ln(\\ln A)}{\\ln 2}",
-        "\\log_{2}(\\frac{\\ln(y)}{\\ln(A)})",
-        "\\log_{2}(\\frac{\\ln y}{\\ln A})",
-        "\\log_2(\\frac{\\ln(y)}{\\ln(A)})",
-        "\\frac{\\log_2(\\frac{\\ln(y)}{\\ln(A)})}{1}"
+        "\\sin^2(\\theta)+\\cos^2(\\theta)",
+        "\\sin^{2}(\\theta)+\\cos^{2}(\\theta)",
+        "\\sin^2\\theta+\\cos^2\\theta",
+        "\\mathrm{sen}^2(\\theta)+\\cos^2(\\theta)"
       ]
     },
-    // -----------------------------------------------------------------------
-    // FIN BLOQUE: REACTIVO 02
-    // -----------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------
-    // INICIO BLOQUE: REACTIVO 03[cite: 3]
-    // -----------------------------------------------------------------------
     {
-      id: "R03_ARRHENIUS_AJUSTE",
-      titulo: "03. Despeje de Constante en Ecuaciones Simultáneas",
-      descripcion: "A partir del sistema simultáneo, despeja la constante C en términos de A, E, D, x_1 y x_2:",
-      latexProblema: "A = B \\exp\\left(-\\frac{C}{Dx_1}\\right), \\quad E = B \\exp\\left(-\\frac{C}{Dx_2}\\right)",
-      tiempoSegundos: 120,
-      respuestaCanonica: "C = \\frac{D x_1 x_2 \\ln(A/E)}{x_1 - x_2}",
+      id: "tut_12_letras_griegas_fraccion",
+      titulo: "12. Letra Sigma y Subíndices en Esfuerzos",
+      descripcion: "escribe la fórmula del esfuerzo normal inicial:",
+      latexProblema: "\\sigma = \\frac{f}{a_0}",
+      guia: "Escribe '\\sigma = \\frac{f}{a_0}' o usa los botones '\\sigma', '\\frac{a}{b}' y 'x_a'.",
+      respuestaCanonica: "\\sigma = \\frac{f}{a_0}",
+      solucionesValidas: ["\\sigma=\\frac{f}{a_0}", "\\sigma=\\frac{f}{a_{0}}", "\\sigma=f/a_0", "\\frac{f}{a_0}"]
+    },
+    {
+      id: "tut_13_friccion_tangente",
+      titulo: "13. Letra Mu y Función Tangente",
+      descripcion: "escribe el producto del coeficiente de fricción por la tangente:",
+      latexProblema: "\\mu \\tan(\\alpha)",
+      guia: "Usa '\\mu' y '\\tan(\\alpha)' o escribe '\\alpha' para la letra alfa.",
+      respuestaCanonica: "\\mu \\tan(\\alpha)",
+      solucionesValidas: ["\\mu\\tan(\\alpha)", "\\mu\\tan\\alpha", "\\mu\\cdot\\tan(\\alpha)", "\\mu*\\tan(\\alpha)"]
+    },
+    {
+      id: "tut_14_exponencial_simple",
+      titulo: "14. Función Exponencial con Potencia Negativa",
+      descripcion: "escribe la función exponencial simple:",
+      latexProblema: "e^{-kt}",
+      guia: "Usa el botón 'e^x' o escribe 'e^{-kt}'. El normalizador acepta con y sin llaves.",
+      respuestaCanonica: "e^{-kt}",
+      solucionesValidas: ["e^{-kt}", "e^{-(kt)}", "\\exp(-kt)", "\\exp(-(kt))"]
+    },
+    {
+      id: "tut_15_arrhenius_fraccion",
+      titulo: "15. Exponencial Compuesta tipo Arrhenius",
+      descripcion: "escribe el término exponencial térmico:",
+      latexProblema: "\\exp\\left(-\\frac{q}{rt}\\right)",
+      guia: "Escribe '\\exp(-\\frac{q}{rt})' o 'e^{-\\frac{q}{rt}}'. Se aceptan ambas notaciones.",
+      respuestaCanonica: "\\exp\\left(-\\frac{q}{rt}\\right)",
       solucionesValidas: [
-        "\\frac{Dx_{1}x_{2}\\ln(\\frac{A}{E})}{x_{1}-x_{2}}",
-        "\\frac{D\\cdot x_{1}x_{2}\\ln(\\frac{A}{E})}{x_{1}-x_{2}}",
-        "\\frac{Dx_{1}x_{2}\\ln(A/E)}{x_{1}-x_{2}}",
-        "\\frac{Dx_{1}x_{2}(\\ln(A)-\\ln(E))}{x_{1}-x_{2}}",
-        "\\frac{Dx_{1}x_{2}(\\ln A-\\ln E)}{x_{1}-x_{2}}",
-        "\\frac{D(\\ln(A)-\\ln(E))}{\\frac{1}{x_{2}}-\\frac{1}{x_{1}}}",
-        "\\frac{D\\ln(A/E)}{\\frac{1}{x_{2}}-\\frac{1}{x_{1}}}",
-        "\\frac{Dx_{1}x_{2}\\ln(E/A)}{x_{2}-x_{1}}",
-        "\\frac{Dx_1x_2\\ln(A/E)}{x_1-x_2}"
+        "\\exp(-\\frac{q}{rt})",
+        "\\exp(-\\frac{q}{r\\cdot t})",
+        "e^{-\\frac{q}{rt}}",
+        "e^{-\\frac{q}{r\\cdot t}}",
+        "\\exp(-q/(rt))",
+        "e^{-(q/(rt))}"
       ]
     },
-    // -----------------------------------------------------------------------
-    // FIN BLOQUE: REACTIVO 03
-    // -----------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------
-    // INICIO BLOQUE: REACTIVO 04[cite: 3]
-    // -----------------------------------------------------------------------
     {
-      id: "R04_PROYECCION_VECTORES",
-      titulo: "04. Análisis Vectorial en Laminado Plano",
-      descripcion: "Siendo P el vector radial y F el vector tangencial bajo ángulo \\theta, expresa la fuerza neta proyectada en dirección horizontal X:",
-      latexProblema: "F_x = ?",
-      tiempoSegundos: 120,
-      respuestaCanonica: "F_x = F\\cos(\\theta) - P\\sin(\\theta)",
-      solucionesValidas: [
-        "F\\cos(\\theta)-P\\sin(\\theta)",
-        "F\\cos\\theta-P\\sin\\theta",
-        "-P\\sin(\\theta)+F\\cos(\\theta)",
-        "-P\\sin\\theta+F\\cos\\theta",
-        "F\\cdot\\cos(\\theta)-P\\cdot\\sin(\\theta)",
-        "F\\cos(\\theta)-P\\mathrm{sen}(\\theta)",
-        "F\\cos\\theta-P\\mathrm{sen}\\theta"
-      ]
+      id: "tut_16_energia_cinetica",
+      titulo: "16. Energía con Fracción y Potencias",
+      descripcion: "escribe la fórmula de energía cinética en minúsculas:",
+      latexProblema: "e = \\frac{1}{2}mv^2",
+      guia: "Escribe 'e = \\frac{1}{2} m v^2' o 'e = (1/2) m v^2'.",
+      respuestaCanonica: "e = \\frac{1}{2}mv^2",
+      solucionesValidas: ["e=\\frac{1}{2}mv^2", "e=\\frac{1}{2}m\\cdot v^2", "e=0.5mv^2", "e=\\frac{mv^2}{2}", "\\frac{1}{2}mv^2"]
     },
-    // -----------------------------------------------------------------------
-    // FIN BLOQUE: REACTIVO 04
-    // -----------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------
-    // BLOQUE: REACTIVO 05 - Solución Exacta de EDO
-    // -----------------------------------------------------------------------
     {
-      id: "R05_EDO_LOGISTICA",
-      titulo: "05. Ecuación Diferencial de Crecimiento",
-      descripcion: "Escribe la solución general simplificada y = y(t) de la ecuación diferencial:",
-      latexProblema: "\\frac{dy}{dt} = ry\\left(\\frac{1-y}{k}\\right)",
-      tiempoSegundos: 240,
-      respuestaCanonica: "y(t) = \\frac{1}{1 + C e^{-\\frac{r}{k}t}}",
-      solucionesValidas: [
-        "\\frac{1}{1+Ce^{-\\frac{r}{k}t}}",
-        "\\frac{1}{1+C\\cdot e^{-\\frac{r}{k}t}}",
-        "\\frac{1}{1+C\\exp(-\\frac{r}{k}t)}",
-        "\\frac{1}{1+Ce^{-(r/k)t}}",
-        "\\frac{1}{1+C\\exp(-(r/k)t)}",
-        "\\frac{1}{1+ce^{-\\frac{r}{k}t}}",
-        "\\frac{1}{1+ce^{-(r/k)t}}",
-        "\\frac{C_{0}e^{\\frac{r}{k}t}}{1+C_{0}e^{\\frac{r}{k}t}}",
-        "\\frac{Ce^{\\frac{r}{k}t}}{1+Ce^{\\frac{r}{k}t}}",
-        "1/(1+Ce^{-\\frac{r}{k}t})",
-        "1/(1+Ce^{-(r/k)t})"
-      ]
+      id: "tut_17_frecuencia_omega",
+      titulo: "17. Letra Omega y Raíz Fraccionaria",
+      descripcion: "escribe la frecuencia angular:",
+      latexProblema: "\\omega = \\sqrt{\\frac{k}{m}}",
+      guia: "Usa los botones '\\omega', '\\sqrt{x}' y '\\frac{a}{b}'.",
+      respuestaCanonica: "\\omega = \\sqrt{\\frac{k}{m}}",
+      solucionesValidas: ["\\omega=\\sqrt{\\frac{k}{m}}", "\\omega=\\sqrt{k/m}", "\\sqrt{\\frac{k}{m}}"]
     },
-    // -----------------------------------------------------------------------
-    // FIN BLOQUE: REACTIVO 05
-    // -----------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------
-    // INICIO BLOQUE: REACTIVO 06[cite: 3]
-    // -----------------------------------------------------------------------
     {
-      id: "R06_PRESION_CIRCULAR",
-      titulo: "06. Valor Promedio de Presión en Superficie Circular",
-      descripcion: "Determina el valor promedio adimensional \\bar{p}/\\sigma_y sobre el disco:",
-      latexProblema: "\\frac{p}{\\sigma_y} = \\exp\\left[\\frac{2\\mu}{h}\\left(\\frac{D}{2}-r\\right)\\right]",
-      tiempoSegundos: 120,
-      respuestaCanonica: "\\frac{\\bar{p}}{\\sigma_y} = \\frac{2}{\\left(\\frac{\\mu D}{h}\\right)^2}\\left[\\exp\\left(\\frac{\\mu D}{h}\\right) - \\frac{\\mu D}{h} - 1\\right]",
+      id: "tut_18_derivada_leibniz",
+      titulo: "18. Notación de Derivada",
+      descripcion: "escribe la derivada ordinaria de y respecto a t:",
+      latexProblema: "\\frac{dy}{dt}",
+      guia: "Escribe '\\frac{dy}{dt}' o usa la barra con 'dy/dt'.",
+      respuestaCanonica: "\\frac{dy}{dt}",
+      solucionesValidas: ["\\frac{dy}{dt}", "dy/dt"]
+    },
+    {
+      id: "tut_19_pi_integral",
+      titulo: "19. Expresión Circular con Pi y Radio",
+      descripcion: "escribe el elemento diferencial de área circular:",
+      latexProblema: "2\\pi r dr",
+      guia: "Usa el botón '\\pi' o escribe '\\pi': '2 \\pi r dr'.",
+      respuestaCanonica: "2\\pi r dr",
+      solucionesValidas: ["2\\pi rdr", "2\\cdot\\pi\\cdot r\\cdot dr", "2\\pi r dr"]
+    },
+    {
+      id: "tut_20_presion_completa",
+      titulo: "20. Modelo Avanzado de Manufactura",
+      descripcion: "escribe el término adimensional de presión sobre el disco:",
+      latexProblema: "\\frac{2\\mu}{h}\\left(\\frac{d}{2}-r\\right)",
+      guia: "Combina fracciones, paréntesis y la letra '\\mu': '\\frac{2\\mu}{h}(\\frac{d}{2}-r)'.",
+      respuestaCanonica: "\\frac{2\\mu}{h}\\left(\\frac{d}{2}-r\\right)",
       solucionesValidas: [
-        "\\frac{2}{(\\frac{\\mu D}{h})^{2}}(e^{\\frac{\\mu D}{h}}-\\frac{\\mu D}{h}-1)",
-        "\\frac{2}{(\\frac{\\mu D}{h})^{2}}(\\exp(\\frac{\\mu D}{h})-\\frac{\\mu D}{h}-1)",
-        "\\frac{2\\sigma_{y}}{(\\frac{\\mu D}{h})^{2}}(e^{\\frac{\\mu D}{h}}-\\frac{\\mu D}{h}-1)",
-        "\\frac{2\\sigma_{y}}{(\\frac{\\mu D}{h})^{2}}(\\exp(\\frac{\\mu D}{h})-\\frac{\\mu D}{h}-1)",
-        "\\frac{2}{(\\mu D/h)^{2}}(e^{\\mu D/h}-\\mu D/h-1)",
-        "\\frac{2}{(\\frac{\\mu D}{h})^2}(e^{\\frac{\\mu D}{h}}-\\frac{\\mu D}{h}-1)",
-        "\\frac{2}{(\\frac{\\mu D}{h})^2}(\\exp(\\frac{\\mu D}{h})-\\frac{\\mu D}{h}-1)"
+        "\\frac{2\\mu}{h}(\\frac{d}{2}-r)",
+        "\\frac{2\\mu}{h}(\\frac{d}{2}-r)",
+        "(2\\mu/h)*(d/2-r)",
+        "\\frac{2\\cdot\\mu}{h}(\\frac{d}{2}-r)"
       ]
     }
-    // -----------------------------------------------------------------------
-    // FIN BLOQUE: REACTIVO 06
-    // -----------------------------------------------------------------------
   ];
 
-  // Endpoint de Google Apps Script integrado
-  const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbyH8bSnqfz72ZT-lFbV0X_bovIYKg8a9mOXj4OUyRKlalkWOhr-jOD-mJZGILmmuiOC/exec";
-
-  // Variables de control de estado
+  // Control de variables globales
   let indiceActual = 0;
-  let tiempoRestante = 0;
-  let temporizadorInterval = null;
   let numeroCuentaEstudiante = "";
-  let estadoTarjeta = "RESPONDER"; // 'RESPONDER' o 'AVANZAR'
-  const respuestasRecopiladas = [];
+  let numeroIntento = 1;
+  const respuestasTutorial = [];
 
   document.addEventListener("DOMContentLoaded", () => {
     customElements.whenDefined('math-field').then(() => {
@@ -587,38 +631,73 @@
   });
 
   /**
-   * =========================================================================
-   * FUNCIÓN DE NORMALIZACIÓN EXHAUSTIVA
-   * Aplica universalmente a todos los reactivos matemáticos
-   * =========================================================================
+   * INSERCIÓN DINÁMICA DE ATAJOS EN EL MATH-FIELD ACTIVO
+   */
+  function insertarEnCampo(latexFragment) {
+    const mf = document.getElementById('math-input');
+    if (!mf) return;
+    mf.focus();
+    mf.insert(latexFragment, { selectionMode: 'placeholder' });
+  }
+
+  function alternarTecladoVirtual() {
+    const mf = document.getElementById('math-input');
+    if (!mf) return;
+    if (window.mathVirtualKeyboard) {
+      if (window.mathVirtualKeyboard.visible) {
+        window.mathVirtualKeyboard.hide();
+      } else {
+        mf.focus();
+        window.mathVirtualKeyboard.show();
+      }
+    }
+  }
+
+  /**
+   * MOTOR DE NORMALIZACIÓN MATEMÁTICA AVANZADA (MINÚSCULAS)
+   * Resuelve conflicto de llaves {}, división / vs \frac y orden sub/super.
    */
   function normalizarExpresion(str) {
     if (!str) return "";
-    let s = str.trim();
+    let s = str.trim().toLowerCase();
 
-    // 1. Eliminar comandos de visualización y delimitadores elásticos antes de cualquier otra regla
+    // 1. Eliminar comandos de formato y delimitadores elásticos
     s = s.replace(/\\(displaystyle|left|right|mleft|mright|text|mathrm|mathbf)/g, '');
 
-    // 2. Remover cualquier miembro izquierdo de manera universal (todo lo que preceda al signo igual '=')
+    // 2. Remover miembro izquierdo universal si existe
     s = s.replace(/^.*=\s*/g, '');
 
-    // 3. Homologar corchetes y llaves de agrupación a paréntesis circulares
+    // 3. Homologar corchetes a paréntesis (excepto en argumentos de raíz n-ésima)
+    s = s.replace(/\\sqrt\[([^\]]+)\]/g, 'RAIZN_$1_'); // Guarda temporalmente la raíz n
     s = s.replace(/\[/g, '(').replace(/\]/g, ')');
+    s = s.replace(/RAIZN_([^_]+)_/g, '\\sqrt[$1]');   // Restaura la raíz n
 
-    // 4. Eliminar espacios en blanco
+    // 4. Estandarizar raíces n-ésimas
+    s = s.replace(/\\nthroot\[([^\]]+)\]\{([^}]+)\}/g, '\\sqrt[$1]{$2}');
+
+    // 5. Homologar orden de subíndices y potencias adyacentes: x^2_1 -> x_1^2
+    s = s.replace(/\^([a-z0-9])_([a-z0-9])/g, '_$2^$1');
+    s = s.replace(/\^\{([^}]+)\}_\{([^}]+)\}/g, '_{$2}^{$1}');
+
+    // 6. Eliminar llaves redundantes alrededor de caracteres simples: _{1} -> _1, ^{2} -> ^2
+    s = s.replace(/_\{([a-z0-9])\}/g, '_$1');
+    s = s.replace(/\^\{([a-z0-9])\}/g, '^$1');
+
+    // 7. Homologar fracciones \frac{a}{b} -> (a)/(b) para equiparar con división con slash '/'
+    s = s.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1)/($2)');
+    s = s.replace(/\\frac([a-z0-9])([a-z0-9])/g, '($1)/($2)');
+
+    // 8. Eliminar paréntesis redundantes en factores elementales: (a)/(b) -> a/b
+    s = s.replace(/\(([a-z0-9])\)/g, '$1');
+
+    // 9. Eliminar espacios en blanco y operadores de multiplicación explícita
     s = s.replace(/\s+/g, '');
-
-    // 5. Normalizar multiplicación explícita y operadores
     s = s.replace(/\\(cdot|times)/g, '');
     s = s.replace(/\*/g, '');
 
-    // 6. Estandarizar llaves en subíndices y superíndices de 1 caracter: _{1} -> _1, ^{2} -> ^2
-    s = s.replace(/_\{([a-zA-Z0-9])\}/g, '_$1');
-    s = s.replace(/\^\{([a-zA-Z0-9])\}/g, '^$1');
-
-    // 7. Normalizar logaritmos, exponenciales y funciones trigonométricas
+    // 10. Normalizar logaritmos, exponenciales y trigonometría
     s = s.replace(/\\ln\{([^}]+)\}/g, '\\ln($1)');
-    s = s.replace(/\\ln([a-zA-Z0-9])/g, '\\ln($1)');
+    s = s.replace(/\\ln([a-z0-9])/g, '\\ln($1)');
     s = s.replace(/\\exp\{([^}]+)\}/g, '\\exp($1)');
     s = s.replace(/\\mathrm\{sen\}/g, '\\sin');
     s = s.replace(/\\sen/g, '\\sin');
@@ -626,235 +705,210 @@
     return s;
   }
 
-  function cambiarPantalla(idPantalla) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(idPantalla).classList.add('active');
+  function cambiarPantalla(id) {
+    document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
   }
 
-  function iniciarEvaluacion() {
+  function iniciarTutorial() {
     const inputCuenta = document.getElementById('num-cuenta');
     const errorDiv = document.getElementById('error-registro');
     numeroCuentaEstudiante = inputCuenta.value.trim();
 
-    if (!numeroCuentaEstudiante || numeroCuentaEstudiante.length < 7 || isNaN(numeroCuentaEstudiante)) {
-      errorDiv.textContent = "Ingresa un número de cuenta válido (mínimo 7 dígitos numéricos).";
+    if (!numeroCuentaEstudiante || numeroCuentaEstudiante.length < 5 || isNaN(numeroCuentaEstudiante)) {
+      errorDiv.textContent = "Ingresa un número de cuenta válido.";
       errorDiv.style.display = "block";
       return;
     }
 
-    if (localStorage.getItem("eval_completada_" + numeroCuentaEstudiante)) {
-      errorDiv.textContent = "Este número de cuenta ya ha completado la evaluación en este dispositivo.";
-      errorDiv.style.display = "block";
-      return;
-    }
+    // Manejo de intentos correlativos en localStorage
+    const claveIntentos = `intentos_${CONFIG_TUTORIAL.nombreHojaCalculo}_${numeroCuentaEstudiante}`;
+    const prev = parseInt(localStorage.getItem(claveIntentos) || "0", 10);
+    numeroIntento = prev + 1;
+    localStorage.setItem(claveIntentos, numeroIntento.toString());
 
+    document.getElementById('badge-intento-alumno').textContent = `Intento #${numeroIntento}`;
+
+    respuestasTutorial.length = 0;
     errorDiv.style.display = "none";
-    cambiarPantalla('pantalla-evaluacion');
+    cambiarPantalla('pantalla-tutorial');
     cargarReactivo(0);
   }
 
   function cargarReactivo(indice) {
-    if (indice >= BANCO_REACTIVOS.length) {
-      finalizarEvaluacion();
+    if (indice >= BANCO_TUTORIAL.length) {
+      finalizarTutorial();
       return;
     }
 
     indiceActual = indice;
-    estadoTarjeta = "RESPONDER";
-    const reactivo = BANCO_REACTIVOS[indice];
+    const r = BANCO_TUTORIAL[indice];
 
-    // Actualizar metadata de la tarjeta
-    document.getElementById('indicador-progreso').textContent = `Pregunta ${indice + 1} de ${BANCO_REACTIVOS.length}`;
-    document.getElementById('barra-progreso').style.width = `${((indice + 1) / BANCO_REACTIVOS.length) * 100}%`;
-    document.getElementById('pregunta-titulo').textContent = reactivo.titulo;
-    document.getElementById('pregunta-descripcion').textContent = reactivo.descripcion;
+    document.getElementById('indicador-reactivo').textContent = `Reactivo ${indice + 1} de ${BANCO_TUTORIAL.length}`;
+    document.getElementById('barra-progreso').style.width = `${((indice + 1) / BANCO_TUTORIAL.length) * 100}%`;
+    document.getElementById('tut-titulo').textContent = r.titulo;
+    document.getElementById('tut-descripcion').textContent = r.descripcion;
+    document.getElementById('tut-tip-box').innerHTML = `<strong>Instrucción / Atajo:</strong> ${r.guia}`;
 
-    // Renderizar la fórmula del problema con KaTeX
-    const targetMath = document.getElementById('math-render-target');
+    const target = document.getElementById('tut-render-target');
     if (typeof katex !== 'undefined') {
-      katex.render(reactivo.latexProblema, targetMath, { throwOnError: false, displayMode: true });
+      katex.render(r.latexProblema, target, { throwOnError: false, displayMode: true });
     } else {
-      targetMath.textContent = reactivo.latexProblema;
+      target.textContent = r.latexProblema;
     }
 
-    // Restablecer campo de entrada
-    const mathInput = document.getElementById('math-input');
-    mathInput.value = "";
-    mathInput.removeAttribute('disabled');
-    mathInput.focus();
+    const input = document.getElementById('math-input');
+    input.value = "";
+    input.removeAttribute('disabled');
+    input.focus();
 
-    // Ocultar caja de retroalimentación
-    const feedbackBox = document.getElementById('feedback-inmediato');
-    feedbackBox.className = "feedback-box";
-    feedbackBox.style.display = "none";
+    // Estado inicial de botones
+    document.getElementById('feedback-box').style.display = "none";
+    document.getElementById('col-btn-principal').style.display = "block";
+    document.getElementById('col-btn-reintentar').style.display = "none";
+    document.getElementById('col-btn-siguiente').style.display = "none";
 
-    // Configurar botón
-    const btn = document.getElementById('btn-interaccion');
-    btn.textContent = "Evaluar Respuesta";
-    btn.className = "btn";
-
-    iniciarTemporizador(reactivo.tiempoSegundos);
+    const btnSig = document.getElementById('btn-siguiente');
+    btnSig.textContent = (indice === BANCO_TUTORIAL.length - 1) ? "Finalizar y Ver Reporte →" : "Siguiente →";
   }
 
-  function iniciarTemporizador(segundos) {
-    clearInterval(temporizadorInterval);
-    tiempoRestante = segundos;
-    actualizarVistaCronometro();
+  function verificarRespuesta() {
+    const input = document.getElementById('math-input');
+    input.setAttribute('disabled', 'true');
+    const valorOriginal = input.value.trim();
+    const r = BANCO_TUTORIAL[indiceActual];
 
-    temporizadorInterval = setInterval(() => {
-      tiempoRestante--;
-      actualizarVistaCronometro();
+    const norm = normalizarExpresion(valorOriginal);
+    const esCorrecta = r.solucionesValidas.some(sol => normalizarExpresion(sol) === norm);
 
-      if (tiempoRestante <= 0) {
-        clearInterval(temporizadorInterval);
-        if (estadoTarjeta === "RESPONDER") {
-          evaluarRespuestaActual(true); // Forzar evaluación al expirar los 120 s
-        }
-      }
-    }, 1000);
-  }
-
-  function actualizarVistaCronometro() {
-    const cronoEl = document.getElementById('cronometro');
-    const mins = Math.floor(tiempoRestante / 60);
-    const segs = tiempoRestante % 60;
-    cronoEl.textContent = `${mins.toString().padStart(2, '0')}:${segs.toString().padStart(2, '0')}`;
-
-    if (tiempoRestante <= 15) {
-      cronoEl.classList.add('warning');
-    } else {
-      cronoEl.classList.remove('warning');
-    }
-  }
-
-  function procesarInteraccion() {
-    if (estadoTarjeta === "RESPONDER") {
-      evaluarRespuestaActual(false);
-    } else if (estadoTarjeta === "AVANZAR") {
-      cargarReactivo(indiceActual + 1);
-    }
-  }
-
-  function evaluarRespuestaActual(porTiempoAgotado) {
-    clearInterval(temporizadorInterval);
-    const mathInput = document.getElementById('math-input');
-    mathInput.setAttribute('disabled', 'true');
-
-    const valorOriginal = mathInput.value.trim();
-    const reactivo = BANCO_REACTIVOS[indiceActual];
-
-    // Evaluación aplicando la normalización universal
-    const entradaNormalizada = normalizarExpresion(valorOriginal);
-    const esCorrecta = !porTiempoAgotado && reactivo.solucionesValidas.some(sol => {
-      return normalizarExpresion(sol) === entradaNormalizada;
-    });
-
-    // Registrar resultado en el acumulador
-    respuestasRecopiladas.push({
-      id: reactivo.id,
-      titulo: reactivo.titulo,
-      respuesta: valorOriginal || (porTiempoAgotado ? "TIEMPO_AGOTADO" : "SIN_RESPUESTA"),
+    // Registrar o actualizar respuesta en el acumulador
+    respuestasTutorial[indiceActual] = {
+      id: r.id,
+      titulo: r.titulo,
+      respuesta: valorOriginal || "sin_respuesta",
       esCorrecta: esCorrecta
-    });
+    };
 
-    // Desplegar retroalimentación inmediata
-    const feedbackBox = document.getElementById('feedback-inmediato');
-    const statusText = document.getElementById('feedback-status');
-    const mathRenderExpected = document.getElementById('feedback-math-render');
+    const fb = document.getElementById('feedback-box');
+    const fbStatus = document.getElementById('feedback-status');
+    const fbMath = document.getElementById('feedback-math-render');
 
     if (esCorrecta) {
-      feedbackBox.className = "feedback-box correct";
-      statusText.textContent = "✓ Respuesta Correcta";
+      fb.className = "feedback-box correct";
+      fbStatus.textContent = "✓ ¡Correcto! Escritura y sintaxis válida";
     } else {
-      feedbackBox.className = "feedback-box incorrect";
-      statusText.textContent = porTiempoAgotado ? "✗ Tiempo Agotado — Respuesta Incorrecta" : "✗ Respuesta Incorrecta";
+      fb.className = "feedback-box incorrect";
+      fbStatus.textContent = "✗ Discrepancia en la sintaxis";
     }
 
     if (typeof katex !== 'undefined') {
-      katex.render(reactivo.respuestaCanonica, mathRenderExpected, { throwOnError: false, displayMode: true });
+      katex.render(r.respuestaCanonica, fbMath, { throwOnError: false, displayMode: true });
     } else {
-      mathRenderExpected.textContent = reactivo.respuestaCanonica;
+      fbMath.textContent = r.respuestaCanonica;
     }
+    fb.style.display = "block";
 
-    feedbackBox.style.display = "block";
-
-    // Modificar estado del botón para avanzar
-    estadoTarjeta = "AVANZAR";
-    const btn = document.getElementById('btn-interaccion');
-    btn.className = "btn btn-action";
-    if (indiceActual === BANCO_REACTIVOS.length - 1) {
-      btn.textContent = "Finalizar y Ver Resumen →";
-    } else {
-      btn.textContent = "Continuar al siguiente reactivo →";
-    }
-    btn.focus();
+    // Mostrar botones de Reintentar y Siguiente
+    document.getElementById('col-btn-principal').style.display = "none";
+    document.getElementById('col-btn-reintentar').style.display = "block";
+    document.getElementById('col-btn-siguiente').style.display = "block";
+    document.getElementById('btn-siguiente').focus();
   }
 
-  function finalizarEvaluacion() {
-    clearInterval(temporizadorInterval);
-    localStorage.setItem("eval_completada_" + numeroCuentaEstudiante, "true");
+  function reintentarEjercicioActual() {
+    const input = document.getElementById('math-input');
+    input.removeAttribute('disabled');
+    input.value = "";
+    input.focus();
+
+    document.getElementById('feedback-box').style.display = "none";
+    document.getElementById('col-btn-principal').style.display = "block";
+    document.getElementById('col-btn-reintentar').style.display = "none";
+    document.getElementById('col-btn-siguiente').style.display = "none";
+  }
+
+  function avanzarSiguiente() {
+    cargarReactivo(indiceActual + 1);
+  }
+
+  function finalizarTutorial() {
     cambiarPantalla('pantalla-final');
 
-    const total = respuestasRecopiladas.length;
-    const aciertos = respuestasRecopiladas.filter(r => r.esCorrecta).length;
+    const total = BANCO_TUTORIAL.length;
+    const aciertos = respuestasTutorial.filter(r => r && r.esCorrecta).length;
     const calificacion = Math.round((aciertos / total) * 100);
 
+    document.getElementById('summary-meta-info').textContent = `Estudiante: Cuenta ${numeroCuentaEstudiante} | Intento #${numeroIntento}`;
+
     let htmlTabla = `
-      <p style="font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; text-align: center;">
-        Aciertos: ${aciertos} de ${total} (${calificacion}%)
-      </p>
-      <table class="summary-table">
-        <thead>
-          <tr>
-            <th>Reactivo</th>
-            <th style="text-align: center;">Dictamen</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div class="text-center mb-3">
+        <span class="display-6 fw-bold">${calificacion}%</span>
+        <div class="small text-muted">${aciertos} de ${total} reactivos dominados</div>
+      </div>
+      <div class="table-responsive">
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Reactivo</th>
+              <th class="text-center">Resultado</th>
+            </tr>
+          </thead>
+          <tbody>
     `;
 
-    respuestasRecopiladas.forEach(r => {
+    respuestasTutorial.forEach(r => {
       htmlTabla += `
         <tr>
           <td>${r.titulo}</td>
-          <td style="text-align: center;">
-            <span class="status-badge ${r.esCorrecta ? 'status-correct' : 'status-incorrect'}">
-              ${r.esCorrecta ? 'CORRECTO' : 'INCORRECTO'}
+          <td class="text-center">
+            <span class="badge ${r.esCorrecta ? 'text-bg-success' : 'text-bg-danger'}">
+              ${r.esCorrecta ? 'CORRECTO' : 'REVISAR'}
             </span>
           </td>
         </tr>
       `;
     });
 
-    htmlTabla += `</tbody></table>`;
+    htmlTabla += `</tbody></table></div>`;
     document.getElementById('resumen-calificacion').innerHTML = htmlTabla;
 
+    // Enviar registro asíncrono a Google Sheets
     const payload = {
+      nombreEvaluacion: CONFIG_TUTORIAL.nombreHojaCalculo,
+      actividad: CONFIG_TUTORIAL.actividad,
       numeroCuenta: numeroCuentaEstudiante,
-      timestamp: new Date().toISOString(),
+      numeroIntento: numeroIntento,
+      timestamp: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
       calificacion: calificacion,
       aciertos: aciertos,
       total: total,
-      respuestas: respuestasRecopiladas
+      respuestas: respuestasTutorial
     };
 
-    fetch(URL_APPS_SCRIPT, {
+    fetch(CONFIG_TUTORIAL.urlAppsScript, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     })
     .then(() => {
-      document.getElementById('estado-envio').textContent = "Respuestas registradas exitosamente en la base central de datos.";
-      document.getElementById('estado-envio').className = "alert alert-success";
+      document.getElementById('estado-envio').textContent = `Intento #${numeroIntento} guardado exitosamente en la hoja '${CONFIG_TUTORIAL.nombreHojaCalculo}'[cite: 6].`;
+      document.getElementById('estado-envio').className = "alert alert-success py-2 small mb-3";
     })
     .catch(err => {
       console.error("Error al registrar:", err);
-      document.getElementById('estado-envio').textContent = "Registro guardado localmente. Presente su comprobante al profesor.";
-      document.getElementById('estado-envio').className = "alert alert-error";
+      document.getElementById('estado-envio').textContent = "Sesión guardada localmente.";
+      document.getElementById('estado-envio').className = "alert alert-secondary py-2 small mb-3";
     });
+  }
+
+  function reiniciarTutorialCompleto() {
+    document.getElementById('num-cuenta').value = numeroCuentaEstudiante;
+    cambiarPantalla('pantalla-registro');
   }
 </script>
 
+<!-- Bootstrap 5 Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
