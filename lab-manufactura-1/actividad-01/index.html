@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Tutorial Guiado de Notación Simbólica — FI UNAM</title>
+  <title>Cuestionario Previo: Calibrador Vernier — Lab. Manufactura I FI UNAM</title>
   
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -11,34 +11,40 @@
   <!-- KaTeX CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   
-  <!-- Carga diferida de motores matemáticos -->
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Scripts diferidos KaTeX -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://unpkg.com/mathlive@0.98.6/dist/mathlive.min.js"></script>
 
   <style>
     :root {
-      --fi-blue: #002B7A;
-      --fi-gold: #D59F0F;
-      --ink: #111111;
-      --paper: #ffffff;
-      --muted: #e5e5e5;
-      --muted-dark: #666666;
+      --bg-white: #ffffff;
+      --card-bg: #fcfcfc;
+      --border-color: #e2e8f0;
+      --accent-red: #b71c1c;
+      --accent-red-hover: #8e0000;
+      --text-blue-dark: #0a192f;
+      --text-blue-subtle: #1e3a8a;
+      --text-muted: #475569;
       --success-bg: #e8f5e9;
       --error-bg: #ffebee;
-      --card-bg: #fafafa;
+      --success-border: #2e7d32;
+      --error-border: #c62828;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--paper);
-      color: var(--ink);
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      background-color: var(--bg-white);
+      color: var(--text-blue-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
     }
@@ -46,28 +52,54 @@
     .container-app {
       width: 100%;
       max-width: 680px;
-      margin-top: 8px;
-      padding-bottom: 80px;
+      margin: 8px auto 60px auto;
     }
 
-    header {
-      border-bottom: 3px solid var(--fi-blue);
-      padding-bottom: 12px;
+    .header-top {
+      border-top: 5px solid var(--accent-red);
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-white);
+      padding: 14px 18px;
+      border-radius: 6px;
       margin-bottom: 20px;
     }
 
+    .inst-title {
+      color: var(--text-blue-dark);
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.3px;
+    }
+
+    .inst-subtitle {
+      color: var(--text-blue-subtle);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .badge-semester {
+      background-color: var(--accent-red);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
     .eval-card {
-      background: var(--card-bg);
-      border: 1px solid var(--muted);
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-top: 3px solid var(--accent-red);
       border-radius: 8px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(10, 25, 47, 0.03);
     }
 
     .progress-bar-container {
       width: 100%;
-      background-color: var(--muted);
+      background-color: #edf2f7;
       height: 6px;
       border-radius: 3px;
       margin-bottom: 16px;
@@ -76,7 +108,7 @@
 
     .progress-bar-fill {
       height: 100%;
-      background-color: var(--fi-blue);
+      background-color: var(--accent-red);
       width: 0%;
       transition: width 0.3s ease;
     }
@@ -85,314 +117,217 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
+      margin-bottom: 16px;
+      font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
     }
 
-    .target-math-box {
-      text-align: center;
-      margin: 14px 0;
-      padding: 14px;
-      background: var(--paper);
-      border: 1px dashed #b0bec5;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-
-    /* Barra de herramientas / accesos directos */
-    .math-toolbar {
+    .option-container {
       display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 6px 2px;
-      margin-bottom: 8px;
-      scrollbar-width: thin;
+      flex-direction: column;
+      gap: 10px;
+      margin: 18px 0;
     }
 
-    .math-toolbar::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    .math-toolbar::-webkit-scrollbar-thumb {
-      background: #ced4da;
-      border-radius: 4px;
-    }
-
-    .tool-btn {
-      flex: 0 0 auto;
-      font-size: 0.85rem;
-      font-weight: 600;
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #ced4da;
-      background: #ffffff;
-      color: var(--fi-blue);
+    .option-label {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px 16px;
       cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease;
+      background-color: #ffffff;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
     }
 
-    .tool-btn:hover, .tool-btn:active {
-      background: #e9ecef;
-      border-color: var(--fi-blue);
+    .option-label:hover {
+      border-color: var(--text-blue-subtle);
+      background-color: #f8fafc;
     }
 
-    .tool-btn.highlight {
-      background: #eef3fc;
-      border-color: var(--fi-blue);
-      font-weight: bold;
-    }
-
-    math-field {
-      font-size: 1.25rem;
-      padding: 10px 8px;
-      border: none;
-      border-bottom: 2px solid var(--fi-blue);
-      background: var(--paper);
-      width: 100%;
-      box-sizing: border-box;
-      outline: none;
-      border-radius: 4px 4px 0 0;
-    }
-
-    math-field:focus-within {
-      border-bottom-color: var(--fi-gold);
-      box-shadow: 0 2px 0 0 var(--fi-gold);
-    }
-
-    math-field[disabled] {
-      background-color: #f0f0f0;
-      opacity: 0.85;
-      cursor: not-allowed;
-    }
-
-    .kb-toggle-btn {
-      font-size: 0.78rem;
+    .form-check-input:checked + .option-label {
+      border-color: var(--accent-red);
+      background-color: #fff5f5;
       font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid #ced4da;
-      background: #ffffff;
-      color: #495057;
-      cursor: pointer;
+      box-shadow: 0 0 0 1px var(--accent-red);
     }
 
     .input-text {
       width: 100%;
       padding: 12px;
       font-size: 1rem;
-      border: 1px solid var(--fi-blue);
+      border: 1px solid var(--text-blue-dark);
       border-radius: 4px;
       margin-top: 8px;
       margin-bottom: 16px;
     }
 
-    .btn-custom {
-      background: var(--fi-blue);
-      color: var(--paper);
-      border: 1px solid var(--fi-blue);
-      padding: 13px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      width: 100%;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.2s ease;
+    .input-text:focus {
+      outline: 2px solid var(--accent-red);
+      border-color: var(--accent-red);
     }
 
-    .btn-custom:hover { background: #001f5c; color: var(--paper); }
-    .btn-action { background: var(--ink); border-color: var(--ink); }
-    .btn-action:hover { background: #333333; }
-    .btn-retry { background: #6c757d; border-color: #6c757d; }
-    .btn-retry:hover { background: #5a6268; }
+    .btn-access {
+      background-color: var(--text-blue-dark);
+      color: #ffffff;
+      border: 1px solid var(--text-blue-dark);
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .btn-access:hover {
+      background-color: var(--accent-red);
+      border-color: var(--accent-red);
+      color: #ffffff;
+    }
+
+    .btn-back {
+      color: var(--text-blue-subtle);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .btn-back:hover { color: var(--accent-red); }
 
     .screen-view { display: none; }
     .screen-view.active { display: block; }
 
-    .feedback-box {
-      display: none;
-      margin-top: 14px;
-      padding: 12px;
+    .summary-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .badge-status {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
       border-radius: 4px;
-      font-size: 0.88rem;
-      border-left: 5px solid transparent;
     }
 
-    .feedback-box.correct {
-      display: block;
-      background-color: var(--success-bg);
-      border-color: #198754;
-      color: #198754;
-    }
+    .badge-correct { background-color: var(--success-bg); color: var(--success-border); }
+    .badge-incorrect { background-color: var(--error-bg); color: var(--error-border); }
 
-    .feedback-box.incorrect {
-      display: block;
-      background-color: var(--error-bg);
-      border-color: #dc3545;
-      color: #dc3545;
-    }
-
-    .tip-box {
-      font-size: 0.82rem;
-      background-color: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-left: 3px solid var(--fi-gold);
-      padding: 8px 12px;
-      border-radius: 4px;
-      margin-top: 10px;
-    }
-
-    .code-tag {
-      font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.8rem;
-      background-color: #e9ecef;
-      padding: 2px 5px;
-      border-radius: 3px;
-      color: #b71c1c;
-    }
-
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 16px;
+    .feedback-comment {
       font-size: 0.85rem;
+      line-height: 1.45;
+      padding: 10px 12px;
+      border-radius: 4px;
+      margin-top: 8px;
+      background-color: #f8fafc;
+      border-left: 3px solid var(--text-blue-subtle);
     }
-
-    .summary-table th, .summary-table td {
-      border: 1px solid var(--muted);
-      padding: 9px;
-    }
-
-    .summary-table th { background-color: #f1f3f5; font-weight: 700; }
   </style>
 </head>
 <body>
 
 <main class="container-app" role="main">
   
-  <header class="d-flex justify-content-between align-items-center">
+  <!-- ENCABEZADO INSTITUCIONAL -->
+  <header class="header-top shadow-sm d-flex justify-content-between align-items-center flex-wrap gap-2">
     <div>
-      <h1 class="h5 fw-bold text-uppercase mb-0" style="color: var(--fi-blue);">Taller de Notación Simbólica</h1>
-      <p class="small text-muted mb-0">Facultad de Ingeniería — UNAM</p>
+      <a href="../" class="btn-back">← Volver al Laboratorio</a>
+      <div class="inst-title mt-1">UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO</div>
+      <div class="inst-subtitle">FACULTAD DE INGENIERÍA — LABORATORIO DE MANUFACTURA I</div>
     </div>
-    <span class="badge text-uppercase p-2" style="background-color: var(--fi-gold); color: #000;">20 Reactivos Guiados</span>
+    <div class="text-md-end">
+      <span class="small text-muted d-block">Prof. M. en C. I. Osvaldo Ruiz Cervantes</span>
+      <span class="badge badge-semester">Grupo 04 · Semestre 2027-1</span>
+    </div>
   </header>
 
-  <!-- PANTALLA 1: REGISTRO SIN BLOQUEO -->
-  <section id="pantalla-registro" class="screen-view active">
+  <!-- PANTALLA 1: INSTRUCCIONES FORMALES Y REGISTRO -->
+  <section id="pantalla-registro" class="screen-view active" aria-labelledby="title-reg">
     <div class="eval-card">
-      <h2 class="h6 fw-bold text-uppercase mb-2">Entrenamiento Práctico en Escritura Matemática</h2>
-      <p class="small text-muted mb-3">
-        Ingresa tu número de cuenta oficial para registrar tus avances. Este tutorial consta de <strong>20 ejercicios interactivos guiados</strong> sin límite de tiempo, con botones de acceso rápido y retroalimentación inmediata. Puedes repetir el taller cuantas veces desees para afinar tu velocidad.
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="badge text-bg-danger text-uppercase">Lectura Obligatoria</span>
+        <span class="small text-muted fw-bold">10 Puntos Totales</span>
+      </div>
+
+      <h1 class="h5 fw-bold mb-2" id="title-reg" style="color: var(--text-blue-dark);">Cuestionario Previo: Práctica Calibrador Vernier</h1>
+      <p class="small text-muted mb-3" style="line-height: 1.5;">
+        <strong>Propósito:</strong> Identificar los conceptos básicos, lineamientos de seguridad y cuidados operativos del calibrador vernier, mediante la revisión del documento técnico <strong>MADO-01</strong>, para garantizar un desempeño seguro y eficiente en la sesión experimental.
       </p>
-      
+
+      <div class="p-3 bg-light rounded border mb-3">
+        <div class="small fw-bold text-uppercase mb-1" style="color: var(--text-blue-subtle);">Lineamientos de la Evaluación:</div>
+        <ul class="small text-muted ps-3 mb-0" style="line-height: 1.6;">
+          <li><strong>Formato:</strong> 5 reactivos de opción múltiple (2.0 puntos c/u).</li>
+          <li><strong>Intentos:</strong> Se permite estrictamente <strong>un solo intento</strong>.</li>
+          <li><strong>Requisito:</strong> Acreditar esta evaluación es condición obligatoria para ingresar al taller.</li>
+          <li><strong>Seguridad:</strong> Una vez iniciado, no recargues ni retrocedas en el navegador.</li>
+        </ul>
+      </div>
+
       <div id="error-registro" class="alert alert-danger py-2 small" style="display: none;" role="alert"></div>
 
-      <label for="num-cuenta" class="form-label small fw-bold text-uppercase">Número de Cuenta:</label>
-      <input type="text" id="num-cuenta" class="input-text text-center fw-bold" placeholder="Ej. 318000000" maxlength="11" pattern="[0-9]*" inputmode="numeric" required>
+      <label for="num-cuenta" class="form-label small fw-bold text-uppercase">Ingresa tu Número de Cuenta:</label>
+      <input type="text" id="num-cuenta" class="input-text text-center fw-bold" placeholder="Ej. 323105853" maxlength="11" pattern="[0-9]*" inputmode="numeric" required>
 
-      <button type="button" class="btn-custom" onclick="iniciarTutorial()">
-        Comenzar Entrenamiento Guiado
+      <button type="button" class="btn-access" onclick="iniciarEvaluacion()">
+        Comenzar Cuestionario Previo
       </button>
     </div>
   </section>
 
-  <!-- PANTALLA 2: REACTIVOS GUIADOS DEL TUTORIAL -->
-  <section id="pantalla-tutorial" class="screen-view">
-    <div class="progress-bar-container">
+  <!-- PANTALLA 2: EVALUACIÓN SECUENCIAL (OPCIÓN MÚLTIPLE) -->
+  <section id="pantalla-evaluacion" class="screen-view" aria-labelledby="pregunta-titulo">
+    <div class="progress-bar-container" aria-hidden="true">
       <div id="barra-progreso" class="progress-bar-fill"></div>
     </div>
 
     <div class="eval-card">
       <div class="card-meta">
-        <span id="indicador-reactivo" class="badge text-bg-primary">Reactivo 1 de 20</span>
-        <span id="badge-intento-alumno" class="badge bg-secondary">Intento #1</span>
+        <span id="indicador-reactivo" class="badge text-bg-secondary">Pregunta 1 de 5</span>
+        <span id="cuenta-activa-badge" class="small text-muted">Cuenta: ---</span>
       </div>
 
-      <h2 id="tut-titulo" class="h6 fw-bold mb-1"></h2>
-      <p id="tut-descripcion" class="small text-muted mb-2"></p>
+      <h2 id="pregunta-titulo" class="h6 fw-bold mb-2" style="color: var(--text-blue-dark); line-height: 1.4;"></h2>
 
-      <div class="target-math-box">
-        <span class="d-block small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.72rem;">Ecuación a recrear:</span>
-        <div id="tut-render-target"></div>
-      </div>
+      <!-- Opciones dinámicas -->
+      <div class="option-container" id="contenedor-opciones"></div>
 
-      <div class="d-flex justify-content-between align-items-center mt-3 mb-1">
-        <label for="math-input" class="small fw-bold text-uppercase">Tu Escritura Matemática (minúsculas):</label>
-        <button type="button" class="kb-toggle-btn" onclick="alternarTecladoVirtual()">
-          ⌨️ Teclado Virtual
-        </button>
-      </div>
-
-      <!-- Barra de accesos directos priorizada por frecuencia -->
-      <div class="math-toolbar" id="toolbar-accesos" aria-label="Atajos matemáticos">
-        <button type="button" class="tool-btn highlight" title="Subíndice y Superíndice simultáneo" onclick="insertarEnCampo('_{#?}^{#?}')">x_a^b</button>
-        <button type="button" class="tool-btn highlight" title="Raíz n-ésima" onclick="insertarEnCampo('\\sqrt[#?]{#?}')">\sqrt[n]{x}</button>
-        <button type="button" class="tool-btn" title="Fracción" onclick="insertarEnCampo('\\frac{#?}{#?}')">\frac{a}{b}</button>
-        <button type="button" class="tool-btn" title="Potencia" onclick="insertarEnCampo('^{#?}')">x^a</button>
-        <button type="button" class="tool-btn" title="Subíndice" onclick="insertarEnCampo('_{#?}')">x_a</button>
-        <button type="button" class="tool-btn" title="Raíz cuadrada" onclick="insertarEnCampo('\\sqrt{#?}')">\sqrt{x}</button>
-        <button type="button" class="tool-btn" title="Logaritmo natural" onclick="insertarEnCampo('\\ln(#?)')">\ln(x)</button>
-        <button type="button" class="tool-btn" title="Logaritmo base n" onclick="insertarEnCampo('\\log_{#?}(#?)')">\log_n(x)</button>
-        <button type="button" class="tool-btn" title="Exponencial" onclick="insertarEnCampo('e^{#?}')">e^x</button>
-        <button type="button" class="tool-btn" title="Letra Theta" onclick="insertarEnCampo('\\theta ')">\theta</button>
-        <button type="button" class="tool-btn" title="Letra Mu" onclick="insertarEnCampo('\\mu ')">\mu</button>
-        <button type="button" class="tool-btn" title="Letra Sigma" onclick="insertarEnCampo('\\sigma ')">\sigma</button>
-        <button type="button" class="tool-btn" title="Letra Omega" onclick="insertarEnCampo('\\omega ')">\omega</button>
-        <button type="button" class="tool-btn" title="Letra Pi" onclick="insertarEnCampo('\\pi ')">\pi</button>
-        <button type="button" class="tool-btn" title="Seno" onclick="insertarEnCampo('\\sin(#?)')">\sin(\theta)</button>
-        <button type="button" class="tool-btn" title="Coseno" onclick="insertarEnCampo('\\cos(#?)')">\cos(\theta)</button>
-      </div>
-
-      <math-field id="math-input" placeholder="Escribe aquí..."></math-field>
-
-      <div class="tip-box" id="tut-tip-box"></div>
-
-      <!-- Feedback Inmediato -->
-      <div id="feedback-box" class="feedback-box">
-        <div id="feedback-status" class="fw-bold text-uppercase small mb-1"></div>
-        <div class="small text-muted">Solución canónica esperada:</div>
-        <div id="feedback-math-render" class="bg-white p-2 border rounded mt-1 text-center"></div>
-      </div>
-
-      <div class="row g-2 mt-3" id="contenedor-botones-accion">
-        <div class="col-12" id="col-btn-principal">
-          <button type="button" class="btn-custom" id="btn-verificar" onclick="verificarRespuesta()">
-            Verificar Escritura
-          </button>
-        </div>
-        <div class="col-6" id="col-btn-reintentar" style="display: none;">
-          <button type="button" class="btn-custom btn-retry" onclick="reintentarEjercicioActual()">
-            ↺ Reintentar
-          </button>
-        </div>
-        <div class="col-6" id="col-btn-siguiente" style="display: none;">
-          <button type="button" class="btn-custom btn-action" id="btn-siguiente" onclick="avanzarSiguiente()">
-            Siguiente →
-          </button>
-        </div>
-      </div>
+      <button type="button" class="btn-access mt-2" id="btn-siguiente" onclick="avanzarPregunta()">
+        Registrar y Continuar →
+      </button>
     </div>
   </section>
 
-  <!-- PANTALLA 3: REPORTE FINAL DE DESEMPEÑO -->
-  <section id="pantalla-final" class="screen-view">
+  <!-- PANTALLA 3: REPORTE FINAL CON RETROALIMENTACIÓN FORMATIVA -->
+  <section id="pantalla-final" class="screen-view" aria-labelledby="title-fin">
     <div class="eval-card text-center">
-      <h2 class="h5 fw-bold text-uppercase mb-1">Tutorial Completado</h2>
+      <h2 class="h5 fw-bold text-uppercase mb-1" id="title-fin" style="color: var(--text-blue-dark);">Evaluación Finalizada</h2>
       <p class="small text-muted mb-3" id="summary-meta-info"></p>
       
-      <div id="estado-envio" class="alert alert-info py-2 small mb-3">
-        Registrando intento en la hoja 'Tutorial_Sintaxis_Matematica'...
+      <div id="estado-envio" class="alert alert-success py-2 small mb-3">
+        Sincronizando calificación con el libro central de calificaciones...
       </div>
 
-      <div id="resumen-calificacion" class="text-start mb-3"></div>
+      <div id="resumen-puntaje-box" class="p-3 bg-light rounded border mb-4">
+        <div class="display-6 fw-bold mb-0" id="puntaje-total-texto" style="color: var(--accent-red);">0 / 10</div>
+        <div class="small text-muted fw-bold text-uppercase mt-1" id="dictamen-aprobatorio">Cuestionario Previo Concluido</div>
+      </div>
 
-      <button type="button" class="btn-custom py-2 fw-bold text-uppercase" onclick="reiniciarTutorialCompleto()">
-        Realizar un Nuevo Intento del Tutorial
-      </button>
+      <!-- Desglose por reactivo -->
+      <div class="text-start" id="contenedor-reporte-detallado"></div>
+
+      <p class="small text-muted mt-3 mb-0">
+        Tu intento ha quedado registrado formalmente en la plataforma del curso. Puedes cerrar esta ventana.
+      </p>
     </div>
   </section>
 
@@ -400,520 +335,320 @@
 
 <script>
   /**
-   * CONFIGURACIÓN DE LA ACTIVIDAD
+   * =========================================================================
+   * CONFIGURACIÓN DE LA ACTIVIDAD Y ENDPOINT
+   * =========================================================================
    */
-  const CONFIG_TUTORIAL = {
+  const CONFIG = {
     semestre: "2027-1",
-    asignatura: "Manufactura I",
-    tipoCurso: "Teoría",
+    asignatura: "Laboratorio de Manufactura I",
+    tipoCurso: "Práctica",
     grupo: "04",
     tipoEvaluacion: "Diagnóstica",
-    idActividad: "MANUF1_ACT01",
-    nombreActividad: "Tutorial_Guiado_20_Reactivos",
+    idActividad: "LAB1_ACT01",
+    nombreActividad: "Cuestionario Previo: Calibrador Vernier",
     urlAppsScript: "https://script.google.com/macros/s/AKfycby2HbJBq7XkBexjdEAwe3OYihcG52bHu9bT7rWS0Vmbn-5bPgNE97i-ka27G1ZtIm4B/exec"
-      };
+  };
 
   /**
-   * BANCO DE 20 REACTIVOS GUIADOS (MINÚSCULAS ESTRICTAS)
+   * =========================================================================
+   * BANCO DE REACTIVOS: MANUAL MADO-01 (CALIBRADOR VERNIER)
+   * Extraído íntegramente del Cuestionario Oficial de Formularios de Google
+   * =========================================================================
    */
-  const BANCO_TUTORIAL = [
+  const BANCO_PREGUNTAS = [
     {
-      id: "tut_01_lineal",
-      titulo: "01. Constantes y Variables Simples",
-      descripcion: "escribe la ecuación lineal básica:",
-      latexProblema: "y = mx + b",
-      guia: "En laptop/PC escribe directamente: 'y = m x + b'. En móvil usa el teclado de MathLive o escribe 'y=mx+b'.",
-      respuestaCanonica: "y = mx + b",
-      solucionesValidas: ["y=mx+b", "y=m*x+b", "y=m\\cdot x+b", "mx+b"]
+      id: "R01_CURSOR_NONIO",
+      puntos: 2,
+      pregunta: "¿Cuál es el elemento del calibrador vernier que funciona como componente deslizante y sobre el cual se encuentra grabada la escala del nonio?",
+      opciones: [
+        { id: "A", texto: "Brazo principal" },
+        { id: "B", texto: "Cursor" },
+        { id: "C", texto: "Varilla de profundidad" },
+        { id: "D", texto: "Regleta" }
+      ],
+      opcionCorrecta: "B",
+      comentario: "¡Correcto! Como indica el manual en la descripción de partes, el cursor es el elemento deslizante montado sobre la regleta graduada que permite modificar la apertura de las puntas y contiene la escala vernier para la precisión."
     },
     {
-      id: "tut_02_subindices",
-      titulo: "02. Subíndices Simples",
-      descripcion: "escribe la suma de dos variables con subíndice numérico:",
-      latexProblema: "x_1 + x_2",
-      guia: "Usa el guion bajo '_' para subíndices: 'x_1 + x_2' o el botón 'x_a'. No te preocupes por las llaves {}.",
-      respuestaCanonica: "x_1 + x_2",
-      solucionesValidas: ["x_1+x_2", "x_{1}+x_{2}"]
+      id: "R02_CUATRO_MEDICIONES",
+      puntos: 2,
+      pregunta: "Según las capacidades físicas del instrumento estándar descrito en la práctica, ¿cuáles son los cuatro tipos de mediciones geométricas que puede realizar?",
+      opciones: [
+        { id: "A", texto: "Exteriores, interiores, ángulos y radios" },
+        { id: "B", texto: "Exteriores, interiores, peldaños y profundidad" },
+        { id: "C", texto: "Planitud, exteriores, profundidad y rugosidad" },
+        { id: "D", texto: "Exteriores, interiores, temperatura y dureza" }
+      ],
+      opcionCorrecta: "B",
+      comentario: "¡Muy bien! El calibrador vernier es versátil y sus puntas y varillas están diseñadas específicamente para medir exteriores (puntas largas), interiores (puntas superiores), peldaños (cantos) y profundidad (varilla)."
     },
     {
-      id: "tut_03_potencias",
-      titulo: "03. Superíndices y Potencias",
-      descripcion: "escribe la suma de cuadrados (teorema de pitágoras):",
-      latexProblema: "a^2 + b^2",
-      guia: "Usa el acento circunflejo '^' o el botón 'x^a': 'a^2 + b^2'. El normalizador acepta con o sin llaves {}.",
-      respuestaCanonica: "a^2 + b^2",
-      solucionesValidas: ["a^2+b^2", "a^{2}+b^{2}"]
+      id: "R03_FORMULA_LEGIBILIDAD",
+      puntos: 2,
+      pregunta: "Para determinar la legibilidad ($P$) o precisión del instrumento, ¿qué operación matemática debe realizarse entre la mínima graduación de la escala principal ($S$) y el número de divisiones del nonio ($n$)?",
+      opciones: [
+        { id: "A", texto: "Multiplicación ($P = S \\times n$)" },
+        { id: "B", texto: "Suma ($P = S + n$)" },
+        { id: "C", texto: "División ($P = S / n$)" },
+        { id: "D", texto: "Resta ($P = S - n$)" }
+      ],
+      opcionCorrecta: "C",
+      comentario: "¡Exacto! La fórmula fundamental para conocer la precisión del instrumento es dividir el valor de la mínima graduación de la regla principal entre el número total de divisiones de la escala vernier ($P = S / n$)."
     },
     {
-      id: "tut_04_fracciones",
-      titulo: "04. Fracciones Estándar",
-      descripcion: "escribe la división fraccionaria de dos variables:",
-      latexProblema: "\\frac{a}{b}",
-      guia: "Escribe la diagonal '/' o '\\frac{a}{b}' o presiona el botón '\\frac{a}{b}'. Ambas formas son aceptadas.",
-      respuestaCanonica: "\\frac{a}{b}",
-      solucionesValidas: ["\\frac{a}{b}", "a/b"]
+      id: "R04_CALCULO_005MM",
+      puntos: 2,
+      pregunta: "Si se utiliza un calibrador vernier con escala en milímetros donde la regla principal marca $1\\text{ mm}$ como mínima división y el nonio tiene $20$ divisiones, ¿cuál es su legibilidad?",
+      opciones: [
+        { id: "A", texto: "0.10 mm" },
+        { id: "B", texto: "0.05 mm" },
+        { id: "C", texto: "0.02 mm" },
+        { id: "D", texto: "0.01 mm" }
+      ],
+      opcionCorrecta: "B",
+      comentario: "Correcto. Aplicando el principio de legibilidad del manual: al dividir $1\\text{ mm}$ entre $20$ divisiones, el resultado es $0.05\\text{ mm}$, lo cual es una de las escalas métricas comunes descritas en la práctica."
     },
     {
-      id: "tut_05_simultaneos",
-      titulo: "05. Subíndice y Superíndice Simultáneos",
-      descripcion: "escribe variables con subíndice elevadas a una potencia:",
-      latexProblema: "x_1^2 + x_2^2",
-      guia: "Usa el botón destacado 'x_a^b' de la barra, o escribe en tu teclado 'x_1^2 + x_2^2' (primero '_' y luego '^').",
-      respuestaCanonica: "x_1^2 + x_2^2",
-      solucionesValidas: ["x_1^2+x_2^2", "x_{1}^{2}+x_{2}^{2}", "x^2_1+x^2_2", "x^{2}_{1}+x^{2}_{2}"]
-    },
-    {
-      id: "tut_06_raiz_cuadrada",
-      titulo: "06. Raíz Cuadrada Simple",
-      descripcion: "escribe la raíz cuadrada de una suma:",
-      latexProblema: "\\sqrt{x + y}",
-      guia: "Escribe '\\sqrt' o presiona el botón '\\sqrt{x}'.",
-      respuestaCanonica: "\\sqrt{x + y}",
-      solucionesValidas: ["\\sqrt{x+y}", "\\sqrt{x + y}"]
-    },
-    {
-      id: "tut_07_raiz_nesima",
-      titulo: "07. Raíz n-ésima Compleja",
-      descripcion: "escribe la raíz cúbica de la variable x:",
-      latexProblema: "\\sqrt[3]{x}",
-      guia: "Usa el botón '\\sqrt[n]{x}' de la barra de atajos o escribe en teclado '\\sqrt[3]{x}'.",
-      respuestaCanonica: "\\sqrt[3]{x}",
-      solucionesValidas: ["\\sqrt[3]{x}", "\\sqrt[3]{x}", "\\nthroot[3]{x}"]
-    },
-    {
-      id: "tut_08_log_natural",
-      titulo: "08. Logaritmo Natural",
-      descripcion: "escribe el logaritmo natural de la variable y:",
-      latexProblema: "\\ln(y)",
-      guia: "Escribe '\\ln(y)' o presiona el botón '\\ln(x)'.",
-      respuestaCanonica: "\\ln(y)",
-      solucionesValidas: ["\\ln(y)", "\\ln y", "\\ln{y}"]
-    },
-    {
-      id: "tut_09_log_base",
-      titulo: "09. Logaritmo en Base Arbitraria",
-      descripcion: "escribe el logaritmo en base 2 de la variable x:",
-      latexProblema: "\\log_2(x)",
-      guia: "Usa el botón '\\log_n(x)' o escribe '\\log_2(x)' usando subíndice para la base.",
-      respuestaCanonica: "\\log_2(x)",
-      solucionesValidas: ["\\log_2(x)", "\\log_{2}(x)", "\\log_2x"]
-    },
-    {
-      id: "tut_10_trigonometria_simple",
-      titulo: "10. Funciones Trigonométricas y Letra Theta",
-      descripcion: "escribe la suma trigonométrica con el ángulo theta:",
-      latexProblema: "\\sin(\\theta) + \\cos(\\theta)",
-      guia: "Usa los botones '\\sin', '\\cos' y '\\theta' o escribe '\\sin(\\theta) + \\cos(\\theta)'.",
-      respuestaCanonica: "\\sin(\\theta) + \\cos(\\theta)",
-      solucionesValidas: [
-        "\\sin(\\theta)+\\cos(\\theta)",
-        "\\sin\\theta+\\cos\\theta",
-        "\\mathrm{sen}(\\theta)+\\cos(\\theta)",
-        "\\mathrm{sen}\\theta+\\cos\\theta"
-      ]
-    },
-    {
-      id: "tut_11_trigo_potencias",
-      titulo: "11. Identidad Trigonométrica Cuadrática",
-      descripcion: "escribe la identidad pitagórica:",
-      latexProblema: "\\sin^2(\\theta) + \\cos^2(\\theta)",
-      guia: "Escribe '\\sin^2(\\theta)' combinando función y potencia o usando los atajos.",
-      respuestaCanonica: "\\sin^2(\\theta) + \\cos^2(\\theta)",
-      solucionesValidas: [
-        "\\sin^2(\\theta)+\\cos^2(\\theta)",
-        "\\sin^{2}(\\theta)+\\cos^{2}(\\theta)",
-        "\\sin^2\\theta+\\cos^2\\theta",
-        "\\mathrm{sen}^2(\\theta)+\\cos^2(\\theta)"
-      ]
-    },
-    {
-      id: "tut_12_letras_griegas_fraccion",
-      titulo: "12. Letra Sigma y Subíndices en Esfuerzos",
-      descripcion: "escribe la fórmula del esfuerzo normal inicial:",
-      latexProblema: "\\sigma = \\frac{f}{a_0}",
-      guia: "Escribe '\\sigma = \\frac{f}{a_0}' o usa los botones '\\sigma', '\\frac{a}{b}' y 'x_a'.",
-      respuestaCanonica: "\\sigma = \\frac{f}{a_0}",
-      solucionesValidas: ["\\sigma=\\frac{f}{a_0}", "\\sigma=\\frac{f}{a_{0}}", "\\sigma=f/a_0", "\\frac{f}{a_0}"]
-    },
-    {
-      id: "tut_13_friccion_tangente",
-      titulo: "13. Letra Mu y Función Tangente",
-      descripcion: "escribe el producto del coeficiente de fricción por la tangente:",
-      latexProblema: "\\mu \\tan(\\alpha)",
-      guia: "Usa '\\mu' y '\\tan(\\alpha)' o escribe '\\alpha' para la letra alfa.",
-      respuestaCanonica: "\\mu \\tan(\\alpha)",
-      solucionesValidas: ["\\mu\\tan(\\alpha)", "\\mu\\tan\\alpha", "\\mu\\cdot\\tan(\\alpha)", "\\mu*\\tan(\\alpha)"]
-    },
-    {
-      id: "tut_14_exponencial_simple",
-      titulo: "14. Función Exponencial con Potencia Negativa",
-      descripcion: "escribe la función exponencial simple:",
-      latexProblema: "e^{-kt}",
-      guia: "Usa el botón 'e^x' o escribe 'e^{-kt}'. El normalizador acepta con y sin llaves.",
-      respuestaCanonica: "e^{-kt}",
-      solucionesValidas: ["e^{-kt}", "e^{-(kt)}", "\\exp(-kt)", "\\exp(-(kt))"]
-    },
-    {
-      id: "tut_15_arrhenius_fraccion",
-      titulo: "15. Exponencial Compuesta tipo Arrhenius",
-      descripcion: "escribe el término exponencial térmico:",
-      latexProblema: "\\exp\\left(-\\frac{q}{rt}\\right)",
-      guia: "Escribe '\\exp(-\\frac{q}{rt})' o 'e^{-\\frac{q}{rt}}'. Se aceptan ambas notaciones.",
-      respuestaCanonica: "\\exp\\left(-\\frac{q}{rt}\\right)",
-      solucionesValidas: [
-        "\\exp(-\\frac{q}{rt})",
-        "\\exp(-\\frac{q}{r\\cdot t})",
-        "e^{-\\frac{q}{rt}}",
-        "e^{-\\frac{q}{r\\cdot t}}",
-        "\\exp(-q/(rt))",
-        "e^{-(q/(rt))}"
-      ]
-    },
-    {
-      id: "tut_16_energia_cinetica",
-      titulo: "16. Energía con Fracción y Potencias",
-      descripcion: "escribe la fórmula de energía cinética en minúsculas:",
-      latexProblema: "e = \\frac{1}{2}mv^2",
-      guia: "Escribe 'e = \\frac{1}{2} m v^2' o 'e = (1/2) m v^2'.",
-      respuestaCanonica: "e = \\frac{1}{2}mv^2",
-      solucionesValidas: ["e=\\frac{1}{2}mv^2", "e=\\frac{1}{2}m\\cdot v^2", "e=0.5mv^2", "e=\\frac{mv^2}{2}", "\\frac{1}{2}mv^2"]
-    },
-    {
-      id: "tut_17_frecuencia_omega",
-      titulo: "17. Letra Omega y Raíz Fraccionaria",
-      descripcion: "escribe la frecuencia angular:",
-      latexProblema: "\\omega = \\sqrt{\\frac{k}{m}}",
-      guia: "Usa los botones '\\omega', '\\sqrt{x}' y '\\frac{a}{b}'.",
-      respuestaCanonica: "\\omega = \\sqrt{\\frac{k}{m}}",
-      solucionesValidas: ["\\omega=\\sqrt{\\frac{k}{m}}", "\\omega=\\sqrt{k/m}", "\\sqrt{\\frac{k}{m}}"]
-    },
-    {
-      id: "tut_18_derivada_leibniz",
-      titulo: "18. Notación de Derivada",
-      descripcion: "escribe la derivada ordinaria de y respecto a t:",
-      latexProblema: "\\frac{dy}{dt}",
-      guia: "Escribe '\\frac{dy}{dt}' o usa la barra con 'dy/dt'.",
-      respuestaCanonica: "\\frac{dy}{dt}",
-      solucionesValidas: ["\\frac{dy}{dt}", "dy/dt"]
-    },
-    {
-      id: "tut_19_pi_integral",
-      titulo: "19. Expresión Circular con Pi y Radio",
-      descripcion: "escribe el elemento diferencial de área circular:",
-      latexProblema: "2\\pi r dr",
-      guia: "Usa el botón '\\pi' o escribe '\\pi': '2 \\pi r dr'.",
-      respuestaCanonica: "2\\pi r dr",
-      solucionesValidas: ["2\\pi rdr", "2\\cdot\\pi\\cdot r\\cdot dr", "2\\pi r dr"]
-    },
-    {
-      id: "tut_20_presion_completa",
-      titulo: "20. Modelo Avanzado de Manufactura",
-      descripcion: "escribe el término adimensional de presión sobre el disco:",
-      latexProblema: "\\frac{2\\mu}{h}\\left(\\frac{d}{2}-r\\right)",
-      guia: "Combina fracciones, paréntesis y la letra '\\mu': '\\frac{2\\mu}{h}(\\frac{d}{2}-r)'.",
-      respuestaCanonica: "\\frac{2\\mu}{h}\\left(\\frac{d}{2}-r\\right)",
-      solucionesValidas: [
-        "\\frac{2\\mu}{h}(\\frac{d}{2}-r)",
-        "\\frac{2\\mu}{h}(\\frac{d}{2}-r)",
-        "(2\\mu/h)*(d/2-r)",
-        "\\frac{2\\cdot\\mu}{h}(\\frac{d}{2}-r)"
-      ]
+      id: "R05_ALMACENAMIENTO_PUNTAS",
+      puntos: 2,
+      pregunta: "Al finalizar la actividad experimental, ¿cuál es la condición correcta en la que debe almacenarse el calibrador vernier para asegurar su conservación?",
+      opciones: [
+        { id: "A", texto: "Con el tornillo de fijación totalmente apretado" },
+        { id: "B", texto: "Con las puntas de medición ligeramente separadas" },
+        { id: "C", texto: "Con las puntas de medición totalmente cerradas (contacto firme)" },
+        { id: "D", texto: "Con la varilla de profundidad totalmente extendida" }
+      ],
+      opcionCorrecta: "B",
+      comentario: "¡Excelente! El manual especifica en el desarrollo de la práctica que, al terminar su uso, el instrumento debe guardarse con las puntas ligeramente separadas para evitar daños por corrosión o presión entre las caras de medición."
     }
   ];
 
-  // Control de variables globales
+  // Control de variables
   let indiceActual = 0;
   let numeroCuentaEstudiante = "";
-  let numeroIntento = 1;
-  const respuestasTutorial = [];
+  const respuestasRecopiladas = [];
 
   document.addEventListener("DOMContentLoaded", () => {
-    customElements.whenDefined('math-field').then(() => {
-      document.querySelectorAll('math-field').forEach(mf => {
-        mf.mathVirtualKeyboardPolicy = "auto";
-      });
-    });
-  });
-
-  /**
-   * INSERCIÓN DINÁMICA DE ATAJOS EN EL MATH-FIELD ACTIVO
-   */
-  function insertarEnCampo(latexFragment) {
-    const mf = document.getElementById('math-input');
-    if (!mf) return;
-    mf.focus();
-    mf.insert(latexFragment, { selectionMode: 'placeholder' });
-  }
-
-  function alternarTecladoVirtual() {
-    const mf = document.getElementById('math-input');
-    if (!mf) return;
-    if (window.mathVirtualKeyboard) {
-      if (window.mathVirtualKeyboard.visible) {
-        window.mathVirtualKeyboard.hide();
-      } else {
-        mf.focus();
-        window.mathVirtualKeyboard.show();
-      }
+    // Verificación de candado si la página intenta recargarse
+    const cuentaActiva = sessionStorage.getItem("eval_cuenta_activa");
+    if (cuentaActiva && localStorage.getItem(`eval_bloqueada_${CONFIG.nombreHoja}_${cuentaActiva}`)) {
+      bloquearPantallaPorReingreso();
     }
-  }
-
-  /**
-   * MOTOR DE NORMALIZACIÓN MATEMÁTICA AVANZADA (MINÚSCULAS)
-   * Resuelve conflicto de llaves {}, división / vs \frac y orden sub/super.
-   */
-  function normalizarExpresion(str) {
-    if (!str) return "";
-    let s = str.trim().toLowerCase();
-
-    // 1. Eliminar comandos de formato y delimitadores elásticos
-    s = s.replace(/\\(displaystyle|left|right|mleft|mright|text|mathrm|mathbf)/g, '');
-
-    // 2. Remover miembro izquierdo universal si existe
-    s = s.replace(/^.*=\s*/g, '');
-
-    // 3. Homologar corchetes a paréntesis (excepto en argumentos de raíz n-ésima)
-    s = s.replace(/\\sqrt\[([^\]]+)\]/g, 'RAIZN_$1_'); // Guarda temporalmente la raíz n
-    s = s.replace(/\[/g, '(').replace(/\]/g, ')');
-    s = s.replace(/RAIZN_([^_]+)_/g, '\\sqrt[$1]');   // Restaura la raíz n
-
-    // 4. Estandarizar raíces n-ésimas
-    s = s.replace(/\\nthroot\[([^\]]+)\]\{([^}]+)\}/g, '\\sqrt[$1]{$2}');
-
-    // 5. Homologar orden de subíndices y potencias adyacentes: x^2_1 -> x_1^2
-    s = s.replace(/\^([a-z0-9])_([a-z0-9])/g, '_$2^$1');
-    s = s.replace(/\^\{([^}]+)\}_\{([^}]+)\}/g, '_{$2}^{$1}');
-
-    // 6. Eliminar llaves redundantes alrededor de caracteres simples: _{1} -> _1, ^{2} -> ^2
-    s = s.replace(/_\{([a-z0-9])\}/g, '_$1');
-    s = s.replace(/\^\{([a-z0-9])\}/g, '^$1');
-
-    // 7. Homologar fracciones \frac{a}{b} -> (a)/(b) para equiparar con división con slash '/'
-    s = s.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1)/($2)');
-    s = s.replace(/\\frac([a-z0-9])([a-z0-9])/g, '($1)/($2)');
-
-    // 8. Eliminar paréntesis redundantes en factores elementales: (a)/(b) -> a/b
-    s = s.replace(/\(([a-z0-9])\)/g, '$1');
-
-    // 9. Eliminar espacios en blanco y operadores de multiplicación explícita
-    s = s.replace(/\s+/g, '');
-    s = s.replace(/\\(cdot|times)/g, '');
-    s = s.replace(/\*/g, '');
-
-    // 10. Normalizar logaritmos, exponenciales y trigonometría
-    s = s.replace(/\\ln\{([^}]+)\}/g, '\\ln($1)');
-    s = s.replace(/\\ln([a-z0-9])/g, '\\ln($1)');
-    s = s.replace(/\\exp\{([^}]+)\}/g, '\\exp($1)');
-    s = s.replace(/\\mathrm\{sen\}/g, '\\sin');
-    s = s.replace(/\\sen/g, '\\sin');
-
-    return s;
-  }
+  });
 
   function cambiarPantalla(id) {
     document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   }
 
-  function iniciarTutorial() {
+  function activarCandadosNavegacion() {
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () { history.go(1); };
+    window.addEventListener('beforeunload', confirmarSalida);
+  }
+
+  function desactivarCandadosNavegacion() {
+    window.removeEventListener('beforeunload', confirmarSalida);
+  }
+
+  function confirmarSalida(e) {
+    e.preventDefault();
+    e.returnValue = 'La evaluación está en curso. Si recargas o sales, el intento se anulará.';
+    return e.returnValue;
+  }
+
+  function bloquearPantallaPorReingreso() {
+    desactivarCandadosNavegacion();
+    cambiarPantalla('pantalla-final');
+    document.getElementById('title-fin').textContent = "Acceso Bloqueado";
+    document.getElementById('estado-envio').textContent = "Se detectó un intento de reingreso o recarga. La evaluación permite un único intento formal.";
+    document.getElementById('estado-envio').className = "alert alert-danger py-2 small mb-3";
+    document.getElementById('resumen-puntaje-box').style.display = "none";
+  }
+
+  function iniciarEvaluacion() {
     const inputCuenta = document.getElementById('num-cuenta');
     const errorDiv = document.getElementById('error-registro');
     numeroCuentaEstudiante = inputCuenta.value.trim();
 
-    if (!numeroCuentaEstudiante || numeroCuentaEstudiante.length < 5 || isNaN(numeroCuentaEstudiante)) {
-      errorDiv.textContent = "Ingresa un número de cuenta válido.";
+    if (!numeroCuentaEstudiante || numeroCuentaEstudiante.length < 7 || isNaN(numeroCuentaEstudiante)) {
+      errorDiv.textContent = "Ingresa un número de cuenta válido (mínimo 7 dígitos numéricos).";
       errorDiv.style.display = "block";
       return;
     }
 
-    // Manejo de intentos correlativos en localStorage
-    const claveIntentos = `intentos_${CONFIG_TUTORIAL.nombreHojaCalculo}_${numeroCuentaEstudiante}`;
-    const prev = parseInt(localStorage.getItem(claveIntentos) || "0", 10);
-    numeroIntento = prev + 1;
-    localStorage.setItem(claveIntentos, numeroIntento.toString());
+    const claveStorage = `eval_bloqueada_${CONFIG.nombreHoja}_${numeroCuentaEstudiante}`;
+    if (localStorage.getItem(claveStorage)) {
+      errorDiv.textContent = "Este número de cuenta ya ha completado este cuestionario previo en este dispositivo.";
+      errorDiv.style.display = "block";
+      return;
+    }
 
-    document.getElementById('badge-intento-alumno').textContent = `Intento #${numeroIntento}`;
+    // Activar candados de seguridad
+    localStorage.setItem(claveStorage, "true");
+    sessionStorage.setItem("eval_cuenta_activa", numeroCuentaEstudiante);
+    activarCandadosNavegacion();
 
-    respuestasTutorial.length = 0;
+    document.getElementById('cuenta-activa-badge').textContent = `Cuenta: ${numeroCuentaEstudiante}`;
     errorDiv.style.display = "none";
-    cambiarPantalla('pantalla-tutorial');
-    cargarReactivo(0);
+    cambiarPantalla('pantalla-evaluacion');
+    cargarPregunta(0);
   }
 
-  function cargarReactivo(indice) {
-    if (indice >= BANCO_TUTORIAL.length) {
-      finalizarTutorial();
+  function renderizarKaTeXEnElemento(elemento) {
+    if (typeof katex === 'undefined') return;
+    elemento.innerHTML = elemento.innerHTML.replace(/\$([^\$]+)\$/g, (match, formula) => {
+      const span = document.createElement('span');
+      katex.render(formula, span, { throwOnError: false });
+      return span.outerHTML;
+    });
+  }
+
+  function cargarPregunta(indice) {
+    if (indice >= BANCO_PREGUNTAS.length) {
+      finalizarCuestionario();
       return;
     }
 
     indiceActual = indice;
-    const r = BANCO_TUTORIAL[indice];
+    const p = BANCO_PREGUNTAS[indice];
 
-    document.getElementById('indicador-reactivo').textContent = `Reactivo ${indice + 1} de ${BANCO_TUTORIAL.length}`;
-    document.getElementById('barra-progreso').style.width = `${((indice + 1) / BANCO_TUTORIAL.length) * 100}%`;
-    document.getElementById('tut-titulo').textContent = r.titulo;
-    document.getElementById('tut-descripcion').textContent = r.descripcion;
-    document.getElementById('tut-tip-box').innerHTML = `<strong>Instrucción / Atajo:</strong> ${r.guia}`;
+    document.getElementById('indicador-reactivo').textContent = `Pregunta ${indice + 1} de ${BANCO_PREGUNTAS.length} (${p.puntos} Pts)`;
+    document.getElementById('barra-progreso').style.width = `${((indice + 1) / BANCO_PREGUNTAS.length) * 100}%`;
+    
+    const tituloEl = document.getElementById('pregunta-titulo');
+    tituloEl.textContent = p.pregunta;
+    renderizarKaTeXEnElemento(tituloEl);
 
-    const target = document.getElementById('tut-render-target');
-    if (typeof katex !== 'undefined') {
-      katex.render(r.latexProblema, target, { throwOnError: false, displayMode: true });
-    } else {
-      target.textContent = r.latexProblema;
-    }
+    const contenedor = document.getElementById('contenedor-opciones');
+    contenedor.innerHTML = "";
 
-    const input = document.getElementById('math-input');
-    input.value = "";
-    input.removeAttribute('disabled');
-    input.focus();
-
-    // Estado inicial de botones
-    document.getElementById('feedback-box').style.display = "none";
-    document.getElementById('col-btn-principal').style.display = "block";
-    document.getElementById('col-btn-reintentar').style.display = "none";
-    document.getElementById('col-btn-siguiente').style.display = "none";
-
-    const btnSig = document.getElementById('btn-siguiente');
-    btnSig.textContent = (indice === BANCO_TUTORIAL.length - 1) ? "Finalizar y Ver Reporte →" : "Siguiente →";
-  }
-
-  function verificarRespuesta() {
-    const input = document.getElementById('math-input');
-    input.setAttribute('disabled', 'true');
-    const valorOriginal = input.value.trim();
-    const r = BANCO_TUTORIAL[indiceActual];
-
-    const norm = normalizarExpresion(valorOriginal);
-    const esCorrecta = r.solucionesValidas.some(sol => normalizarExpresion(sol) === norm);
-
-    // Registrar o actualizar respuesta en el acumulador
-    respuestasTutorial[indiceActual] = {
-      id: r.id,
-      titulo: r.titulo,
-      respuesta: valorOriginal || "sin_respuesta",
-      esCorrecta: esCorrecta
-    };
-
-    const fb = document.getElementById('feedback-box');
-    const fbStatus = document.getElementById('feedback-status');
-    const fbMath = document.getElementById('feedback-math-render');
-
-    if (esCorrecta) {
-      fb.className = "feedback-box correct";
-      fbStatus.textContent = "✓ ¡Correcto! Escritura y sintaxis válida";
-    } else {
-      fb.className = "feedback-box incorrect";
-      fbStatus.textContent = "✗ Discrepancia en la sintaxis";
-    }
-
-    if (typeof katex !== 'undefined') {
-      katex.render(r.respuestaCanonica, fbMath, { throwOnError: false, displayMode: true });
-    } else {
-      fbMath.textContent = r.respuestaCanonica;
-    }
-    fb.style.display = "block";
-
-    // Mostrar botones de Reintentar y Siguiente
-    document.getElementById('col-btn-principal').style.display = "none";
-    document.getElementById('col-btn-reintentar').style.display = "block";
-    document.getElementById('col-btn-siguiente').style.display = "block";
-    document.getElementById('btn-siguiente').focus();
-  }
-
-  function reintentarEjercicioActual() {
-    const input = document.getElementById('math-input');
-    input.removeAttribute('disabled');
-    input.value = "";
-    input.focus();
-
-    document.getElementById('feedback-box').style.display = "none";
-    document.getElementById('col-btn-principal').style.display = "block";
-    document.getElementById('col-btn-reintentar').style.display = "none";
-    document.getElementById('col-btn-siguiente').style.display = "none";
-  }
-
-  function avanzarSiguiente() {
-    cargarReactivo(indiceActual + 1);
-  }
-
-  function finalizarTutorial() {
-    cambiarPantalla('pantalla-final');
-
-    const total = BANCO_TUTORIAL.length;
-    const aciertos = respuestasTutorial.filter(r => r && r.esCorrecta).length;
-    const calificacion = Math.round((aciertos / total) * 100);
-
-    document.getElementById('summary-meta-info').textContent = `Estudiante: Cuenta ${numeroCuentaEstudiante} | Intento #${numeroIntento}`;
-
-    let htmlTabla = `
-      <div class="text-center mb-3">
-        <span class="display-6 fw-bold">${calificacion}%</span>
-        <div class="small text-muted">${aciertos} de ${total} reactivos dominados</div>
-      </div>
-      <div class="table-responsive">
-        <table class="summary-table">
-          <thead>
-            <tr>
-              <th>Reactivo</th>
-              <th class="text-center">Resultado</th>
-            </tr>
-          </thead>
-          <tbody>
-    `;
-
-    respuestasTutorial.forEach(r => {
-      htmlTabla += `
-        <tr>
-          <td>${r.titulo}</td>
-          <td class="text-center">
-            <span class="badge ${r.esCorrecta ? 'text-bg-success' : 'text-bg-danger'}">
-              ${r.esCorrecta ? 'CORRECTO' : 'REVISAR'}
-            </span>
-          </td>
-        </tr>
+    p.opciones.forEach(opt => {
+      const wrapper = document.createElement('div');
+      wrapper.className = "form-check p-0";
+      wrapper.innerHTML = `
+        <input class="form-check-input d-none" type="radio" name="optPregunta" id="opt_${opt.id}" value="${opt.id}">
+        <label class="option-label" for="opt_${opt.id}">
+          <strong style="color: var(--accent-red);">${opt.id})</strong>
+          <span class="opt-text">${opt.texto}</span>
+        </label>
       `;
+      contenedor.appendChild(wrapper);
     });
 
-    htmlTabla += `</tbody></table></div>`;
-    document.getElementById('resumen-calificacion').innerHTML = htmlTabla;
+    document.querySelectorAll('.opt-text').forEach(el => renderizarKaTeXEnElemento(el));
 
-    // Enviar registro asíncrono a Google Sheets
+    const btn = document.getElementById('btn-siguiente');
+    btn.textContent = (indice === BANCO_PREGUNTAS.length - 1) ? "Finalizar y Enviar Respuestas" : "Registrar y Continuar →";
+  }
+
+  function avanzarPregunta() {
+    const checked = document.querySelector('input[name="optPregunta"]:checked');
+    if (!checked) {
+      alert("Por favor, selecciona una respuesta antes de continuar.");
+      return;
+    }
+
+    const respuestaElegida = checked.value;
+    const p = BANCO_PREGUNTAS[indiceActual];
+    const esCorrecta = (respuestaElegida === p.opcionCorrecta);
+    const puntajeGanado = esCorrecta ? p.puntos : 0;
+
+    respuestasRecopiladas.push({
+      id: p.id,
+      pregunta: p.pregunta,
+      respuestaElegida: respuestaElegida,
+      opcionCorrecta: p.opcionCorrecta,
+      textoElegido: p.opciones.find(o => o.id === respuestaElegida).texto,
+      textoCorrecto: p.opciones.find(o => o.id === p.opcionCorrecta).texto,
+      esCorrecta: esCorrecta,
+      puntosGanados: puntajeGanado,
+      puntosMax: p.puntos,
+      comentario: p.comentario
+    });
+
+    cargarPregunta(indiceActual + 1);
+  }
+
+  function finalizarCuestionario() {
+    desactivarCandadosNavegacion();
+    cambiarPantalla('pantalla-final');
+
+    let totalPuntos = 0;
+    respuestasRecopiladas.forEach(r => { totalPuntos += r.puntosGanados; });
+
+    document.getElementById('summary-meta-info').textContent = `Alumno: Cuenta ${numeroCuentaEstudiante} | Grupo ${CONFIG.grupo} | Semestre ${CONFIG.semestre}`;
+    document.getElementById('puntaje-total-texto').textContent = `${totalPuntos} / 10 Pts`;
+
+    const dictamen = document.getElementById('dictamen-aprobatorio');
+    if (totalPuntos >= 8) {
+      dictamen.textContent = "✓ Acreditado — Tienes derecho a ingresar a la sesión práctica";
+      dictamen.className = "small fw-bold text-uppercase mt-1 text-success";
+    } else {
+      dictamen.textContent = "Revisión requerida con el profesor titular en el taller";
+      dictamen.className = "small fw-bold text-uppercase mt-1 text-danger";
+    }
+
+    // Generar reporte formativo detallado con retroalimentación del manual
+    const contenedorReporte = document.getElementById('contenedor-reporte-detallado');
+    contenedorReporte.innerHTML = "";
+
+    respuestasRecopiladas.forEach((r, idx) => {
+      const card = document.createElement('div');
+      card.className = "summary-card shadow-sm";
+      card.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="small fw-bold text-muted">Reactivo 0${idx + 1}</span>
+          <span class="badge-status ${r.esCorrecta ? 'badge-correct' : 'badge-incorrect'}">
+            ${r.esCorrecta ? '+2.0 Pts (Correcto)' : '0.0 Pts (Incorrecto)'}
+          </span>
+        </div>
+        <div class="small fw-bold mb-2" style="color: var(--text-blue-dark);">${r.pregunta}</div>
+        <div class="small mb-1"><strong>Tu respuesta:</strong> ${r.respuestaElegida}) ${r.textoElegido}</div>
+        ${!r.esCorrecta ? `<div class="small text-danger mb-1"><strong>Respuesta correcta:</strong> ${r.opcionCorrecta}) ${r.textoCorrecto}</div>` : ''}
+        <div class="feedback-comment">${r.comentario}</div>
+      `;
+      contenedorReporte.appendChild(card);
+      renderizarKaTeXEnElemento(card);
+    });
+
+    // Envío asíncrono a Google Apps Script
     const payload = {
-      nombreEvaluacion: CONFIG_TUTORIAL.nombreHojaCalculo,
-      actividad: CONFIG_TUTORIAL.actividad,
+      nombreEvaluacion: CONFIG.nombreHoja,
+      semestre: CONFIG.semestre,
+      asignatura: CONFIG.asignatura,
+      grupo: CONFIG.grupo,
+      actividad: CONFIG.actividad,
       numeroCuenta: numeroCuentaEstudiante,
-      numeroIntento: numeroIntento,
       timestamp: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
-      calificacion: calificacion,
-      aciertos: aciertos,
-      total: total,
-      respuestas: respuestasTutorial
+      calificacion: totalPuntos * 10, // Escala 0 - 100
+      aciertos: `${totalPuntos / 2} / 5`,
+      total: 5,
+      respuestas: respuestasRecopiladas.map(r => ({
+        titulo: r.id,
+        respuesta: `${r.respuestaElegida}) ${r.textoElegido}`,
+        esCorrecta: r.esCorrecta
+      }))
     };
 
-    fetch(CONFIG_TUTORIAL.urlAppsScript, {
+    fetch(CONFIG.urlAppsScript, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     })
     .then(() => {
-      document.getElementById('estado-envio').textContent = `Intento #${numeroIntento} guardado exitosamente en la hoja '${CONFIG_TUTORIAL.nombreHojaCalculo}'[cite: 6].`;
+      document.getElementById('estado-envio').textContent = `Calificación registrada exitosamente en la pestaña '${CONFIG.nombreHoja}' de la hoja de cálculo central.`;
       document.getElementById('estado-envio').className = "alert alert-success py-2 small mb-3";
     })
     .catch(err => {
       console.error("Error al registrar:", err);
-      document.getElementById('estado-envio').textContent = "Sesión guardada localmente.";
-      document.getElementById('estado-envio').className = "alert alert-secondary py-2 small mb-3";
+      document.getElementById('estado-envio').textContent = "Registro guardado localmente. Presenta esta pantalla al profesor para asentar tu derecho a práctica.";
+      document.getElementById('estado-envio').className = "alert alert-warning py-2 small mb-3";
     });
-  }
-
-  function reiniciarTutorialCompleto() {
-    document.getElementById('num-cuenta').value = numeroCuentaEstudiante;
-    cambiarPantalla('pantalla-registro');
   }
 </script>
 
-<!-- Bootstrap 5 Bundle JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
