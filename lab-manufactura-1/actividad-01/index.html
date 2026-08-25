@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Scripts diferidos KaTeX -->
+  <!-- Scripts KaTeX -->
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
   <style>
@@ -141,6 +141,7 @@
       align-items: center;
       gap: 12px;
       font-size: 0.92rem;
+      width: 100%;
     }
 
     .option-label:hover {
@@ -242,11 +243,11 @@
     <div>
       <a href="../" class="btn-back">← Volver al Laboratorio</a>
       <div class="inst-title mt-1">UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO</div>
-      <div class="inst-subtitle">FACULTAD DE INGENIERÍA — LABORATORIO DE MANUFACTURA I</div>
+      <div class="inst-subtitle" id="header-asignatura">FACULTAD DE INGENIERÍA — LABORATORIO DE MANUFACTURA I</div>
     </div>
     <div class="text-md-end">
       <span class="small text-muted d-block">Prof. M. en C. I. Osvaldo Ruiz Cervantes</span>
-      <span class="badge badge-semester">Grupo 04 · Semestre 2027-1</span>
+      <span class="badge badge-semester" id="header-grupo-semestre">Grupo 04 · Semestre 2027-1</span>
     </div>
   </header>
 
@@ -260,15 +261,15 @@
 
       <h1 class="h5 fw-bold mb-2" id="title-reg" style="color: var(--text-blue-dark);">Cuestionario Previo: Práctica Calibrador Vernier</h1>
       <p class="small text-muted mb-3" style="line-height: 1.5;">
-        <strong>Propósito:</strong> Identificar los conceptos básicos, lineamientos de seguridad y cuidados operativos del calibrador vernier, mediante la revisión del documento técnico <strong>MADO-01</strong>, para garantizar un desempeño seguro y eficiente en la sesión experimental[cite: 39].
+        <strong>Propósito:</strong> Identificar los conceptos básicos, lineamientos de seguridad y cuidados operativos del calibrador vernier, mediante la revisión del documento técnico <strong>MADO-01</strong>, para garantizar un desempeño seguro y eficiente en la sesión experimental.
       </p>
 
       <div class="p-3 bg-light rounded border mb-3">
         <div class="small fw-bold text-uppercase mb-1" style="color: var(--text-blue-subtle);">Lineamientos de la Evaluación:</div>
         <ul class="small text-muted ps-3 mb-0" style="line-height: 1.6;">
-          <li><strong>Formato:</strong> 5 reactivos de opción múltiple (2.0 puntos c/u)[cite: 38].</li>
-          <li><strong>Intentos:</strong> Se permite estrictamente <strong>un solo intento</strong>[cite: 39].</li>
-          <li><strong>Requisito:</strong> Acreditar esta evaluación es condición obligatoria para ingresar al taller[cite: 39].</li>
+          <li><strong>Formato:</strong> 5 reactivos de opción múltiple (2.0 puntos c/u).</li>
+          <li><strong>Intentos:</strong> Se permite estrictamente <strong>un solo intento</strong>.</li>
+          <li><strong>Requisito:</strong> Acreditar esta evaluación es condición obligatoria para ingresar al taller.</li>
           <li><strong>Seguridad:</strong> Una vez iniciado, no recargues ni retrocedas en el navegador.</li>
         </ul>
       </div>
@@ -284,7 +285,7 @@
     </div>
   </section>
 
-  <!-- PANTALLA 2: EVALUACIÓN SECUENCIAL (OPCIÓN MÚLTIPLE) -->
+  <!-- PANTALLA 2: EVALUACIÓN SECUENCIAL -->
   <section id="pantalla-evaluacion" class="screen-view" aria-labelledby="pregunta-titulo">
     <div class="progress-bar-container" aria-hidden="true">
       <div id="barra-progreso" class="progress-bar-fill"></div>
@@ -307,13 +308,13 @@
     </div>
   </section>
 
-  <!-- PANTALLA 3: REPORTE FINAL CON RETROALIMENTACIÓN FORMATIVA -->
+  <!-- PANTALLA 3: REPORTE FINAL Y RETROALIMENTACIÓN -->
   <section id="pantalla-final" class="screen-view" aria-labelledby="title-fin">
     <div class="eval-card text-center">
       <h2 class="h5 fw-bold text-uppercase mb-1" id="title-fin" style="color: var(--text-blue-dark);">Evaluación Finalizada</h2>
       <p class="small text-muted mb-3" id="summary-meta-info"></p>
       
-      <div id="estado-envio" class="alert alert-success py-2 small mb-3">
+      <div id="estado-envio" class="alert alert-info py-2 small mb-3">
         Sincronizando calificación con el libro central de calificaciones...
       </div>
 
@@ -367,12 +368,12 @@
         { id: "D", texto: "Regleta" }
       ],
       opcionCorrecta: "B",
-      comentario: "¡Correcto! Como indica el manual en la descripción de partes, el cursor es el elemento deslizante montado sobre la regleta graduada que permite modificar la apertura de las puntas y contiene la escala vernier para la precisión."
+      comentario: "El cursor es el elemento deslizante montado sobre la regleta graduada que permite ajustar la apertura de las puntas y contiene la escala vernier (nonio)."
     },
     {
       id: "R02_CUATRO_MEDICIONES",
       puntos: 2,
-      pregunta: "Según las capacidades físicas del instrumento estándar descrito en la práctica, ¿cuáles son los cuatro tipos de mediciones geométricas que puede realizar?",
+      pregunta: "Según las capacidades físicas del instrumento estándar descrito en la práctica, ¿cuáles son los cuatro tipos de mediciones geométricas que permite realizar?",
       opciones: [
         { id: "A", texto: "Exteriores, interiores, ángulos y radios" },
         { id: "B", texto: "Exteriores, interiores, peldaños y profundidad" },
@@ -380,12 +381,12 @@
         { id: "D", texto: "Exteriores, interiores, temperatura y dureza" }
       ],
       opcionCorrecta: "B",
-      comentario: "¡Muy bien! El calibrador vernier es versátil y sus puntas y varillas están diseñadas específicamente para medir exteriores (puntas largas), interiores (puntas superiores), peldaños (cantos) y profundidad (varilla)."
+      comentario: "El calibrador estándar permite mediciones de exteriores (mordazas principales), interiores (orejetas superiores), peldaños o resaltes (tope del cursor) y profundidad (varilla posterior)."
     },
     {
       id: "R03_FORMULA_LEGIBILIDAD",
       puntos: 2,
-      pregunta: "Para determinar la legibilidad ($P$) o precisión del instrumento, ¿qué operación matemática debe realizarse entre la mínima graduación de la escala principal ($S$) y el número de divisiones del nonio ($n$)?",
+      pregunta: "Para determinar la legibilidad ($P$) o resolución del instrumento, ¿qué operación matemática debe realizarse entre la mínima graduación de la escala principal ($S$) y el número de divisiones del nonio ($n$)?",
       opciones: [
         { id: "A", texto: "Multiplicación ($P = S \\times n$)" },
         { id: "B", texto: "Suma ($P = S + n$)" },
@@ -393,7 +394,7 @@
         { id: "D", texto: "Resta ($P = S - n$)" }
       ],
       opcionCorrecta: "C",
-      comentario: "¡Exacto! La fórmula fundamental para conocer la precisión del instrumento es dividir el valor de la mínima graduación de la regla principal entre el número total de divisiones de la escala vernier ($P = S / n$)."
+      comentario: "La legibilidad o mínima lectura del vernier se calcula dividiendo la menor división de la escala principal entre el número total de divisiones del nonio ($P = S / n$)."
     },
     {
       id: "R04_CALCULO_005MM",
@@ -406,29 +407,31 @@
         { id: "D", texto: "0.01 mm" }
       ],
       opcionCorrecta: "B",
-      comentario: "Correcto. Aplicando el principio de legibilidad del manual: al dividir $1\\text{ mm}$ entre $20$ divisiones, el resultado es $0.05\\text{ mm}$, lo cual es una de las escalas métricas comunes descritas en la práctica."
+      comentario: "Aplicando $P = S / n$: al dividir $1\\text{ mm}$ entre $20$ divisiones, la resolución obtenida es de $0.05\\text{ mm}$."
     },
     {
       id: "R05_ALMACENAMIENTO_PUNTAS",
       puntos: 2,
-      pregunta: "Al finalizar la actividad experimental, ¿cuál es la condición correcta en la que debe almacenarse el calibrador vernier para asegurar su conservación?",
+      pregunta: "Al finalizar la actividad experimental, ¿cuál es la condición operativa correcta en la que debe almacenarse el calibrador vernier para asegurar su calibración y vida útil?",
       opciones: [
         { id: "A", texto: "Con el tornillo de fijación totalmente apretado" },
         { id: "B", texto: "Con las puntas de medición ligeramente separadas" },
-        { id: "C", texto: "Con las puntas de medición totalmente cerradas (contacto firme)" },
+        { id: "C", texto: "Con las puntas de medición en contacto firme y cerrado" },
         { id: "D", texto: "Con la varilla de profundidad totalmente extendida" }
       ],
       opcionCorrecta: "B",
-      comentario: "¡Excelente! El manual especifica en el desarrollo de la práctica que, al terminar su uso, el instrumento debe guardarse con las puntas ligeramente separadas para evitar daños por corrosión o presión entre las caras de medición."
+      comentario: "Debe guardarse limpio y con las caras de contacto ligeramente separadas para prevenir tensiones mecánicas o corrosión por contacto continuo."
     }
   ];
 
-  // Variables de control de estado
   let indiceActual = 0;
   let numeroCuentaEstudiante = "";
   const respuestasRecopiladas = [];
 
   document.addEventListener("DOMContentLoaded", () => {
+    // Sincronizar encabezado
+    document.getElementById('header-grupo-semestre').textContent = `Grupo ${CONFIG.grupo} · Semestre ${CONFIG.semestre}`;
+    
     const cuentaActiva = sessionStorage.getItem("eval_cuenta_activa");
     if (cuentaActiva && localStorage.getItem(`eval_bloqueada_${CONFIG.idActividad}_${cuentaActiva}`)) {
       bloquearPantallaPorReingreso();
@@ -460,7 +463,7 @@
     desactivarCandadosNavegacion();
     cambiarPantalla('pantalla-final');
     document.getElementById('title-fin').textContent = "Acceso Bloqueado";
-    document.getElementById('estado-envio').textContent = "Se detectó un intento de reingreso o recarga. La evaluación permite un único intento formal.";
+    document.getElementById('estado-envio').textContent = "Se detectó un intento de reingreso. La evaluación permite un único intento formal.";
     document.getElementById('estado-envio').className = "alert alert-danger py-2 small mb-3";
     document.getElementById('resumen-puntaje-box').style.display = "none";
   }
@@ -478,12 +481,11 @@
 
     const claveStorage = `eval_bloqueada_${CONFIG.idActividad}_${numeroCuentaEstudiante}`;
     if (localStorage.getItem(claveStorage)) {
-      errorDiv.textContent = "Este número de cuenta ya ha completado este cuestionario previo en este dispositivo.";
+      errorDiv.textContent = "Este número de cuenta ya tiene un intento registrado en este equipo.";
       errorDiv.style.display = "block";
       return;
     }
 
-    // Activar candados de seguridad
     localStorage.setItem(claveStorage, "true");
     sessionStorage.setItem("eval_cuenta_activa", numeroCuentaEstudiante);
     activarCandadosNavegacion();
@@ -498,8 +500,12 @@
     if (typeof katex === 'undefined') return;
     elemento.innerHTML = elemento.innerHTML.replace(/\$([^\$]+)\$/g, (match, formula) => {
       const span = document.createElement('span');
-      katex.render(formula, span, { throwOnError: false });
-      return span.outerHTML;
+      try {
+        katex.render(formula, span, { throwOnError: false });
+        return span.outerHTML;
+      } catch (e) {
+        return match;
+      }
     });
   }
 
@@ -524,9 +530,9 @@
 
     p.opciones.forEach(opt => {
       const wrapper = document.createElement('div');
-      wrapper.className = "form-check p-0";
+      wrapper.className = "form-check p-0 mb-2";
       wrapper.innerHTML = `
-        <input class="form-check-input d-none" type="radio" name="optPregunta" id="opt_${opt.id}" value="${opt.id}">
+        <input class="form-check-input visually-hidden" type="radio" name="optPregunta" id="opt_${opt.id}" value="${opt.id}">
         <label class="option-label" for="opt_${opt.id}">
           <strong style="color: var(--accent-red);">${opt.id})</strong>
           <span class="opt-text">${opt.texto}</span>
@@ -544,7 +550,7 @@
   function avanzarPregunta() {
     const checked = document.querySelector('input[name="optPregunta"]:checked');
     if (!checked) {
-      alert("Por favor, selecciona una respuesta antes de continuar.");
+      alert("Selecciona una opción antes de continuar.");
       return;
     }
 
@@ -555,6 +561,7 @@
 
     respuestasRecopiladas.push({
       id: p.id,
+      numero: indiceActual + 1,
       pregunta: p.pregunta,
       respuestaElegida: respuestaElegida,
       opcionCorrecta: p.opcionCorrecta,
@@ -585,10 +592,10 @@
 
     const dictamen = document.getElementById('dictamen-aprobatorio');
     if (totalPuntos >= 8) {
-      dictamen.textContent = "✓ Acreditado — Tienes derecho a ingresar a la sesión práctica";
+      dictamen.textContent = "✓ Acreditado — Acceso autorizado a la sesión de laboratorio";
       dictamen.className = "small fw-bold text-uppercase mt-1 text-success";
     } else {
-      dictamen.textContent = "Revisión requerida con el profesor titular en el taller";
+      dictamen.textContent = "Revisión técnica requerida antes de operar equipo";
       dictamen.className = "small fw-bold text-uppercase mt-1 text-danger";
     }
 
@@ -603,7 +610,7 @@
         <div class="d-flex justify-content-between align-items-center mb-1">
           <span class="small fw-bold text-muted">Reactivo 0${idx + 1}</span>
           <span class="badge-status ${r.esCorrecta ? 'badge-correct' : 'badge-incorrect'}">
-            ${r.esCorrecta ? '+2.0 Pts (Correcto)' : '0.0 Pts (Incorrecto)'}
+            ${r.esCorrecta ? `+${r.puntosGanados}.0 Pts (Correcto)` : '0.0 Pts (Incorrecto)'}
           </span>
         </div>
         <div class="small fw-bold mb-2" style="color: var(--text-blue-dark);">${r.pregunta}</div>
@@ -615,8 +622,10 @@
       renderizarKaTeXEnElemento(card);
     });
 
-    // Payload completamente estructurado para el Consolidado_General en Google Sheets
+    // Construcción del Payload exhaustivo para Google Apps Script
+    const ahora = new Date();
     const payload = {
+      // Metadatos institucionales y de contexto
       semestre: CONFIG.semestre,
       asignatura: CONFIG.asignatura,
       tipoCurso: CONFIG.tipoCurso,
@@ -624,32 +633,77 @@
       tipoEvaluacion: CONFIG.tipoEvaluacion,
       idActividad: CONFIG.idActividad,
       nombreActividad: CONFIG.nombreActividad,
+      
+      // Identificadores de alumno (mapeo múltiple para tablas centralizadas)
+      cuenta: numeroCuentaEstudiante,
+      numCuenta: numeroCuentaEstudiante,
       numeroCuenta: numeroCuentaEstudiante,
-      timestamp: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
-      calificacion: totalPuntos * 10, // Escala normalizada 0 - 100
-      aciertos: aciertosConteo,        // Valor numérico entero
-      total: BANCO_PREGUNTAS.length,
+      
+      // Métricas de desempeño
+      calificacion: totalPuntos * 10, // Escala 0 a 100
+      calificacionBase10: totalPuntos, // Escala 0 a 10
+      aciertos: aciertosConteo,
+      totalReactivos: BANCO_PREGUNTAS.length,
+      dictamen: totalPuntos >= 8 ? "ACREDITADO" : "NO_ACREDITADO",
+      
+      // Marcas temporales
+      timestamp: ahora.toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
+      fechaISO: ahora.toISOString(),
+
+      // Desglose plano por columnas para Google Sheets (R1 a R5)
+      r1_id: respuestasRecopiladas[0]?.id || "",
+      r1_respuesta: respuestasRecopiladas[0]?.respuestaElegida || "",
+      r1_correcta: respuestasRecopiladas[0]?.esCorrecta ? "SI" : "NO",
+      r1_puntos: respuestasRecopiladas[0]?.puntosGanados || 0,
+
+      r2_id: respuestasRecopiladas[1]?.id || "",
+      r2_respuesta: respuestasRecopiladas[1]?.respuestaElegida || "",
+      r2_correcta: respuestasRecopiladas[1]?.esCorrecta ? "SI" : "NO",
+      r2_puntos: respuestasRecopiladas[1]?.puntosGanados || 0,
+
+      r3_id: respuestasRecopiladas[2]?.id || "",
+      r3_respuesta: respuestasRecopiladas[2]?.respuestaElegida || "",
+      r3_correcta: respuestasRecopiladas[2]?.esCorrecta ? "SI" : "NO",
+      r3_puntos: respuestasRecopiladas[2]?.puntosGanados || 0,
+
+      r4_id: respuestasRecopiladas[3]?.id || "",
+      r4_respuesta: respuestasRecopiladas[3]?.respuestaElegida || "",
+      r4_correcta: respuestasRecopiladas[3]?.esCorrecta ? "SI" : "NO",
+      r4_puntos: respuestasRecopiladas[3]?.puntosGanados || 0,
+
+      r5_id: respuestasRecopiladas[4]?.id || "",
+      r5_respuesta: respuestasRecopiladas[4]?.respuestaElegida || "",
+      r5_correcta: respuestasRecopiladas[4]?.esCorrecta ? "SI" : "NO",
+      r5_puntos: respuestasRecopiladas[4]?.puntosGanados || 0,
+
+      // Colección estructurada y JSON serializado
       respuestas: respuestasRecopiladas.map(r => ({
-        titulo: r.id,
-        respuesta: `${r.respuestaElegida}) ${r.textoElegido}`,
-        esCorrecta: r.esCorrecta
-      }))
+        id: r.id,
+        eleccion: r.respuestaElegida,
+        correcta: r.opcionCorrecta,
+        esCorrecta: r.esCorrecta,
+        puntos: r.puntosGanados
+      })),
+      respuestas_json: JSON.stringify(respuestasRecopiladas)
     };
 
+    // Envío compatible con Google Apps Script Web App
     fetch(CONFIG.urlAppsScript, {
       method: "POST",
       mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(payload)
     })
     .then(() => {
-      document.getElementById('estado-envio').textContent = "Calificación registrada exitosamente en el Consolidado General.";
-      document.getElementById('estado-envio').className = "alert alert-success py-2 small mb-3";
+      const estadoEl = document.getElementById('estado-envio');
+      estadoEl.textContent = "✓ Calificación registrada y sincronizada formalmente.";
+      estadoEl.className = "alert alert-success py-2 small mb-3";
     })
     .catch(err => {
-      console.error("Error al registrar:", err);
-      document.getElementById('estado-envio').textContent = "Registro guardado localmente. Presenta esta pantalla al profesor para asentar tu derecho a práctica.";
-      document.getElementById('estado-envio').className = "alert alert-warning py-2 small mb-3";
+      console.error("Error en sincronización:", err);
+      const estadoEl = document.getElementById('estado-envio');
+      estadoEl.textContent = "Registro almacenado en caché local. Muestra esta pantalla a tu profesor.";
+      estadoEl.className = "alert alert-warning py-2 small mb-3";
     });
   }
 </script>
