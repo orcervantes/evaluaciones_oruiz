@@ -3,912 +3,274 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Tutorial Guiado de Notación Simbólica — FI UNAM</title>
+  <title>Portal Académico de Manufactura — Facultad de Ingeniería UNAM</title>
   
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   
-  <!-- KaTeX CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  
-  <!-- Carga diferida de motores matemáticos -->
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://unpkg.com/mathlive@0.98.6/dist/mathlive.min.js"></script>
+  <!-- Tipografía Comercial: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --fi-blue: #002B7A;
-      --fi-gold: #D59F0F;
-      --ink: #111111;
-      --paper: #ffffff;
-      --muted: #e5e5e5;
-      --muted-dark: #666666;
-      --success-bg: #e8f5e9;
-      --error-bg: #ffebee;
-      --card-bg: #fafafa;
+      --bg-white: #ffffff;
+      --card-bg: #fcfcfc;
+      --border-color: #e2e8f0;
+      --accent-red: #b71c1c;
+      --accent-red-hover: #8e0000;
+      --text-blue-dark: #0a192f;
+      --text-blue-subtle: #1e3a8a;
+      --text-muted: #475569;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--paper);
-      color: var(--ink);
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      background-color: var(--bg-white);
+      color: var(--text-blue-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
     }
 
-    .container-app {
-      width: 100%;
-      max-width: 680px;
-      margin-top: 8px;
-      padding-bottom: 80px;
+    .header-top {
+      border-top: 5px solid var(--accent-red);
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-white);
     }
 
-    header {
-      border-bottom: 3px solid var(--fi-blue);
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+    .inst-title {
+      color: var(--text-blue-dark);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-size: 1.15rem;
+      line-height: 1.2;
     }
 
-    .eval-card {
-      background: var(--card-bg);
-      border: 1px solid var(--muted);
-      border-radius: 8px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      background-color: var(--muted);
-      height: 6px;
-      border-radius: 3px;
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background-color: var(--fi-blue);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .target-math-box {
-      text-align: center;
-      margin: 14px 0;
-      padding: 14px;
-      background: var(--paper);
-      border: 1px dashed #b0bec5;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-
-    /* Barra de herramientas / accesos directos */
-    .math-toolbar {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 6px 2px;
-      margin-bottom: 8px;
-      scrollbar-width: thin;
-    }
-
-    .math-toolbar::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    .math-toolbar::-webkit-scrollbar-thumb {
-      background: #ced4da;
-      border-radius: 4px;
-    }
-
-    .tool-btn {
-      flex: 0 0 auto;
-      font-size: 0.85rem;
+    .inst-subtitle {
+      color: var(--text-blue-subtle);
       font-weight: 600;
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #ced4da;
-      background: #ffffff;
-      color: var(--fi-blue);
-      cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease;
-    }
-
-    .tool-btn:hover, .tool-btn:active {
-      background: #e9ecef;
-      border-color: var(--fi-blue);
-    }
-
-    .tool-btn.highlight {
-      background: #eef3fc;
-      border-color: var(--fi-blue);
-      font-weight: bold;
-    }
-
-    math-field {
-      font-size: 1.25rem;
-      padding: 10px 8px;
-      border: none;
-      border-bottom: 2px solid var(--fi-blue);
-      background: var(--paper);
-      width: 100%;
-      box-sizing: border-box;
-      outline: none;
-      border-radius: 4px 4px 0 0;
-    }
-
-    math-field:focus-within {
-      border-bottom-color: var(--fi-gold);
-      box-shadow: 0 2px 0 0 var(--fi-gold);
-    }
-
-    math-field[disabled] {
-      background-color: #f0f0f0;
-      opacity: 0.85;
-      cursor: not-allowed;
-    }
-
-    .kb-toggle-btn {
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid #ced4da;
-      background: #ffffff;
-      color: #495057;
-      cursor: pointer;
-    }
-
-    .input-text {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      border: 1px solid var(--fi-blue);
-      border-radius: 4px;
-      margin-top: 8px;
-      margin-bottom: 16px;
-    }
-
-    .btn-custom {
-      background: var(--fi-blue);
-      color: var(--paper);
-      border: 1px solid var(--fi-blue);
-      padding: 13px;
       font-size: 0.9rem;
+    }
+
+    .prof-name {
+      color: var(--accent-red);
       font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .badge-semester {
+      background-color: var(--accent-red);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    .portal-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-top: 4px solid var(--accent-red);
+      border-radius: 6px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+    }
+
+    .portal-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(10, 25, 47, 0.06);
+      border-color: #cbd5e1;
+      border-top-color: var(--accent-red-hover);
+    }
+
+    .card-heading {
+      color: var(--text-blue-dark);
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .btn-access {
+      background-color: var(--text-blue-dark);
+      color: #ffffff;
+      border: 1px solid var(--text-blue-dark);
+      font-weight: 600;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      width: 100%;
-      cursor: pointer;
+      padding: 12px 16px;
       border-radius: 4px;
-      transition: background 0.2s ease;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      transition: all 0.2s ease;
     }
 
-    .btn-custom:hover { background: #001f5c; color: var(--paper); }
-    .btn-action { background: var(--ink); border-color: var(--ink); }
-    .btn-action:hover { background: #333333; }
-    .btn-retry { background: #6c757d; border-color: #6c757d; }
-    .btn-retry:hover { background: #5a6268; }
+    .btn-access:hover, .btn-access:focus {
+      background-color: var(--accent-red);
+      border-color: var(--accent-red);
+      color: #ffffff;
+    }
 
-    .screen-view { display: none; }
-    .screen-view.active { display: block; }
-
-    .feedback-box {
-      display: none;
-      margin-top: 14px;
-      padding: 12px;
+    .guide-box {
+      background-color: #fafbfc;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--text-blue-subtle);
       border-radius: 4px;
-      font-size: 0.88rem;
-      border-left: 5px solid transparent;
+      padding: 18px 20px;
     }
 
-    .feedback-box.correct {
-      display: block;
-      background-color: var(--success-bg);
-      border-color: #198754;
-      color: #198754;
-    }
-
-    .feedback-box.incorrect {
-      display: block;
-      background-color: var(--error-bg);
-      border-color: #dc3545;
-      color: #dc3545;
-    }
-
-    .tip-box {
+    footer {
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
       font-size: 0.82rem;
-      background-color: #f8f9fa;
-      border: 1px solid #e9ecef;
-      border-left: 3px solid var(--fi-gold);
-      padding: 8px 12px;
-      border-radius: 4px;
-      margin-top: 10px;
+      margin-top: auto;
+      padding: 24px 0;
     }
-
-    .code-tag {
-      font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.8rem;
-      background-color: #e9ecef;
-      padding: 2px 5px;
-      border-radius: 3px;
-      color: #b71c1c;
-    }
-
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 16px;
-      font-size: 0.85rem;
-    }
-
-    .summary-table th, .summary-table td {
-      border: 1px solid var(--muted);
-      padding: 9px;
-    }
-
-    .summary-table th { background-color: #f1f3f5; font-weight: 700; }
   </style>
 </head>
 <body>
 
-<main class="container-app" role="main">
-  
-  <header class="d-flex justify-content-between align-items-center">
-    <div>
-      <h1 class="h5 fw-bold text-uppercase mb-0" style="color: var(--fi-blue);">Taller de Notación Simbólica</h1>
-      <p class="small text-muted mb-0">Facultad de Ingeniería — UNAM</p>
+  <!-- ENCABEZADO INSTITUCIONAL -->
+  <header class="header-top py-3">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Escudo / Iconografía Institucional UNAM FI -->
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Escudo Facultad de Ingeniería UNAM">
+          <rect width="48" height="48" rx="4" fill="#0A192F"/>
+          <path d="M10 12H38V16H10V12Z" fill="#B71C1C"/>
+          <path d="M14 20H34V24H14V20Z" fill="#FFFFFF"/>
+          <path d="M18 28H30V32H18V28Z" fill="#B71C1C"/>
+          <path d="M22 36H26V40H22V36Z" fill="#FFFFFF"/>
+        </svg>
+        <div>
+          <div class="inst-title">UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO</div>
+          <div class="inst-subtitle">FACULTAD DE INGENIERÍA — DEPARTAMENTO DE DISEÑO Y MANUFACTURA</div>
+        </div>
+      </div>
+      <div class="text-md-end">
+        <!-- ================================================================= -->
+        <!-- PARÁMETROS DE ACTUALIZACIÓN SEMESTRAL                             -->
+        <!-- ================================================================= -->
+        <div class="prof-name">Prof. M. en C. I. Osvaldo Ruiz Cervantes</div>
+        <span class="badge badge-semester mt-1 d-inline-block">Semestre Lectivo: 2027-1</span>
+        <!-- ================================================================= -->
+      </div>
     </div>
-    <span class="badge text-uppercase p-2" style="background-color: var(--fi-gold); color: #000;">20 Reactivos Guiados</span>
   </header>
 
-  <!-- PANTALLA 1: REGISTRO SIN BLOQUEO -->
-  <section id="pantalla-registro" class="screen-view active">
-    <div class="eval-card">
-      <h2 class="h6 fw-bold text-uppercase mb-2">Entrenamiento Práctico en Escritura Matemática</h2>
-      <p class="small text-muted mb-3">
-        Ingresa tu número de cuenta oficial para registrar tus avances. Este tutorial consta de <strong>20 ejercicios interactivos guiados</strong> sin límite de tiempo, con botones de acceso rápido y retroalimentación inmediata. Puedes repetir el taller cuantas veces desees para afinar tu velocidad.
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container my-5">
+    
+    <!-- Sección de Bienvenida y Guía Operativa -->
+    <div class="mb-5">
+      <h1 class="h4 fw-bold" style="color: var(--text-blue-dark);">Portal Académico y Sistema de Evaluación Continua</h1>
+      <p class="text-muted" style="max-width: 840px; font-size: 0.95rem; line-height: 1.6;">
+        Bienvenido(a) a la plataforma digital de actividades y evaluaciones de cátedra. Este portal centraliza los talleres de entrenamiento simbólico, evaluaciones diagnósticas, cuestionarios previos de laboratorio y exámenes parciales de las asignaturas correspondientes al ciclo escolar.
       </p>
+
+      <div class="guide-box mt-3">
+        <h2 class="h6 fw-bold mb-2" style="color: var(--text-blue-subtle);">Instrucciones de Navegación y Acceso:</h2>
+        <ul class="mb-0 text-muted small ps-3" style="line-height: 1.6;">
+          <li>Selecciona la asignatura o laboratorio en el que te encuentras oficialmente inscrito(a).</li>
+          <li>Accederás al listado ordenado de actividades programadas (diagnósticas, formativas y sumativas).</li>
+          <li>Para ingresar a cualquier evaluación, captura tu número de cuenta oficial. Tus resultados se registrarán automáticamente en la base central de datos.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Malla de Acceso a Cursos -->
+    <div class="row g-4">
       
-      <div id="error-registro" class="alert alert-danger py-2 small" style="display: none;" role="alert"></div>
-
-      <label for="num-cuenta" class="form-label small fw-bold text-uppercase">Número de Cuenta:</label>
-      <input type="text" id="num-cuenta" class="input-text text-center fw-bold" placeholder="Ej. 318000000" maxlength="11" pattern="[0-9]*" inputmode="numeric" required>
-
-      <button type="button" class="btn-custom" onclick="iniciarTutorial()">
-        Comenzar Entrenamiento Guiado
-      </button>
-    </div>
-  </section>
-
-  <!-- PANTALLA 2: REACTIVOS GUIADOS DEL TUTORIAL -->
-  <section id="pantalla-tutorial" class="screen-view">
-    <div class="progress-bar-container">
-      <div id="barra-progreso" class="progress-bar-fill"></div>
-    </div>
-
-    <div class="eval-card">
-      <div class="card-meta">
-        <span id="indicador-reactivo" class="badge text-bg-primary">Reactivo 1 de 20</span>
-        <span id="badge-intento-alumno" class="badge bg-secondary">Intento #1</span>
-      </div>
-
-      <h2 id="tut-titulo" class="h6 fw-bold mb-1"></h2>
-      <p id="tut-descripcion" class="small text-muted mb-2"></p>
-
-      <div class="target-math-box">
-        <span class="d-block small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.72rem;">Ecuación a recrear:</span>
-        <div id="tut-render-target"></div>
-      </div>
-
-      <div class="d-flex justify-content-between align-items-center mt-3 mb-1">
-        <label for="math-input" class="small fw-bold text-uppercase">Tu Escritura Matemática (minúsculas):</label>
-        <button type="button" class="kb-toggle-btn" onclick="alternarTecladoVirtual()">
-          ⌨️ Teclado Virtual
-        </button>
-      </div>
-
-      <!-- Barra de accesos directos priorizada por frecuencia -->
-      <div class="math-toolbar" id="toolbar-accesos" aria-label="Atajos matemáticos">
-        <button type="button" class="tool-btn highlight" title="Subíndice y Superíndice simultáneo" onclick="insertarEnCampo('_{#?}^{#?}')">x_a^b</button>
-        <button type="button" class="tool-btn highlight" title="Raíz n-ésima" onclick="insertarEnCampo('\\sqrt[#?]{#?}')">\sqrt[n]{x}</button>
-        <button type="button" class="tool-btn" title="Fracción" onclick="insertarEnCampo('\\frac{#?}{#?}')">\frac{a}{b}</button>
-        <button type="button" class="tool-btn" title="Potencia" onclick="insertarEnCampo('^{#?}')">x^a</button>
-        <button type="button" class="tool-btn" title="Subíndice" onclick="insertarEnCampo('_{#?}')">x_a</button>
-        <button type="button" class="tool-btn" title="Raíz cuadrada" onclick="insertarEnCampo('\\sqrt{#?}')">\sqrt{x}</button>
-        <button type="button" class="tool-btn" title="Logaritmo natural" onclick="insertarEnCampo('\\ln(#?)')">\ln(x)</button>
-        <button type="button" class="tool-btn" title="Logaritmo base n" onclick="insertarEnCampo('\\log_{#?}(#?)')">\log_n(x)</button>
-        <button type="button" class="tool-btn" title="Exponencial" onclick="insertarEnCampo('e^{#?}')">e^x</button>
-        <button type="button" class="tool-btn" title="Letra Theta" onclick="insertarEnCampo('\\theta ')">\theta</button>
-        <button type="button" class="tool-btn" title="Letra Mu" onclick="insertarEnCampo('\\mu ')">\mu</button>
-        <button type="button" class="tool-btn" title="Letra Sigma" onclick="insertarEnCampo('\\sigma ')">\sigma</button>
-        <button type="button" class="tool-btn" title="Letra Omega" onclick="insertarEnCampo('\\omega ')">\omega</button>
-        <button type="button" class="tool-btn" title="Letra Pi" onclick="insertarEnCampo('\\pi ')">\pi</button>
-        <button type="button" class="tool-btn" title="Seno" onclick="insertarEnCampo('\\sin(#?)')">\sin(\theta)</button>
-        <button type="button" class="tool-btn" title="Coseno" onclick="insertarEnCampo('\\cos(#?)')">\cos(\theta)</button>
-      </div>
-
-      <math-field id="math-input" placeholder="Escribe aquí..."></math-field>
-
-      <div class="tip-box" id="tut-tip-box"></div>
-
-      <!-- Feedback Inmediato -->
-      <div id="feedback-box" class="feedback-box">
-        <div id="feedback-status" class="fw-bold text-uppercase small mb-1"></div>
-        <div class="small text-muted">Solución canónica esperada:</div>
-        <div id="feedback-math-render" class="bg-white p-2 border rounded mt-1 text-center"></div>
-      </div>
-
-      <div class="row g-2 mt-3" id="contenedor-botones-accion">
-        <div class="col-12" id="col-btn-principal">
-          <button type="button" class="btn-custom" id="btn-verificar" onclick="verificarRespuesta()">
-            Verificar Escritura
-          </button>
-        </div>
-        <div class="col-6" id="col-btn-reintentar" style="display: none;">
-          <button type="button" class="btn-custom btn-retry" onclick="reintentarEjercicioActual()">
-            ↺ Reintentar
-          </button>
-        </div>
-        <div class="col-6" id="col-btn-siguiente" style="display: none;">
-          <button type="button" class="btn-custom btn-action" id="btn-siguiente" onclick="avanzarSiguiente()">
-            Siguiente →
-          </button>
+      <!-- TARJETA 1: MANUFACTURA I -->
+      <div class="col-12 col-md-4">
+        <div class="portal-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge text-bg-light border text-muted fw-bold">Teoría</span>
+              <span class="small text-muted fw-semibold">Grupo 04</span>
+            </div>
+            <h3 class="card-heading">Manufactura I</h3>
+            <p class="card-desc">
+              Fundamentos de conformado mecánico, plasticidad, procesos de fundición, laminado plano y soldadura industrial.
+            </p>
+          </div>
+          <div class="mt-4">
+            <a href="./manufactura-1/" class="btn-access">Acceder al Curso →</a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- PANTALLA 3: REPORTE FINAL DE DESEMPEÑO -->
-  <section id="pantalla-final" class="screen-view">
-    <div class="eval-card text-center">
-      <h2 class="h5 fw-bold text-uppercase mb-1">Tutorial Completado</h2>
-      <p class="small text-muted mb-3" id="summary-meta-info"></p>
-      
-      <div id="estado-envio" class="alert alert-info py-2 small mb-3">
-        Registrando intento en la hoja 'Tutorial_Sintaxis_Matematica'...
+      <!-- TARJETA 2: MANUFACTURA II -->
+      <div class="col-12 col-md-4">
+        <div class="portal-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge text-bg-light border text-muted fw-bold">Teoría</span>
+              <span class="small text-muted fw-semibold">Grupo 01</span>
+            </div>
+            <h3 class="card-heading">Manufactura II</h3>
+            <p class="card-desc">
+              Mecanizado por arranque de viruta, máquinas herramientas CNC, tribología, procesos avanzados y metrología.
+            </p>
+          </div>
+          <div class="mt-4">
+            <a href="./manufactura-2/" class="btn-access">Acceder al Curso →</a>
+          </div>
+        </div>
       </div>
 
-      <div id="resumen-calificacion" class="text-start mb-3"></div>
-
-      <button type="button" class="btn-custom py-2 fw-bold text-uppercase" onclick="reiniciarTutorialCompleto()">
-        Realizar un Nuevo Intento del Tutorial
-      </button>
-    </div>
-  </section>
-
-</main>
-
-<script>
-  /**
-   * CONFIGURACIÓN DE LA ACTIVIDAD
-   */
-  const CONFIG_TUTORIAL = {
-    actividad: "Tutorial_Guiado_20_Reactivos",
-    nombreHojaCalculo: "Tutorial_Sintaxis_Matematica",
-    urlAppsScript: "https://script.google.com/macros/s/AKfycbxdb4bLB7EgA4CSzxZkTE8ORi0cvLTqJS9DvPA2fVHrtz6Y-zcJHFL7WDRRLxIJ2cNJ/exec"
-  };
-
-  /**
-   * BANCO DE 20 REACTIVOS GUIADOS (MINÚSCULAS ESTRICTAS)
-   */
-  const BANCO_TUTORIAL = [
-    {
-      id: "tut_01_lineal",
-      titulo: "01. Constantes y Variables Simples",
-      descripcion: "escribe la ecuación lineal básica:",
-      latexProblema: "y = mx + b",
-      guia: "En laptop/PC escribe directamente: 'y = m x + b'. En móvil usa el teclado de MathLive o escribe 'y=mx+b'.",
-      respuestaCanonica: "y = mx + b",
-      solucionesValidas: ["y=mx+b", "y=m*x+b", "y=m\\cdot x+b", "mx+b"]
-    },
-    {
-      id: "tut_02_subindices",
-      titulo: "02. Subíndices Simples",
-      descripcion: "escribe la suma de dos variables con subíndice numérico:",
-      latexProblema: "x_1 + x_2",
-      guia: "Usa el guion bajo '_' para subíndices: 'x_1 + x_2' o el botón 'x_a'. No te preocupes por las llaves {}.",
-      respuestaCanonica: "x_1 + x_2",
-      solucionesValidas: ["x_1+x_2", "x_{1}+x_{2}"]
-    },
-    {
-      id: "tut_03_potencias",
-      titulo: "03. Superíndices y Potencias",
-      descripcion: "escribe la suma de cuadrados (teorema de pitágoras):",
-      latexProblema: "a^2 + b^2",
-      guia: "Usa el acento circunflejo '^' o el botón 'x^a': 'a^2 + b^2'. El normalizador acepta con o sin llaves {}.",
-      respuestaCanonica: "a^2 + b^2",
-      solucionesValidas: ["a^2+b^2", "a^{2}+b^{2}"]
-    },
-    {
-      id: "tut_04_fracciones",
-      titulo: "04. Fracciones Estándar",
-      descripcion: "escribe la división fraccionaria de dos variables:",
-      latexProblema: "\\frac{a}{b}",
-      guia: "Escribe la diagonal '/' o '\\frac{a}{b}' o presiona el botón '\\frac{a}{b}'. Ambas formas son aceptadas.",
-      respuestaCanonica: "\\frac{a}{b}",
-      solucionesValidas: ["\\frac{a}{b}", "a/b"]
-    },
-    {
-      id: "tut_05_simultaneos",
-      titulo: "05. Subíndice y Superíndice Simultáneos",
-      descripcion: "escribe variables con subíndice elevadas a una potencia:",
-      latexProblema: "x_1^2 + x_2^2",
-      guia: "Usa el botón destacado 'x_a^b' de la barra, o escribe en tu teclado 'x_1^2 + x_2^2' (primero '_' y luego '^').",
-      respuestaCanonica: "x_1^2 + x_2^2",
-      solucionesValidas: ["x_1^2+x_2^2", "x_{1}^{2}+x_{2}^{2}", "x^2_1+x^2_2", "x^{2}_{1}+x^{2}_{2}"]
-    },
-    {
-      id: "tut_06_raiz_cuadrada",
-      titulo: "06. Raíz Cuadrada Simple",
-      descripcion: "escribe la raíz cuadrada de una suma:",
-      latexProblema: "\\sqrt{x + y}",
-      guia: "Escribe '\\sqrt' o presiona el botón '\\sqrt{x}'.",
-      respuestaCanonica: "\\sqrt{x + y}",
-      solucionesValidas: ["\\sqrt{x+y}", "\\sqrt{x + y}"]
-    },
-    {
-      id: "tut_07_raiz_nesima",
-      titulo: "07. Raíz n-ésima Compleja",
-      descripcion: "escribe la raíz cúbica de la variable x:",
-      latexProblema: "\\sqrt[3]{x}",
-      guia: "Usa el botón '\\sqrt[n]{x}' de la barra de atajos o escribe en teclado '\\sqrt[3]{x}'.",
-      respuestaCanonica: "\\sqrt[3]{x}",
-      solucionesValidas: ["\\sqrt[3]{x}", "\\sqrt[3]{x}", "\\nthroot[3]{x}"]
-    },
-    {
-      id: "tut_08_log_natural",
-      titulo: "08. Logaritmo Natural",
-      descripcion: "escribe el logaritmo natural de la variable y:",
-      latexProblema: "\\ln(y)",
-      guia: "Escribe '\\ln(y)' o presiona el botón '\\ln(x)'.",
-      respuestaCanonica: "\\ln(y)",
-      solucionesValidas: ["\\ln(y)", "\\ln y", "\\ln{y}"]
-    },
-    {
-      id: "tut_09_log_base",
-      titulo: "09. Logaritmo en Base Arbitraria",
-      descripcion: "escribe el logaritmo en base 2 de la variable x:",
-      latexProblema: "\\log_2(x)",
-      guia: "Usa el botón '\\log_n(x)' o escribe '\\log_2(x)' usando subíndice para la base.",
-      respuestaCanonica: "\\log_2(x)",
-      solucionesValidas: ["\\log_2(x)", "\\log_{2}(x)", "\\log_2x"]
-    },
-    {
-      id: "tut_10_trigonometria_simple",
-      titulo: "10. Funciones Trigonométricas y Letra Theta",
-      descripcion: "escribe la suma trigonométrica con el ángulo theta:",
-      latexProblema: "\\sin(\\theta) + \\cos(\\theta)",
-      guia: "Usa los botones '\\sin', '\\cos' y '\\theta' o escribe '\\sin(\\theta) + \\cos(\\theta)'.",
-      respuestaCanonica: "\\sin(\\theta) + \\cos(\\theta)",
-      solucionesValidas: [
-        "\\sin(\\theta)+\\cos(\\theta)",
-        "\\sin\\theta+\\cos\\theta",
-        "\\mathrm{sen}(\\theta)+\\cos(\\theta)",
-        "\\mathrm{sen}\\theta+\\cos\\theta"
-      ]
-    },
-    {
-      id: "tut_11_trigo_potencias",
-      titulo: "11. Identidad Trigonométrica Cuadrática",
-      descripcion: "escribe la identidad pitagórica:",
-      latexProblema: "\\sin^2(\\theta) + \\cos^2(\\theta)",
-      guia: "Escribe '\\sin^2(\\theta)' combinando función y potencia o usando los atajos.",
-      respuestaCanonica: "\\sin^2(\\theta) + \\cos^2(\\theta)",
-      solucionesValidas: [
-        "\\sin^2(\\theta)+\\cos^2(\\theta)",
-        "\\sin^{2}(\\theta)+\\cos^{2}(\\theta)",
-        "\\sin^2\\theta+\\cos^2\\theta",
-        "\\mathrm{sen}^2(\\theta)+\\cos^2(\\theta)"
-      ]
-    },
-    {
-      id: "tut_12_letras_griegas_fraccion",
-      titulo: "12. Letra Sigma y Subíndices en Esfuerzos",
-      descripcion: "escribe la fórmula del esfuerzo normal inicial:",
-      latexProblema: "\\sigma = \\frac{f}{a_0}",
-      guia: "Escribe '\\sigma = \\frac{f}{a_0}' o usa los botones '\\sigma', '\\frac{a}{b}' y 'x_a'.",
-      respuestaCanonica: "\\sigma = \\frac{f}{a_0}",
-      solucionesValidas: ["\\sigma=\\frac{f}{a_0}", "\\sigma=\\frac{f}{a_{0}}", "\\sigma=f/a_0", "\\frac{f}{a_0}"]
-    },
-    {
-      id: "tut_13_friccion_tangente",
-      titulo: "13. Letra Mu y Función Tangente",
-      descripcion: "escribe el producto del coeficiente de fricción por la tangente:",
-      latexProblema: "\\mu \\tan(\\alpha)",
-      guia: "Usa '\\mu' y '\\tan(\\alpha)' o escribe '\\alpha' para la letra alfa.",
-      respuestaCanonica: "\\mu \\tan(\\alpha)",
-      solucionesValidas: ["\\mu\\tan(\\alpha)", "\\mu\\tan\\alpha", "\\mu\\cdot\\tan(\\alpha)", "\\mu*\\tan(\\alpha)"]
-    },
-    {
-      id: "tut_14_exponencial_simple",
-      titulo: "14. Función Exponencial con Potencia Negativa",
-      descripcion: "escribe la función exponencial simple:",
-      latexProblema: "e^{-kt}",
-      guia: "Usa el botón 'e^x' o escribe 'e^{-kt}'. El normalizador acepta con y sin llaves.",
-      respuestaCanonica: "e^{-kt}",
-      solucionesValidas: ["e^{-kt}", "e^{-(kt)}", "\\exp(-kt)", "\\exp(-(kt))"]
-    },
-    {
-      id: "tut_15_arrhenius_fraccion",
-      titulo: "15. Exponencial Compuesta tipo Arrhenius",
-      descripcion: "escribe el término exponencial térmico:",
-      latexProblema: "\\exp\\left(-\\frac{q}{rt}\\right)",
-      guia: "Escribe '\\exp(-\\frac{q}{rt})' o 'e^{-\\frac{q}{rt}}'. Se aceptan ambas notaciones.",
-      respuestaCanonica: "\\exp\\left(-\\frac{q}{rt}\\right)",
-      solucionesValidas: [
-        "\\exp(-\\frac{q}{rt})",
-        "\\exp(-\\frac{q}{r\\cdot t})",
-        "e^{-\\frac{q}{rt}}",
-        "e^{-\\frac{q}{r\\cdot t}}",
-        "\\exp(-q/(rt))",
-        "e^{-(q/(rt))}"
-      ]
-    },
-    {
-      id: "tut_16_energia_cinetica",
-      titulo: "16. Energía con Fracción y Potencias",
-      descripcion: "escribe la fórmula de energía cinética en minúsculas:",
-      latexProblema: "e = \\frac{1}{2}mv^2",
-      guia: "Escribe 'e = \\frac{1}{2} m v^2' o 'e = (1/2) m v^2'.",
-      respuestaCanonica: "e = \\frac{1}{2}mv^2",
-      solucionesValidas: ["e=\\frac{1}{2}mv^2", "e=\\frac{1}{2}m\\cdot v^2", "e=0.5mv^2", "e=\\frac{mv^2}{2}", "\\frac{1}{2}mv^2"]
-    },
-    {
-      id: "tut_17_frecuencia_omega",
-      titulo: "17. Letra Omega y Raíz Fraccionaria",
-      descripcion: "escribe la frecuencia angular:",
-      latexProblema: "\\omega = \\sqrt{\\frac{k}{m}}",
-      guia: "Usa los botones '\\omega', '\\sqrt{x}' y '\\frac{a}{b}'.",
-      respuestaCanonica: "\\omega = \\sqrt{\\frac{k}{m}}",
-      solucionesValidas: ["\\omega=\\sqrt{\\frac{k}{m}}", "\\omega=\\sqrt{k/m}", "\\sqrt{\\frac{k}{m}}"]
-    },
-    {
-      id: "tut_18_derivada_leibniz",
-      titulo: "18. Notación de Derivada",
-      descripcion: "escribe la derivada ordinaria de y respecto a t:",
-      latexProblema: "\\frac{dy}{dt}",
-      guia: "Escribe '\\frac{dy}{dt}' o usa la barra con 'dy/dt'.",
-      respuestaCanonica: "\\frac{dy}{dt}",
-      solucionesValidas: ["\\frac{dy}{dt}", "dy/dt"]
-    },
-    {
-      id: "tut_19_pi_integral",
-      titulo: "19. Expresión Circular con Pi y Radio",
-      descripcion: "escribe el elemento diferencial de área circular:",
-      latexProblema: "2\\pi r dr",
-      guia: "Usa el botón '\\pi' o escribe '\\pi': '2 \\pi r dr'.",
-      respuestaCanonica: "2\\pi r dr",
-      solucionesValidas: ["2\\pi rdr", "2\\cdot\\pi\\cdot r\\cdot dr", "2\\pi r dr"]
-    },
-    {
-      id: "tut_20_presion_completa",
-      titulo: "20. Modelo Avanzado de Manufactura",
-      descripcion: "escribe el término adimensional de presión sobre el disco:",
-      latexProblema: "\\frac{2\\mu}{h}\\left(\\frac{d}{2}-r\\right)",
-      guia: "Combina fracciones, paréntesis y la letra '\\mu': '\\frac{2\\mu}{h}(\\frac{d}{2}-r)'.",
-      respuestaCanonica: "\\frac{2\\mu}{h}\\left(\\frac{d}{2}-r\\right)",
-      solucionesValidas: [
-        "\\frac{2\\mu}{h}(\\frac{d}{2}-r)",
-        "\\frac{2\\mu}{h}(\\frac{d}{2}-r)",
-        "(2\\mu/h)*(d/2-r)",
-        "\\frac{2\\cdot\\mu}{h}(\\frac{d}{2}-r)"
-      ]
-    }
-  ];
-
-  // Control de variables globales
-  let indiceActual = 0;
-  let numeroCuentaEstudiante = "";
-  let numeroIntento = 1;
-  const respuestasTutorial = [];
-
-  document.addEventListener("DOMContentLoaded", () => {
-    customElements.whenDefined('math-field').then(() => {
-      document.querySelectorAll('math-field').forEach(mf => {
-        mf.mathVirtualKeyboardPolicy = "auto";
-      });
-    });
-  });
-
-  /**
-   * INSERCIÓN DINÁMICA DE ATAJOS EN EL MATH-FIELD ACTIVO
-   */
-  function insertarEnCampo(latexFragment) {
-    const mf = document.getElementById('math-input');
-    if (!mf) return;
-    mf.focus();
-    mf.insert(latexFragment, { selectionMode: 'placeholder' });
-  }
-
-  function alternarTecladoVirtual() {
-    const mf = document.getElementById('math-input');
-    if (!mf) return;
-    if (window.mathVirtualKeyboard) {
-      if (window.mathVirtualKeyboard.visible) {
-        window.mathVirtualKeyboard.hide();
-      } else {
-        mf.focus();
-        window.mathVirtualKeyboard.show();
-      }
-    }
-  }
-
-  /**
-   * MOTOR DE NORMALIZACIÓN MATEMÁTICA AVANZADA (MINÚSCULAS)
-   * Resuelve conflicto de llaves {}, división / vs \frac y orden sub/super.
-   */
-  function normalizarExpresion(str) {
-    if (!str) return "";
-    let s = str.trim().toLowerCase();
-
-    // 1. Eliminar comandos de formato y delimitadores elásticos
-    s = s.replace(/\\(displaystyle|left|right|mleft|mright|text|mathrm|mathbf)/g, '');
-
-    // 2. Remover miembro izquierdo universal si existe
-    s = s.replace(/^.*=\s*/g, '');
-
-    // 3. Homologar corchetes a paréntesis (excepto en argumentos de raíz n-ésima)
-    s = s.replace(/\\sqrt\[([^\]]+)\]/g, 'RAIZN_$1_'); // Guarda temporalmente la raíz n
-    s = s.replace(/\[/g, '(').replace(/\]/g, ')');
-    s = s.replace(/RAIZN_([^_]+)_/g, '\\sqrt[$1]');   // Restaura la raíz n
-
-    // 4. Estandarizar raíces n-ésimas
-    s = s.replace(/\\nthroot\[([^\]]+)\]\{([^}]+)\}/g, '\\sqrt[$1]{$2}');
-
-    // 5. Homologar orden de subíndices y potencias adyacentes: x^2_1 -> x_1^2
-    s = s.replace(/\^([a-z0-9])_([a-z0-9])/g, '_$2^$1');
-    s = s.replace(/\^\{([^}]+)\}_\{([^}]+)\}/g, '_{$2}^{$1}');
-
-    // 6. Eliminar llaves redundantes alrededor de caracteres simples: _{1} -> _1, ^{2} -> ^2
-    s = s.replace(/_\{([a-z0-9])\}/g, '_$1');
-    s = s.replace(/\^\{([a-z0-9])\}/g, '^$1');
-
-    // 7. Homologar fracciones \frac{a}{b} -> (a)/(b) para equiparar con división con slash '/'
-    s = s.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1)/($2)');
-    s = s.replace(/\\frac([a-z0-9])([a-z0-9])/g, '($1)/($2)');
-
-    // 8. Eliminar paréntesis redundantes en factores elementales: (a)/(b) -> a/b
-    s = s.replace(/\(([a-z0-9])\)/g, '$1');
-
-    // 9. Eliminar espacios en blanco y operadores de multiplicación explícita
-    s = s.replace(/\s+/g, '');
-    s = s.replace(/\\(cdot|times)/g, '');
-    s = s.replace(/\*/g, '');
-
-    // 10. Normalizar logaritmos, exponenciales y trigonometría
-    s = s.replace(/\\ln\{([^}]+)\}/g, '\\ln($1)');
-    s = s.replace(/\\ln([a-z0-9])/g, '\\ln($1)');
-    s = s.replace(/\\exp\{([^}]+)\}/g, '\\exp($1)');
-    s = s.replace(/\\mathrm\{sen\}/g, '\\sin');
-    s = s.replace(/\\sen/g, '\\sin');
-
-    return s;
-  }
-
-  function cambiarPantalla(id) {
-    document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
-
-  function iniciarTutorial() {
-    const inputCuenta = document.getElementById('num-cuenta');
-    const errorDiv = document.getElementById('error-registro');
-    numeroCuentaEstudiante = inputCuenta.value.trim();
-
-    if (!numeroCuentaEstudiante || numeroCuentaEstudiante.length < 5 || isNaN(numeroCuentaEstudiante)) {
-      errorDiv.textContent = "Ingresa un número de cuenta válido.";
-      errorDiv.style.display = "block";
-      return;
-    }
-
-    // Manejo de intentos correlativos en localStorage
-    const claveIntentos = `intentos_${CONFIG_TUTORIAL.nombreHojaCalculo}_${numeroCuentaEstudiante}`;
-    const prev = parseInt(localStorage.getItem(claveIntentos) || "0", 10);
-    numeroIntento = prev + 1;
-    localStorage.setItem(claveIntentos, numeroIntento.toString());
-
-    document.getElementById('badge-intento-alumno').textContent = `Intento #${numeroIntento}`;
-
-    respuestasTutorial.length = 0;
-    errorDiv.style.display = "none";
-    cambiarPantalla('pantalla-tutorial');
-    cargarReactivo(0);
-  }
-
-  function cargarReactivo(indice) {
-    if (indice >= BANCO_TUTORIAL.length) {
-      finalizarTutorial();
-      return;
-    }
-
-    indiceActual = indice;
-    const r = BANCO_TUTORIAL[indice];
-
-    document.getElementById('indicador-reactivo').textContent = `Reactivo ${indice + 1} de ${BANCO_TUTORIAL.length}`;
-    document.getElementById('barra-progreso').style.width = `${((indice + 1) / BANCO_TUTORIAL.length) * 100}%`;
-    document.getElementById('tut-titulo').textContent = r.titulo;
-    document.getElementById('tut-descripcion').textContent = r.descripcion;
-    document.getElementById('tut-tip-box').innerHTML = `<strong>Instrucción / Atajo:</strong> ${r.guia}`;
-
-    const target = document.getElementById('tut-render-target');
-    if (typeof katex !== 'undefined') {
-      katex.render(r.latexProblema, target, { throwOnError: false, displayMode: true });
-    } else {
-      target.textContent = r.latexProblema;
-    }
-
-    const input = document.getElementById('math-input');
-    input.value = "";
-    input.removeAttribute('disabled');
-    input.focus();
-
-    // Estado inicial de botones
-    document.getElementById('feedback-box').style.display = "none";
-    document.getElementById('col-btn-principal').style.display = "block";
-    document.getElementById('col-btn-reintentar').style.display = "none";
-    document.getElementById('col-btn-siguiente').style.display = "none";
-
-    const btnSig = document.getElementById('btn-siguiente');
-    btnSig.textContent = (indice === BANCO_TUTORIAL.length - 1) ? "Finalizar y Ver Reporte →" : "Siguiente →";
-  }
-
-  function verificarRespuesta() {
-    const input = document.getElementById('math-input');
-    input.setAttribute('disabled', 'true');
-    const valorOriginal = input.value.trim();
-    const r = BANCO_TUTORIAL[indiceActual];
-
-    const norm = normalizarExpresion(valorOriginal);
-    const esCorrecta = r.solucionesValidas.some(sol => normalizarExpresion(sol) === norm);
-
-    // Registrar o actualizar respuesta en el acumulador
-    respuestasTutorial[indiceActual] = {
-      id: r.id,
-      titulo: r.titulo,
-      respuesta: valorOriginal || "sin_respuesta",
-      esCorrecta: esCorrecta
-    };
-
-    const fb = document.getElementById('feedback-box');
-    const fbStatus = document.getElementById('feedback-status');
-    const fbMath = document.getElementById('feedback-math-render');
-
-    if (esCorrecta) {
-      fb.className = "feedback-box correct";
-      fbStatus.textContent = "✓ ¡Correcto! Escritura y sintaxis válida";
-    } else {
-      fb.className = "feedback-box incorrect";
-      fbStatus.textContent = "✗ Discrepancia en la sintaxis";
-    }
-
-    if (typeof katex !== 'undefined') {
-      katex.render(r.respuestaCanonica, fbMath, { throwOnError: false, displayMode: true });
-    } else {
-      fbMath.textContent = r.respuestaCanonica;
-    }
-    fb.style.display = "block";
-
-    // Mostrar botones de Reintentar y Siguiente
-    document.getElementById('col-btn-principal').style.display = "none";
-    document.getElementById('col-btn-reintentar').style.display = "block";
-    document.getElementById('col-btn-siguiente').style.display = "block";
-    document.getElementById('btn-siguiente').focus();
-  }
-
-  function reintentarEjercicioActual() {
-    const input = document.getElementById('math-input');
-    input.removeAttribute('disabled');
-    input.value = "";
-    input.focus();
-
-    document.getElementById('feedback-box').style.display = "none";
-    document.getElementById('col-btn-principal').style.display = "block";
-    document.getElementById('col-btn-reintentar').style.display = "none";
-    document.getElementById('col-btn-siguiente').style.display = "none";
-  }
-
-  function avanzarSiguiente() {
-    cargarReactivo(indiceActual + 1);
-  }
-
-  function finalizarTutorial() {
-    cambiarPantalla('pantalla-final');
-
-    const total = BANCO_TUTORIAL.length;
-    const aciertos = respuestasTutorial.filter(r => r && r.esCorrecta).length;
-    const calificacion = Math.round((aciertos / total) * 100);
-
-    document.getElementById('summary-meta-info').textContent = `Estudiante: Cuenta ${numeroCuentaEstudiante} | Intento #${numeroIntento}`;
-
-    let htmlTabla = `
-      <div class="text-center mb-3">
-        <span class="display-6 fw-bold">${calificacion}%</span>
-        <div class="small text-muted">${aciertos} de ${total} reactivos dominados</div>
+      <!-- TARJETA 3: LABORATORIO DE MANUFACTURA I -->
+      <div class="col-12 col-md-4">
+        <div class="portal-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge text-bg-light border text-muted fw-bold">Práctica</span>
+              <span class="small text-muted fw-semibold">Grupo 04</span>
+            </div>
+            <h3 class="card-heading">Laboratorio de Manufactura I</h3>
+            <p class="card-desc">
+              Prácticas de taller, seguridad industrial, metrología dimensional con calibrador vernier, forja y mecanizado básico.
+            </p>
+          </div>
+          <div class="mt-4">
+            <a href="./lab-manufactura-1/" class="btn-access">Acceder al Laboratorio →</a>
+          </div>
+        </div>
       </div>
-      <div class="table-responsive">
-        <table class="summary-table">
-          <thead>
-            <tr>
-              <th>Reactivo</th>
-              <th class="text-center">Resultado</th>
-            </tr>
-          </thead>
-          <tbody>
-    `;
 
-    respuestasTutorial.forEach(r => {
-      htmlTabla += `
-        <tr>
-          <td>${r.titulo}</td>
-          <td class="text-center">
-            <span class="badge ${r.esCorrecta ? 'text-bg-success' : 'text-bg-danger'}">
-              ${r.esCorrecta ? 'CORRECTO' : 'REVISAR'}
-            </span>
-          </td>
-        </tr>
-      `;
-    });
+    </div>
+  </main>
 
-    htmlTabla += `</tbody></table></div>`;
-    document.getElementById('resumen-calificacion').innerHTML = htmlTabla;
+  <!-- PIE DE PÁGINA INSTITUCIONAL -->
+  <footer class="text-center">
+    <div class="container">
+      <div>Facultad de Ingeniería, Universidad Nacional Autónoma de México — Circuito Escolar, Ciudad Universitaria.</div>
+      <div class="mt-1">Cátedra de Manufactura y Materiales · Portal administrado en GitHub Pages.</div>
+    </div>
+  </footer>
 
-    // Enviar registro asíncrono a Google Sheets
-    const payload = {
-      nombreEvaluacion: CONFIG_TUTORIAL.nombreHojaCalculo,
-      actividad: CONFIG_TUTORIAL.actividad,
-      numeroCuenta: numeroCuentaEstudiante,
-      numeroIntento: numeroIntento,
-      timestamp: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
-      calificacion: calificacion,
-      aciertos: aciertos,
-      total: total,
-      respuestas: respuestasTutorial
-    };
-
-    fetch(CONFIG_TUTORIAL.urlAppsScript, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    })
-    .then(() => {
-      document.getElementById('estado-envio').textContent = `Intento #${numeroIntento} guardado exitosamente en la hoja '${CONFIG_TUTORIAL.nombreHojaCalculo}'[cite: 6].`;
-      document.getElementById('estado-envio').className = "alert alert-success py-2 small mb-3";
-    })
-    .catch(err => {
-      console.error("Error al registrar:", err);
-      document.getElementById('estado-envio').textContent = "Sesión guardada localmente.";
-      document.getElementById('estado-envio').className = "alert alert-secondary py-2 small mb-3";
-    });
-  }
-
-  function reiniciarTutorialCompleto() {
-    document.getElementById('num-cuenta').value = numeroCuentaEstudiante;
-    cambiarPantalla('pantalla-registro');
-  }
-</script>
-
-<!-- Bootstrap 5 Bundle JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
