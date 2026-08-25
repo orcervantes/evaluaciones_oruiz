@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Cuestionario Previo: Calibrador Vernier — Lab. Manufactura I FI UNAM</title>
+  <title>Cuestionario Previo: Calibrador Vernier — Lab. Manufactura I | FI UNAM</title>
   
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -260,15 +260,15 @@
 
       <h1 class="h5 fw-bold mb-2" id="title-reg" style="color: var(--text-blue-dark);">Cuestionario Previo: Práctica Calibrador Vernier</h1>
       <p class="small text-muted mb-3" style="line-height: 1.5;">
-        <strong>Propósito:</strong> Identificar los conceptos básicos, lineamientos de seguridad y cuidados operativos del calibrador vernier, mediante la revisión del documento técnico <strong>MADO-01</strong>, para garantizar un desempeño seguro y eficiente en la sesión experimental.
+        <strong>Propósito:</strong> Identificar los conceptos básicos, lineamientos de seguridad y cuidados operativos del calibrador vernier, mediante la revisión del documento técnico <strong>MADO-01</strong>, para garantizar un desempeño seguro y eficiente en la sesión experimental[cite: 39].
       </p>
 
       <div class="p-3 bg-light rounded border mb-3">
         <div class="small fw-bold text-uppercase mb-1" style="color: var(--text-blue-subtle);">Lineamientos de la Evaluación:</div>
         <ul class="small text-muted ps-3 mb-0" style="line-height: 1.6;">
-          <li><strong>Formato:</strong> 5 reactivos de opción múltiple (2.0 puntos c/u).</li>
-          <li><strong>Intentos:</strong> Se permite estrictamente <strong>un solo intento</strong>.</li>
-          <li><strong>Requisito:</strong> Acreditar esta evaluación es condición obligatoria para ingresar al taller.</li>
+          <li><strong>Formato:</strong> 5 reactivos de opción múltiple (2.0 puntos c/u)[cite: 38].</li>
+          <li><strong>Intentos:</strong> Se permite estrictamente <strong>un solo intento</strong>[cite: 39].</li>
+          <li><strong>Requisito:</strong> Acreditar esta evaluación es condición obligatoria para ingresar al taller[cite: 39].</li>
           <li><strong>Seguridad:</strong> Una vez iniciado, no recargues ni retrocedas en el navegador.</li>
         </ul>
       </div>
@@ -336,7 +336,7 @@
 <script>
   /**
    * =========================================================================
-   * CONFIGURACIÓN DE LA ACTIVIDAD Y ENDPOINT
+   * CONFIGURACIÓN FORMAL DE LA ACTIVIDAD (LABORATORIO DE MANUFACTURA I)
    * =========================================================================
    */
   const CONFIG = {
@@ -353,7 +353,6 @@
   /**
    * =========================================================================
    * BANCO DE REACTIVOS: MANUAL MADO-01 (CALIBRADOR VERNIER)
-   * Extraído íntegramente del Cuestionario Oficial de Formularios de Google
    * =========================================================================
    */
   const BANCO_PREGUNTAS = [
@@ -424,15 +423,14 @@
     }
   ];
 
-  // Control de variables
+  // Variables de control de estado
   let indiceActual = 0;
   let numeroCuentaEstudiante = "";
   const respuestasRecopiladas = [];
 
   document.addEventListener("DOMContentLoaded", () => {
-    // Verificación de candado si la página intenta recargarse
     const cuentaActiva = sessionStorage.getItem("eval_cuenta_activa");
-    if (cuentaActiva && localStorage.getItem(`eval_bloqueada_${CONFIG.nombreHoja}_${cuentaActiva}`)) {
+    if (cuentaActiva && localStorage.getItem(`eval_bloqueada_${CONFIG.idActividad}_${cuentaActiva}`)) {
       bloquearPantallaPorReingreso();
     }
   });
@@ -478,7 +476,7 @@
       return;
     }
 
-    const claveStorage = `eval_bloqueada_${CONFIG.nombreHoja}_${numeroCuentaEstudiante}`;
+    const claveStorage = `eval_bloqueada_${CONFIG.idActividad}_${numeroCuentaEstudiante}`;
     if (localStorage.getItem(claveStorage)) {
       errorDiv.textContent = "Este número de cuenta ya ha completado este cuestionario previo en este dispositivo.";
       errorDiv.style.display = "block";
@@ -576,7 +574,11 @@
     cambiarPantalla('pantalla-final');
 
     let totalPuntos = 0;
-    respuestasRecopiladas.forEach(r => { totalPuntos += r.puntosGanados; });
+    let aciertosConteo = 0;
+    respuestasRecopiladas.forEach(r => { 
+      totalPuntos += r.puntosGanados; 
+      if (r.esCorrecta) aciertosConteo++;
+    });
 
     document.getElementById('summary-meta-info').textContent = `Alumno: Cuenta ${numeroCuentaEstudiante} | Grupo ${CONFIG.grupo} | Semestre ${CONFIG.semestre}`;
     document.getElementById('puntaje-total-texto').textContent = `${totalPuntos} / 10 Pts`;
@@ -590,7 +592,7 @@
       dictamen.className = "small fw-bold text-uppercase mt-1 text-danger";
     }
 
-    // Generar reporte formativo detallado con retroalimentación del manual
+    // Renderizar desglose por reactivo
     const contenedorReporte = document.getElementById('contenedor-reporte-detallado');
     contenedorReporte.innerHTML = "";
 
@@ -613,18 +615,20 @@
       renderizarKaTeXEnElemento(card);
     });
 
-    // Envío asíncrono a Google Apps Script
+    // Payload completamente estructurado para el Consolidado_General en Google Sheets
     const payload = {
-      nombreEvaluacion: CONFIG.nombreHoja,
       semestre: CONFIG.semestre,
       asignatura: CONFIG.asignatura,
+      tipoCurso: CONFIG.tipoCurso,
       grupo: CONFIG.grupo,
-      actividad: CONFIG.actividad,
+      tipoEvaluacion: CONFIG.tipoEvaluacion,
+      idActividad: CONFIG.idActividad,
+      nombreActividad: CONFIG.nombreActividad,
       numeroCuenta: numeroCuentaEstudiante,
       timestamp: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
-      calificacion: totalPuntos * 10, // Escala 0 - 100
-      aciertos: `${totalPuntos / 2} / 5`,
-      total: 5,
+      calificacion: totalPuntos * 10, // Escala normalizada 0 - 100
+      aciertos: aciertosConteo,        // Valor numérico entero
+      total: BANCO_PREGUNTAS.length,
       respuestas: respuestasRecopiladas.map(r => ({
         titulo: r.id,
         respuesta: `${r.respuestaElegida}) ${r.textoElegido}`,
@@ -639,7 +643,7 @@
       body: JSON.stringify(payload)
     })
     .then(() => {
-      document.getElementById('estado-envio').textContent = `Calificación registrada exitosamente en la pestaña '${CONFIG.nombreHoja}' de la hoja de cálculo central.`;
+      document.getElementById('estado-envio').textContent = "Calificación registrada exitosamente en el Consolidado General.";
       document.getElementById('estado-envio').className = "alert alert-success py-2 small mb-3";
     })
     .catch(err => {
