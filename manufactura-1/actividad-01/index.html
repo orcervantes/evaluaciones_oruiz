@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Tutorial Guiado de Notación Simbólica — FI UNAM</title>
+  <title>Tutorial Guiado de Notación Simbólica — Manufactura I | FI UNAM</title>
   
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -101,7 +101,6 @@
       overflow-x: auto;
     }
 
-    /* Barra de herramientas / accesos directos */
     .math-toolbar {
       display: flex;
       gap: 6px;
@@ -245,15 +244,6 @@
       margin-top: 10px;
     }
 
-    .code-tag {
-      font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.8rem;
-      background-color: #e9ecef;
-      padding: 2px 5px;
-      border-radius: 3px;
-      color: #b71c1c;
-    }
-
     .summary-table {
       width: 100%;
       border-collapse: collapse;
@@ -276,7 +266,7 @@
   <header class="d-flex justify-content-between align-items-center">
     <div>
       <h1 class="h5 fw-bold text-uppercase mb-0" style="color: var(--fi-blue);">Taller de Notación Simbólica</h1>
-      <p class="small text-muted mb-0">Facultad de Ingeniería — UNAM</p>
+      <p class="small text-muted mb-0">Manufactura I — Facultad de Ingeniería UNAM</p>
     </div>
     <span class="badge text-uppercase p-2" style="background-color: var(--fi-gold); color: #000;">20 Reactivos Guiados</span>
   </header>
@@ -385,7 +375,7 @@
       <p class="small text-muted mb-3" id="summary-meta-info"></p>
       
       <div id="estado-envio" class="alert alert-info py-2 small mb-3">
-        Registrando intento en la hoja 'Tutorial_Sintaxis_Matematica'...
+        Registrando intento en la hoja 'Consolidado_General'...
       </div>
 
       <div id="resumen-calificacion" class="text-start mb-3"></div>
@@ -400,7 +390,7 @@
 
 <script>
   /**
-   * CONFIGURACIÓN DE LA ACTIVIDAD
+   * CONFIGURACIÓN FORMAL DE LA ACTIVIDAD (MANUFACTURA I)
    */
   const CONFIG_TUTORIAL = {
     semestre: "2027-1",
@@ -409,9 +399,9 @@
     grupo: "04",
     tipoEvaluacion: "Diagnóstica",
     idActividad: "MANUF1_ACT01",
-    nombreActividad: "Tutorial_Guiado_20_Reactivos",
+    nombreActividad: "Tutorial de Notación Simbólica y Sintaxis",
     urlAppsScript: "https://script.google.com/macros/s/AKfycby2HbJBq7XkBexjdEAwe3OYihcG52bHu9bT7rWS0Vmbn-5bPgNE97i-ka27G1ZtIm4B/exec"
-      };
+  };
 
   /**
    * BANCO DE 20 REACTIVOS GUIADOS (MINÚSCULAS ESTRICTAS)
@@ -635,9 +625,6 @@
     });
   });
 
-  /**
-   * INSERCIÓN DINÁMICA DE ATAJOS EN EL MATH-FIELD ACTIVO
-   */
   function insertarEnCampo(latexFragment) {
     const mf = document.getElementById('math-input');
     if (!mf) return;
@@ -658,49 +645,26 @@
     }
   }
 
-  /**
-   * MOTOR DE NORMALIZACIÓN MATEMÁTICA AVANZADA (MINÚSCULAS)
-   * Resuelve conflicto de llaves {}, división / vs \frac y orden sub/super.
-   */
   function normalizarExpresion(str) {
     if (!str) return "";
     let s = str.trim().toLowerCase();
 
-    // 1. Eliminar comandos de formato y delimitadores elásticos
     s = s.replace(/\\(displaystyle|left|right|mleft|mright|text|mathrm|mathbf)/g, '');
-
-    // 2. Remover miembro izquierdo universal si existe
     s = s.replace(/^.*=\s*/g, '');
-
-    // 3. Homologar corchetes a paréntesis (excepto en argumentos de raíz n-ésima)
-    s = s.replace(/\\sqrt\[([^\]]+)\]/g, 'RAIZN_$1_'); // Guarda temporalmente la raíz n
+    s = s.replace(/\\sqrt\[([^\]]+)\]/g, 'RAIZN_$1_');
     s = s.replace(/\[/g, '(').replace(/\]/g, ')');
-    s = s.replace(/RAIZN_([^_]+)_/g, '\\sqrt[$1]');   // Restaura la raíz n
-
-    // 4. Estandarizar raíces n-ésimas
+    s = s.replace(/RAIZN_([^_]+)_/g, '\\sqrt[$1]');
     s = s.replace(/\\nthroot\[([^\]]+)\]\{([^}]+)\}/g, '\\sqrt[$1]{$2}');
-
-    // 5. Homologar orden de subíndices y potencias adyacentes: x^2_1 -> x_1^2
     s = s.replace(/\^([a-z0-9])_([a-z0-9])/g, '_$2^$1');
     s = s.replace(/\^\{([^}]+)\}_\{([^}]+)\}/g, '_{$2}^{$1}');
-
-    // 6. Eliminar llaves redundantes alrededor de caracteres simples: _{1} -> _1, ^{2} -> ^2
     s = s.replace(/_\{([a-z0-9])\}/g, '_$1');
     s = s.replace(/\^\{([a-z0-9])\}/g, '^$1');
-
-    // 7. Homologar fracciones \frac{a}{b} -> (a)/(b) para equiparar con división con slash '/'
     s = s.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1)/($2)');
     s = s.replace(/\\frac([a-z0-9])([a-z0-9])/g, '($1)/($2)');
-
-    // 8. Eliminar paréntesis redundantes en factores elementales: (a)/(b) -> a/b
     s = s.replace(/\(([a-z0-9])\)/g, '$1');
-
-    // 9. Eliminar espacios en blanco y operadores de multiplicación explícita
     s = s.replace(/\s+/g, '');
     s = s.replace(/\\(cdot|times)/g, '');
     s = s.replace(/\*/g, '');
-
-    // 10. Normalizar logaritmos, exponenciales y trigonometría
     s = s.replace(/\\ln\{([^}]+)\}/g, '\\ln($1)');
     s = s.replace(/\\ln([a-z0-9])/g, '\\ln($1)');
     s = s.replace(/\\exp\{([^}]+)\}/g, '\\exp($1)');
@@ -726,8 +690,7 @@
       return;
     }
 
-    // Manejo de intentos correlativos en localStorage
-    const claveIntentos = `intentos_${CONFIG_TUTORIAL.nombreHojaCalculo}_${numeroCuentaEstudiante}`;
+    const claveIntentos = `intentos_${CONFIG_TUTORIAL.idActividad}_${numeroCuentaEstudiante}`;
     const prev = parseInt(localStorage.getItem(claveIntentos) || "0", 10);
     numeroIntento = prev + 1;
     localStorage.setItem(claveIntentos, numeroIntento.toString());
@@ -767,7 +730,6 @@
     input.removeAttribute('disabled');
     input.focus();
 
-    // Estado inicial de botones
     document.getElementById('feedback-box').style.display = "none";
     document.getElementById('col-btn-principal').style.display = "block";
     document.getElementById('col-btn-reintentar').style.display = "none";
@@ -786,7 +748,6 @@
     const norm = normalizarExpresion(valorOriginal);
     const esCorrecta = r.solucionesValidas.some(sol => normalizarExpresion(sol) === norm);
 
-    // Registrar o actualizar respuesta en el acumulador
     respuestasTutorial[indiceActual] = {
       id: r.id,
       titulo: r.titulo,
@@ -813,7 +774,6 @@
     }
     fb.style.display = "block";
 
-    // Mostrar botones de Reintentar y Siguiente
     document.getElementById('col-btn-principal').style.display = "none";
     document.getElementById('col-btn-reintentar').style.display = "block";
     document.getElementById('col-btn-siguiente').style.display = "block";
@@ -836,6 +796,9 @@
     cargarReactivo(indiceActual + 1);
   }
 
+  /**
+   * ENVÍO DE DATOS NORMALIZADOS AL CONSOLIDADO GENERAL
+   */
   function finalizarTutorial() {
     cambiarPantalla('pantalla-final');
 
@@ -877,12 +840,16 @@
     htmlTabla += `</tbody></table></div>`;
     document.getElementById('resumen-calificacion').innerHTML = htmlTabla;
 
-    // Enviar registro asíncrono a Google Sheets
+    // Payload completamente estructurado para coincidir con Consolidado_General en Google Sheets
     const payload = {
-      nombreEvaluacion: CONFIG_TUTORIAL.nombreHojaCalculo,
-      actividad: CONFIG_TUTORIAL.actividad,
+      semestre: CONFIG_TUTORIAL.semestre,
+      asignatura: CONFIG_TUTORIAL.asignatura,
+      tipoCurso: CONFIG_TUTORIAL.tipoCurso,
+      grupo: CONFIG_TUTORIAL.grupo,
+      tipoEvaluacion: CONFIG_TUTORIAL.tipoEvaluacion,
+      idActividad: CONFIG_TUTORIAL.idActividad,
+      nombreActividad: CONFIG_TUTORIAL.nombreActividad,
       numeroCuenta: numeroCuentaEstudiante,
-      numeroIntento: numeroIntento,
       timestamp: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
       calificacion: calificacion,
       aciertos: aciertos,
@@ -897,7 +864,7 @@
       body: JSON.stringify(payload)
     })
     .then(() => {
-      document.getElementById('estado-envio').textContent = `Intento #${numeroIntento} guardado exitosamente en la hoja '${CONFIG_TUTORIAL.nombreHojaCalculo}'[cite: 6].`;
+      document.getElementById('estado-envio').textContent = "Intento guardado exitosamente en el Consolidado General.";
       document.getElementById('estado-envio').className = "alert alert-success py-2 small mb-3";
     })
     .catch(err => {
